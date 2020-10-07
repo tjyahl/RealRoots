@@ -1,0 +1,16 @@
+Make a git account at github.com
+clone my repository (I'll invite you after you make an account)
+
+
+
+When you're ready to work:
+go to your directory in a terminal
+type "git status" (w/o quotes)
+type "git pull" (this is very important)
+work on stuff
+type "git add BLAH" where BLAH is any file you've worked on
+(you might have to git add BLAH a bunch if you have worked on multiple files)
+type "git commit -m "HERE IS WHAT I DID"" (here the inside quotes DO appear, and HERE IS WHAT I DID should be replaced by a summary of what you've changed in the files [short though plx])
+type "git push" 
+
+
