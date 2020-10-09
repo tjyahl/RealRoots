@@ -68,7 +68,7 @@ eliminant = (h, C) -> (
      assert( dim A == 0 );
      F := coefficientRing A;
      assert( isField F );
-     assert( F == coefficientRing C );
+     assert( F === coefficientRing C );
      B := basis A;
      d := numgens source B;
      M := fold((M, i) -> M || 
@@ -135,25 +135,25 @@ SturmSequence = f -> (
 --------------------------------------------------------------------------
 --sign(n) Computes the sign of a number
    --
-sign := n -> (if n < 0 then -1 
+sign = n -> (if n < 0 then -1 
               else if n == 0 then 0
-	      else if n > 0 then 1);
+	      else if n > 0 then 1)
 --------------------------------------------------------------------------
 --signAtMinusInfinity(g) Computes the sign of g(-infinity), g is univariate
    --                    with real coefficients
    --
-signAtMinusInfinity := g -> sign((if odd first degree g 
+signAtMinusInfinity = g -> sign((if odd first degree g 
 	                          then -1 else 1) * 
-			         leadCoefficient g);
+			         leadCoefficient g)
 --------------------------------------------------------------------------
 --signAtZero(g) Computes the sign of g(0), g is univariate with real coefficients
    --
-signAtZero := g -> sign substitute(g,(ring g)_0=>0)
+signAtZero = g -> sign substitute(g,(ring g)_0=>0)
 --------------------------------------------------------------------------
 --signAtInfinity(g) Computes the sign of g(-infinity), g is univariate
    --               with real coefficients
    --
-signAtInfinity := g -> sign leadCoefficient g; 
+signAtInfinity = g -> sign leadCoefficient g
 --------------------------------------------------------------------------
 --numRealSturm(f) Uses Sturm sequences to compute the number of real roots
    --             of a polynomial f with real coefficients
