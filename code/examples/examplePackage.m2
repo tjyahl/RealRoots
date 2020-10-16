@@ -1,7 +1,7 @@
 --example_package.m2
 newPackage(
-    "example_package",
-    Version=>1.0,
+    "examplePackage",
+    Version=>"1.0",
     Date=>"Oct 9, 2020",
     Authors=>{
 	{Name=>"Thomas Yahl",
@@ -15,7 +15,7 @@ newPackage(
     PackageImports=>{},
     PackageExports=>{},
     --DebuggingMode set to true runs the debugger if any error occurs.
-    DebuggingMode=>True
+    DebuggingMode=>true
     )
 
 
@@ -36,7 +36,7 @@ McNugget(ZZ,ZZ) := ZZ => (n,m)->(
 
 myFunction = method()
 myFunction(ZZ,ZZ) := ZZ => (n,m)->(
-    print("This is myFunction")
+    print("This is myFunction");
     McNugget(n,m)
     )
 
