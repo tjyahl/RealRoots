@@ -1,4 +1,4 @@
---example_package.m2
+--examplePackage.m2
 newPackage(
     "examplePackage",
     Version=>"1.0",

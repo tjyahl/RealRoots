@@ -5,7 +5,10 @@
 ----The "realroots_old.m2" file is in a higher folder, ".." goes up one folder.
 ----This isn't how to load packages, but the old version isn't written as a package.
 restart
-load("../realroots_old.m2")
+load("Documents/RealRoots/code/realroots_old.m2") --for Kelly
+load("Downloads/RealRoots/code/realroots_old.m2") --for Jordy sometimes
+load("realroots_old.m2") --for Jordy
+load("../realroots_old.m2") --for Thomas
 
 
 --This package is loaded for the command "solveSystem" to compute the solutions.
