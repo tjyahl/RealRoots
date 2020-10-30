@@ -28,12 +28,38 @@ newPackage(
 
 
 export{
-    
+    "eliminant",
+    "regularRep"
     }
 
+--thomas is going to fix this..
+eliminant = method()
+eliminant (RingElement,PolynomialRing) := (RingElement) => (h,C)-> (
+    Z := C_0; 
+    A := ring h;
+    assert( dim A == 0 );
+    F := coefficientRing A;
+    assert( isField F );
+    assert( F === coefficientRing C );
+    B := basis A;
+    d := numgens source B;
+    M := fold((M, i) -> M || 
+              substitute(contract(B, h^(i+1)), F), 
+              substitute(contract(B, 1_A), F), 
+              flatten subsets(d, d));
+    N := ((ker transpose M)).generators;
+    P := matrix {toList apply(0..d, i -> Z^i)} * N;
+              (flatten entries(P))_0
+    )
 
 
-
+regularRep = method()
+regularRep (RingElement) := (Matrix) => f->(
+    assert( dim ring f == 0 );
+    b := basis ring f;
+    k := coefficientRing ring f;
+    substitute(contract(transpose b, f*b), k)
+    )
 
 
 beginDocumentation()
