@@ -11,8 +11,8 @@ newPackage(
 	 Email=>"",
 	 HomePage=>""},
     	{Name=>"Kelly Maluccio",
-	 Email=>"",
-	 HomePage=>""},
+	 Email=>"kmaluccio@math.tamu.edu",
+	 HomePage=>"https://www.math.tamu.edu/~kmaluccio"},
     	{Name=>"Frank Sottile",
 	 Email=>"",
 	 HomePage=>""},
@@ -29,7 +29,16 @@ newPackage(
 
 export{
     "eliminant",
-    "regularRep"
+    "regularRep",
+    "charPoly",
+    "SturmSequence",
+    --Jordy adds his methods here
+    "numPosRoots",
+    "numNegRoots",
+    "variations",
+    "traceForm",
+    "traceFormSignature",
+    "numRealTrace"
     }
 
 --thomas is going to fix this..
@@ -61,6 +70,94 @@ regularRep (RingElement) := (Matrix) => f->(
     substitute(contract(transpose b, f*b), k)
     )
 
+charPoly = method()
+charPoly (RingElement,PolynomialRing) := (RingElement) => (h,C)->(
+    A := ring h;
+    F := coefficientRing A;
+    S := F[C];
+    C = value C;
+    mh := regularRep(h) ** S;
+    Idz := S_0 * id_(S^(numgens source mh));
+    det(Idz - mh)
+    )
+
+SturmSequence = method()
+SturmSequence (RingElement) := (Sequence) => f->(
+    assert( isPolynomialRing ring f);
+    assert(numgens ring f === 1);
+    R := ring f;
+    assert(char R == 0);
+    x := R_0;
+    n := first degree f;
+    c := new MutableList from toList (0..n);
+    if n>=0 then (
+	c#0 = f;
+	if n >=1 then (
+	    c#1 = diff(x,f);
+	    scan(2..n, i -> c#i = -c#(i-2) % c#(i-1));
+	    ));
+    toList c
+    )
+
+--Jordy starts here add sign, signAtMinusInfinity, signAtZero, signAtInfinity, numRealSturm
+
+numPosRoots = method()
+numPosRoots (RingElement) := (ZZ) => f->(
+    c := SturmSequence f;
+    variations(signAtZero \ c) - variations(signAtInfinity \ c)
+    )
+
+numNegRoots = method()
+numNegRoots (RingElement) := (ZZ) => f->(
+    c := SturmSequence f;
+    variations(signAtInfinity \ c) - variations(signAtZero \ c)
+    )
+
+variations = method()
+variations (Sequence) := (ZZ) => c->(
+    n := 0;
+    last := 0;
+    scan(c, x -> if x =!=0 then (
+	    if last < 0 and x > 0 or last > 0 and x < 0 then n = n+1;
+	    last = x;
+	    ));
+    n
+    )
+
+traceForm = method()
+traceForm (RingElement) := (RingElement) => h->(
+    assert(dim ring h == 0);
+    b := basis ring h;
+    k := coefficientRing ring h;
+    mm := substitute(contract(transpose b, h*b**b),k);
+    tr := matrix {apply(first entries b, x -> trace regularRep x)};
+    adjoint(tr*mm, source tr, source tr)
+    )
+
+traceFormSignature = method()
+traceFormSignature (RingElement) := (Sequence) => h->(
+    A := ring h;
+    assert( dim A == 0 );
+    assert( char A == 0 );
+    S := QQ[Z];
+    TrF := traceForm(h) ** S;
+    IdZ := Z * id_(S^(numgens source TrF));
+    f := det(TrF - IdZ);
+    << "The trace form S_h with h = " << h << 
+      " has rank " << rank(TrF) << " and signature " << 
+      numPosRoots(f) - numNegRoots(f) << endl
+    )
+
+numRealTrace = method()
+numRealTrace (QuotientRing) := (ZZ) => A->(
+    assert(dim A == 0);
+    assert(char A == 0);
+    S := QQ[Z];
+    TrF := traceForm(1_A) ** S;
+    IdZ := Z * id_(S^(numgens source TrF));
+    f := det(TrF - IdZ);
+    numPosRoots(f) - numNegRoots(f)
+    )
 
 beginDocumentation()
 
