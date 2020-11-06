@@ -8,7 +8,7 @@ newPackage(
 	 Email=>"",
 	 HomePage=>""},
      	{Name=>"Jordy Lopez",
-	 Email=>"",
+	 Email=>"jordy.lopez@math.tamu.edu",
 	 HomePage=>""},
     	{Name=>"Kelly Maluccio",
 	 Email=>"kmaluccio@math.tamu.edu",
@@ -32,7 +32,11 @@ export{
     "regularRep",
     "charPoly",
     "SturmSequence",
-    --Jordy adds his methods here
+    "sign",
+    "signAtNegInfinity",
+    "signAtZero",
+    "signAtInfinity",
+    "numRealSturm",
     "numPosRoots",
     "numNegRoots",
     "variations",
@@ -99,7 +103,37 @@ SturmSequence (RingElement) := (Sequence) => f->(
     toList c
     )
 
---Jordy starts here add sign, signAtMinusInfinity, signAtZero, signAtInfinity, numRealSturm
+
+sign=method()
+sign (Number) := (ZZ) => n ->(
+     if n < 0 then -1 
+       else if n == 0 then 0
+       else if n > 0 then 1
+     )
+
+signAtNegInfinity=method()
+signAtNegInfinity (RingElement) := (ZZ) => g->(
+    sign((if odd first degree g
+	    then -1 else 1)*
+	leadCoefficient g)
+    )
+
+signAtZero=method()
+signAtZero (RingElement) := (ZZ) => g->(
+    sign substitute (g,(ring g)_0=>0)
+    )
+
+signAtInfinity=method()
+signAtInfinity (RingElement) := (ZZ) => g->(
+    sign leadCoefficient g
+    )
+
+numRealSturm=method()
+numRealSturm (RingElement) := (ZZ) => f->( 
+    c := SturmSequence f;
+    variations (signAtNegInfinity \ c)
+        - variations (signAtInfinity \ c)
+    )
 
 numPosRoots = method()
 numPosRoots (RingElement) := (ZZ) => f->(
@@ -169,7 +203,7 @@ end
 --Notes:
 ----
 ----1) Remember to include tests for the code in documentation.
-----
+----2) How do we make sure that polynomials f and g have real coefficients?
 ----
 ----
 ----

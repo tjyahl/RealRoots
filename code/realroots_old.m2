@@ -140,7 +140,7 @@ sign = n -> (if n < 0 then -1
 	      else if n > 0 then 1)
 --------------------------------------------------------------------------
 --signAtMinusInfinity(g) Computes the sign of g(-infinity), g is univariate
-   --                    with real coefficients
+   --                    with real coefficientss
    --
 signAtMinusInfinity = g -> sign((if odd first degree g 
 	                          then -1 else 1) * 
