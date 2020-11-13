@@ -23,6 +23,9 @@ R = QQ[x,y]
 F = {y^2-x^2-1,x-y^2+4*y-2}
 sols = solveSystem F
 
+--example from AG lecture
+F = {x^5-49/95*x^3*y+y^6, y^5-49/95*x*y^3+x^6} --should be 5 real roots
+
 I = ideal F
 S = R/I
 
