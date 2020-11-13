@@ -47,21 +47,21 @@ export{
 
 --thomas is going to fix this..
 eliminant = method()
-eliminant (RingElement,PolynomialRing) := (RingElement) => (h,C)-> (
+eliminant (RingElement,PolynomialRing) := (RingElement) => (f,C)-> (
     Z := C_0; 
-    A := ring h;
-    assert( dim A == 0 );
-    F := coefficientRing A;
-    assert( isField F );
-    assert( F === coefficientRing C );
-    B := basis A;
-    d := numgens source B;
+    R := ring f;
+    assert( dim R == 0 );
+    K := coefficientRing R;
+    assert( isField K );
+    assert( K === coefficientRing C );
+    B := basis R;
+    n := numgens source B;
     M := fold((M, i) -> M || 
-              substitute(contract(B, h^(i+1)), F), 
-              substitute(contract(B, 1_A), F), 
-              flatten subsets(d, d));
+              substitute(contract(B, f^(i+1)), K), 
+              substitute(contract(B, 1_R), K), 
+              flatten subsets(n, n));
     N := ((ker transpose M)).generators;
-    P := matrix {toList apply(0..d, i -> Z^i)} * N;
+    P := matrix {toList apply(0..n, i -> Z^i)} * N;
               (flatten entries(P))_0
     )
 
@@ -69,38 +69,38 @@ eliminant (RingElement,PolynomialRing) := (RingElement) => (h,C)-> (
 regularRep = method()
 regularRep (RingElement) := (Matrix) => f->(
     assert( dim ring f == 0 );
-    b := basis ring f;
-    k := coefficientRing ring f;
-    substitute(contract(transpose b, f*b), k)
+    B := basis ring f;
+    K := coefficientRing ring f;
+    substitute(contract(transpose B, f*B), K)
     )
 
-charPoly = method()
-charPoly (RingElement,PolynomialRing) := (RingElement) => (h,C)->(
-    A := ring h;
-    F := coefficientRing A;
-    S := F[C];
-    C = value C;
-    mh := regularRep(h) ** S;
-    Idz := S_0 * id_(S^(numgens source mh));
-    det(Idz - mh)
+charPoly = method() -- overload this to take matrices
+charPoly (RingElement,Symbol) := (RingElement) => (f,Z)->(
+    R := ring f;
+    K := coefficientRing R;
+    S := K[Z];
+    Z = value Z;
+    mf := regularRep(f) ** S;
+    Idz := S_0 * id_(S^(numgens source mf));
+    det(Idz - mf)
     )
 
 SturmSequence = method()
-SturmSequence (RingElement) := (Sequence) => f->(
+SturmSequence (RingElement) := (List) => f->(
     assert( isPolynomialRing ring f);
     assert(numgens ring f === 1);
     R := ring f;
     assert(char R == 0);
     x := R_0;
-    n := first degree f;
-    c := new MutableList from toList (0..n);
-    if n>=0 then (
-	c#0 = f;
-	if n >=1 then (
-	    c#1 = diff(x,f);
-	    scan(2..n, i -> c#i = -c#(i-2) % c#(i-1));
+    d := first degree f;
+    l := new MutableList from toList (0..d);
+    if d>=0 then (
+	l#0 = f;
+	if d >=1 then (
+	    l#1 = diff(x,f);
+	    scan(2..d, i -> l#i = -l#(i-2) % l#(i-1));
 	    ));
-    toList c
+    toList l
     )
 
 
@@ -112,46 +112,46 @@ sign (Number) := (ZZ) => n ->(
      )
 
 signAtNegInfinity=method()
-signAtNegInfinity (RingElement) := (ZZ) => g->(
-    sign((if odd first degree g
+signAtNegInfinity (RingElement) := (ZZ) => f->(
+    sign((if odd first degree f
 	    then -1 else 1)*
-	leadCoefficient g)
+	leadCoefficient f)
     )
 
 signAtZero=method()
-signAtZero (RingElement) := (ZZ) => g->(
-    sign substitute (g,(ring g)_0=>0)
+signAtZero (RingElement) := (ZZ) => f->(
+    sign substitute (f,(ring f)_0=>0)
     )
 
 signAtInfinity=method()
-signAtInfinity (RingElement) := (ZZ) => g->(
-    sign leadCoefficient g
+signAtInfinity (RingElement) := (ZZ) => f->(
+    sign leadCoefficient f
     )
 
 numRealSturm=method()
 numRealSturm (RingElement) := (ZZ) => f->( 
-    c := SturmSequence f;
-    variations (signAtNegInfinity \ c)
-        - variations (signAtInfinity \ c)
+    l := SturmSequence f;
+    variations (signAtNegInfinity \ l)
+        - variations (signAtInfinity \ l)
     )
 
 numPosRoots = method()
 numPosRoots (RingElement) := (ZZ) => f->(
-    c := SturmSequence f;
-    variations(signAtZero \ c) - variations(signAtInfinity \ c)
+    l := SturmSequence f;
+    variations(signAtZero \ l) - variations(signAtInfinity \ l)
     )
 
 numNegRoots = method()
 numNegRoots (RingElement) := (ZZ) => f->(
-    c := SturmSequence f;
-    variations(signAtInfinity \ c) - variations(signAtZero \ c)
+    l := SturmSequence f;
+    variations(signAtInfinity \ l) - variations(signAtZero \ l)
     )
 
 variations = method()
-variations (Sequence) := (ZZ) => c->(
+variations (List) := (ZZ) => l->(
     n := 0;
     last := 0;
-    scan(c, x -> if x =!=0 then (
+    scan(l, x -> if x =!=0 then (
 	    if last < 0 and x > 0 or last > 0 and x < 0 then n = n+1;
 	    last = x;
 	    ));
@@ -159,38 +159,38 @@ variations (Sequence) := (ZZ) => c->(
     )
 
 traceForm = method()
-traceForm (RingElement) := (RingElement) => h->(
-    assert(dim ring h == 0);
-    b := basis ring h;
-    k := coefficientRing ring h;
-    mm := substitute(contract(transpose b, h*b**b),k);
-    tr := matrix {apply(first entries b, x -> trace regularRep x)};
+traceForm (RingElement) := (RingElement) => f->(
+    assert(dim ring f == 0);
+    B := basis ring f;
+    K := coefficientRing ring f;
+    mm := substitute(contract(transpose B, f*B**B),K);--change name of mm to ?? and tr
+    tr := matrix {apply(first entries B, x -> trace regularRep x)};
     adjoint(tr*mm, source tr, source tr)
     )
 
 traceFormSignature = method()
-traceFormSignature (RingElement) := (Sequence) => h->(
-    A := ring h;
-    assert( dim A == 0 );
-    assert( char A == 0 );
+traceFormSignature (RingElement) := (Sequence) => f->(
+    R := ring f;
+    assert( dim R == 0 );
+    assert( char R == 0 ); --check char elsewhere
     S := QQ[Z];
-    TrF := traceForm(h) ** S;
+    TrF := traceForm(f) ** S;
     IdZ := Z * id_(S^(numgens source TrF));
-    f := det(TrF - IdZ);
-    << "The trace form S_h with h = " << h << 
+    ch := det(TrF - IdZ);  --use charPoly(TrF)
+    << "The trace form S_f with f = " << f << 
       " has rank " << rank(TrF) << " and signature " << 
-      numPosRoots(f) - numNegRoots(f) << endl
-    )
+      numPosRoots(ch) - numNegRoots(ch) << endl
+    ) --no strings in output!
 
 numRealTrace = method()
-numRealTrace (QuotientRing) := (ZZ) => A->(
-    assert(dim A == 0);
-    assert(char A == 0);
+numRealTrace (QuotientRing) := (ZZ) => R->(
+    assert(dim R == 0);   --CONSIDER: input for trace stuff quotientRing/RingElement?
+    assert(char R == 0);
     S := QQ[Z];
-    TrF := traceForm(1_A) ** S;
+    TrF := traceForm(1_R) ** S;
     IdZ := Z * id_(S^(numgens source TrF));
-    f := det(TrF - IdZ);
-    numPosRoots(f) - numNegRoots(f)
+    ch := det(TrF - IdZ); --use charPoly(TrF)
+    numPosRoots(ch) - numNegRoots(ch)
     )
 
 beginDocumentation()
