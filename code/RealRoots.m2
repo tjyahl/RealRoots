@@ -82,10 +82,9 @@ eliminant (RingElement,PolynomialRing) := RingElement => (f,C)-> (
     )
 
 
-coefficients = method()
 coefficients (RingElement,Matrix) := (f,B)->(
     K = coefficientRing ring f;
-    substitute(contract(transpose B,f*B,K))
+    substitute(contract(transpose B,f,K))
     )
 
 coefficients (Matrix,Matrix) := (F,B)->(
@@ -201,7 +200,8 @@ variations (List) := ZZ => l->(
     scan(l, x -> if x =!=0 then (
 	    if last < 0 and x > 0 or last > 0 and x < 0 then n = n+1;
 	    last = x;
-	    ));
+	    )
+	);
     n
     )
 
