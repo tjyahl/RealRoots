@@ -34,7 +34,7 @@ export{
     "SturmSequence",
     "sign",
     "signAtNegInfinity",
-    "signAtZero",
+    "signAt",
     "signAtInfinity",
     "numRealSturm",
     "numPosRoots",
@@ -50,12 +50,16 @@ export{
 isUnivariate = method()
 isUnivariate (Ring) := Boolean => R->(
     K := coefficientRing R;
-    (numgens R === 1) and (isField K) and (char K === 0)
+    if instance (K,InexactField) then print "Warning: Computations over inexact field";
+    (isPolynomialRing R) and (numgens R === 1) and (isField K) and (char K === 0)
     )
 
-isUnivariate (RingElement) := Boolean => f->(
-    R := ring f;
-    isUnivariate(R)
+
+isArtinian = method()
+isArtinian (Ring) := Boolean => R->(
+    K := coefficientRing R;
+    if instance (K,InexactField) then print "Warning: Computations over inexact field";
+    (isField K) and (char K===0) and (dim R===0)
     )
 
 
@@ -124,14 +128,10 @@ charPoly (RingElement) := RingElement => f->(
 
 
 SturmSequence = method()
-SturmSequence (RingElement) := List => f->(
-    assert( isPolynomialRing ring f);
-    
-    assert(numgens ring f === 1);
-    
+SturmSequence (RingElement) := List => f->(    
     R := ring f;
-    assert(char R == 0);
-    
+    if not isUnivariate R then error "Expected univariate polynomial";
+     
     x := R_0;
     d := first degree f;
     l := new MutableList from toList (0..d);
@@ -160,9 +160,9 @@ signAtNegInfinity (RingElement) := ZZ => f->(
     )
 
 
-signAtZero = method()
-signAtZero (RingElement) := ZZ => f->(
-    sign( substitute(f,(ring f)_0=>0) )
+signAt = method()
+signAt (RingElement,Number) := ZZ => (f,r)->(
+    sign( substitute(f,(ring f)_0=>r) )
     )
 
 
@@ -175,21 +175,26 @@ signAtInfinity (RingElement) := ZZ => f->(
 numRealSturm = method()
 numRealSturm (RingElement) := ZZ => f->( 
     l := SturmSequence f;
-    variations(l / signAtNegInfinity) - variations(l / signAtInfinity)
+    variations apply(l,signAtNegInfinity) - variations apply(l,signAtInfinity)
+    )
+
+numRealSturm (RingElement,Number,Number) := ZZ => (f,a,b)->(
+    l := SturmSequence f;
+    variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
     )
 
 
 numPosRoots = method()
 numPosRoots (RingElement) := ZZ => f->(
     l := SturmSequence f;
-    variations(l / signAtZero) - variations(l / signAtInfinity)
+    variations apply(l,g->signAt(g,0)) - variations apply(l,signAtInfinity)
     )
 
 
 numNegRoots = method()
 numNegRoots (RingElement) := ZZ => f->(
     l := SturmSequence f;
-    variations(l / signAtInfinity) - variations(l / signAtZero)
+    variations apply(l,signAtNegInfinity) - variations apply(l,g->signAt(g,0))
     )
 
 
@@ -214,10 +219,11 @@ variations (List) := ZZ => l->(
 
 traceForm = method()
 traceForm (RingElement) := RingElement => f->(
-    assert(dim ring f == 0);
+    R := ring f;
+    if not isArtinian R then error "Expected Artinian ring";
     
-    B := basis ring f;
-    K := coefficientRing ring f;
+    B := basis R;
+    K := coefficientRing R;
     mm := substitute(contract(transpose B, f*B**B),K);--change name of mm to ?? and tr
     tr := matrix {apply(first entries B, x -> trace regularRep x)};
     adjoint(tr*mm, source tr, source tr)
@@ -227,10 +233,8 @@ traceForm (RingElement) := RingElement => f->(
 traceFormSignature = method()
 traceFormSignature (RingElement) := Sequence => f->(
     R := ring f;
-    assert( dim R == 0 );
-    
-    assert( char R == 0 ); --check char elsewhere
-    
+    if not isArtinian R then error "Expected Artinian ring";
+  
     S := QQ[Z];
     TrF := traceForm(f) ** S;
     IdZ := Z * id_(S^(numgens source TrF));
@@ -242,11 +246,14 @@ traceFormSignature (RingElement) := Sequence => f->(
 
 
 numRealTrace = method()
+numRealTrace (RingElement) := ZZ => f->() --Empty for now
+
+numRealTrace (List) := ZZ => F->() --Empty for now
+
 numRealTrace (QuotientRing) := ZZ => R->(
-    assert(dim R == 0);   --CONSIDER: input for trace stuff quotientRing/RingElement?
-    
-    assert(char R == 0);
-    
+    --CONSIDER: input for trace stuff quotientRing/RingElement?
+    if not isArtinian R then error "Expected Artinian ring";
+        
     S := QQ[Z];
     TrF := traceForm(1_R) ** S;
     IdZ := Z * id_(S^(numgens source TrF));
