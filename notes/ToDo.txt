@@ -1,0 +1,36 @@
+
+Jordy Lopez
+Kelley Maluccio
+Thomas Yahl
+Frank Sottile
+
+Here are some capabilities that I'd like to have in the Macaulay2 real package
+
+* There are several ways to compute eliminants.  Combine them into one method
+   with different strategies.
+
+* Include a check for the shape Lemma (make sure that it applies before applying it)
+   and a fix to get it right (?)
+
+* Sturm.  Should do this for real roots in an interval, as well as positive
+           reals, negative reals, and all real.
+
+* Implement Budan-Fourier
+
+* Trace form, including the multivariate case.
+
+* (?) Hurwicz stability or other stability
+
+* Hermite-Biehler
+
+* Routh-Hurwicz
+
+* Hurwicz determinant
+
+* Stickelberger's theorem, eigenvalues and solving
+
+* Brainstorm about other capabilities.
+
+* Some of these shold work over fields/rings with arbitrary coefficients.
+
+* Sturm-Habicht in place of Sturm for height complexity 
