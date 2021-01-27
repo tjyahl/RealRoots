@@ -1,0 +1,109 @@
+--TwoQuad.m2
+--
+-- Frank Sottile
+-- Macaulay2 program to look at the Fano problem of n-planes
+--  on two quadrics in P^2n.
+---------------------------------------------------------------------------------
+--
+--restart
+--
+---------------------------------------------------------------------------------
+-- 
+--  This routine computes myR_nVar^j mod myGB for j=0,..., dim(myR/myGB)
+--   Its kernel is the minimal polynomial for myR_nVar
+--
+elimMatrix = method ()
+elimMatrix (Ideal, ZZ) :=  (myGB, nVar) -> (
+  myR = ring myGB;
+  B = lift(basis(myR/myGB),myR);
+  cR = coefficientRing myR;
+  univarR = cR[t];
+  s = myR_nVar;   -- Grabs the ring variable
+  use myR;
+  myf = 1;
+  myf = myf % myGB;
+  (M,Co) = coefficients( myf, Monomials => B) ;
+  for i from 1 to degree myGB do {
+    myf = myf * s;
+    myf = myf % myGB;
+    (M,C) = coefficients( myf, Monomials => B) ;
+    Co = Co|C;
+    };
+  return(Co);
+  )
+---------------------------------------------------------------------------------
+--
+--   Need to create a file to hold the Frobenius elements.  To append, we have to 
+--    close file
+--    get its contents
+--    open it again and write previous contents and then new contents.
+--
+
+outName = "Data.txt";
+--fil = outName << "# This file records the cycle types of Frobenius elements" << endl;
+fil = outName << "" 
+fil << close;
+
+pr = 4001;
+n = 2;
+numSols = 16;
+nIter = 1000;
+S = ZZ/pr[t];
+R = ZZ/pr[x_(0,0) .. x_(n,n-1)];
+Coords = id_(R^n)|| matrix(apply(n+1, j -> apply(n, i -> x_(j,i)) ));
+--
+--   This completes the basic definitions of the rings, maps and coordinates.
+--
+--
+--  Makes the ideal and computes its Groebner basis
+--
+for ii from 1 to nIter do {
+  L = table(2*n+1, 2*n+1, (i,j) -> random (coefficientRing R) );
+  Q = matrix (table (2*n+1, 2*n+1, (i,j) ->  L_i_j+L_j_i ) );
+  I = ideal flatten entries flatten (transpose(Coords) * Coords ) ;
+  I = I + ideal flatten entries flatten (transpose(Coords) * Q * Coords );
+  gbI = ideal groebnerBasis( I , Strategy=>"F4");
+  -------  Check that the dimension and degree are what was expected
+  if (dim(gbI)==0 and degree(gbI)==numSols) then {   
+    nVar = 0;
+    --    Set up ring maps for later
+    SR = ZZ/1009[R_nVar];
+    FF = map(SR,R);
+    F = map(S,SR,{t});
+    powerM = elimMatrix(gbI,nVar);     --- Compute the matrix whose kernel is the eliminant
+    if (rank powerM==numSols) then {     --- Check that it has the expected rank
+      Ker = kernel powerM;
+      --  We build the minimal polynomial by hand
+      elim = 0;
+      for i from 0 to degree gbI do {
+        elim = elim + Ker_0_i * R_nVar^i;
+        };
+      --  We map it to S = cR[t]
+      e = F(FF(elim));
+      use S;
+      --  Check if it is square-free
+      J = ideal( e, diff(e,t));
+      --  Factor it
+      if (dim J == -1) then {
+        fe = toList factor e;
+        --  make a string recording the degrees of the different factors
+        for i from 0 to #fe-1 do {
+          if i==0 then {
+            CT =  toString (degree value fe_0)_0;
+            }
+	    else {
+              CT = CT | "," | toString (degree value fe_i)_0;
+	    }
+        };
+        --  Finally, write to the output file   
+        N = get outName;
+        fil = outName << N;
+        fil  << CT << endl;
+        fil << close;
+        };
+      };
+    };
+  };
+---------------------------------------------------------------------------------
+
+
