@@ -46,7 +46,7 @@ export{
     }
 
 --needs better name
---also need to worry about extra parameters (Nida)
+--also need to worry about fields with parameters
 isUnivariate = method()
 isUnivariate (Ring) := Boolean => R->(
     K := coefficientRing R;
@@ -63,46 +63,31 @@ isArtinian (Ring) := Boolean => R->(
     )
 
 
---thomas is going to fix this eventually..
 eliminant = method()
-eliminant (RingElement,PolynomialRing) := RingElement => (f,C)-> (
-    Z := C_0; 
+eliminant (RingElement) := RingElement => f-> (
     R := ring f;
-    assert( dim R == 0 );
-    
-    K := coefficientRing R;
-    assert( isField K );
-    assert( K === coefficientRing C );
-    
+    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
     B := basis R;
     n := numgens source B;
-    M := fold((M, i) -> M || 
-              substitute(contract(B, f^(i+1)), K), 
-              substitute(contract(B, 1_R), K), 
-              flatten subsets(n, n));
-    N := ((ker transpose M)).generators;
-    P := matrix {toList apply(0..n, i -> Z^i)} * N;
-              (flatten entries(P))_0
-    )
-
-
-coefficients (RingElement,Matrix) := (f,B)->(
-    K = coefficientRing ring f;
-    substitute(contract(transpose B,f,K))
-    )
-
-coefficients (Matrix,Matrix) := (F,B)->(
-    K = coefficientRing ring F;
-    substitute(contract(transpose B,F,K))
+    K := coefficientRing R;
+    
+    Z := getSymbol "Z";
+    S := K(monoid [Z]);
+    
+    P := map(R^1,R^(n+1),(i,j)->f^j);
+    M := last coefficients(P, Monomials=>B);
+    coeffs := generators ker M;
+    (map(S^1,S^(n+1),(i,j)->Z^j)*sub(coeffs,K))_(0,0)
     )
 
 
 regularRep = method()
 regularRep (RingElement) := Matrix => f->(
-    assert( dim ring f == 0 );
-    
-    B := basis ring f;
-    coefficients(f*B,B)
+    R := ring f;
+    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
+        
+    B := basis R;
+    coefficients(f*B,Monomials=>B)
     )
 
 
@@ -122,7 +107,7 @@ charPoly (Matrix) := RingElement => M->(
     )
 
 charPoly (RingElement) := RingElement => f->(
-    mf := regularRep(f);
+    (B,mf) := regularRep(f);
     charPoly(mf)
     )
 
@@ -130,11 +115,12 @@ charPoly (RingElement) := RingElement => f->(
 SturmSequence = method()
 SturmSequence (RingElement) := List => f->(    
     R := ring f;
-    if not isUnivariate R then error "Expected univariate polynomial";
-     
+    if not isUnivariate R then error "Error: Expected univariate polynomial";
+    if (f == 0) then error "Error: Expected nonzero polynomial";
+    
     x := R_0;
     d := first degree f;
-    l := new MutableList from toList (0..d);
+    l := new MutableList from toList(0..d);
     if d >= 0 then (
 	l#0 = f;
 	if d >= 1 then (
@@ -183,6 +169,16 @@ numRealSturm (RingElement,Number,Number) := ZZ => (f,a,b)->(
     variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
     )
 
+numRealSturm (RingElement,Number,InfiniteNumber) := ZZ => (f,a,b)->(
+    l := SturmSequence f;
+    variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAtInfinity(g))
+    )
+
+numRealSturm (RingElement,InfiniteNumber,Number) := ZZ => (f,a,b)->(
+    l := SturmSequence f;
+    variations apply(l,g->signAtNegInfinity(g)) - variations apply(l,g->signAt(g,b))
+    )
+
 
 numPosRoots = method()
 numPosRoots (RingElement) := ZZ => f->(
@@ -225,7 +221,7 @@ traceForm (RingElement) := RingElement => f->(
     B := basis R;
     K := coefficientRing R;
     mm := substitute(contract(transpose B, f*B**B),K);--change name of mm to ?? and tr
-    tr := matrix {apply(first entries B, x -> trace regularRep x)};
+    tr := matrix {apply(first entries B, x -> trace last regularRep x)};
     adjoint(tr*mm, source tr, source tr)
     )
 
