@@ -1,7 +1,7 @@
 --RealRoots.m2
 newPackage(
     "RealRoots",
-    Version=>0.1,
+    Version=>"0.1",
     Date=>"Oct 9, 2020",
     Authors=>{
 	{Name=>"Dan Grayson",
@@ -23,12 +23,14 @@ newPackage(
     Headline=>"Package for exploring counting and locating real solutions to polynomial systems",
     PackageImports=>{},
     PackageExports=>{},
-    DebuggingMode=>True
+    DebuggingMode=>true
     )
 
 
 export{
     "eliminant",
+    "eliminant1",
+    "eliminant2",
     "regularRep",
     "charPoly",
     "SturmSequence", --do we need to export this
@@ -37,6 +39,7 @@ export{
     "numNegRoots",
     "variations",
     "traceForm",
+    "traceForm1",
     "traceFormSignature",
     "numRealTrace"
     }
@@ -46,7 +49,7 @@ export{
 isUnivariate = method()
 isUnivariate (Ring) := Boolean => R->(
     K := coefficientRing R;
-    if instance (K,InexactField) then print "Warning: Computations over inexact field";
+    if instance(K,InexactField) then print "Warning: Computations over inexact field";
     (isPolynomialRing R) and (numgens R === 1) and (isField K) and (char K === 0)
     )
 
@@ -54,13 +57,13 @@ isUnivariate (Ring) := Boolean => R->(
 isArtinian = method()
 isArtinian (Ring) := Boolean => R->(
     K := coefficientRing R;
-    if instance (K,InexactField) then print "Warning: Computations over inexact field";
+    if instance(K,InexactField) then print "Warning: Computations over inexact field";
     (isField K) and (char K===0) and (dim R===0)
     )
 
 
 eliminant = method()
-eliminant (RingElement) := RingElement => f-> (
+eliminant (RingElement) := RingElement => f->(
     R := ring f;
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
     B := basis R;
@@ -72,8 +75,31 @@ eliminant (RingElement) := RingElement => f-> (
     
     P := map(R^1,R^(n+1),(i,j)->f^j);
     M := last coefficients(P, Monomials=>B);
-    coeffs := generators ker M;
-    (map(S^1,S^(n+1),(i,j)->Z^j)*sub(coeffs,K))_(0,0)
+    coeffs := sub(gens ker M,K);
+    (map(S^1,S^(n+1),(i,j)->S_0^j) * coeffs)_(0,0)
+    )
+
+eliminant1 = method()
+eliminant1 (RingElement) := RingElement => f->(
+    R := ring f;
+    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
+    K := coefficientRing R;
+    
+    Z := getSymbol "Z";
+    S := K(monoid [Z]);
+    
+    phi := map(R,S,{f});
+    (ker phi)_0
+    )
+
+eliminant2 = method()
+eliminant2 (RingElement) := RingElement => f->(
+    R := ring f;
+    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
+    n := numgens source basis R;
+    
+    g := charPoly(f);
+    if (first degree g === n) then g else error "oops!"
     )
 
 
@@ -81,24 +107,26 @@ regularRep = method()
 regularRep (RingElement) := Matrix => f->(
     R := ring f;
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
-        
+    K := coefficientRing R;
+    
     B := basis R;
-    coefficients(f*B,Monomials=>B)
+    C := last coefficients(f*B,Monomials=>B);
+    (B,sub(C,K))
     )
 
 
 charPoly = method()
 charPoly (Matrix) := RingElement => M->(
-    n = numgens source M;
-    assert( numgens target M === n );
+    n := numgens source M;
+    if not (numgens target M === n) then error "Error: Expected a square matrix";
     
-    K = ring M;
-    assert( isField K and char K === 0 );
+    K := ring M;
+    if not (isField K and char K === 0) then error "Error: Expected a field of characteristic zero";
     
     Z := getSymbol "Z";
     S := K(monoid [Z]);
 
-    IdZ := Z*id_(S^n);
+    IdZ := S_0*id_(S^n);
     det(IdZ - M)
     )
 
@@ -111,7 +139,7 @@ charPoly (RingElement) := RingElement => f->(
 SturmSequence = method()
 SturmSequence (RingElement) := List => f->(    
     R := ring f;
-    if not isUnivariate R then error "Error: Expected univariate polynomial";
+    if not isUnivariate(R) then error "Error: Expected univariate polynomial";
     if (f == 0) then error "Error: Expected nonzero polynomial";
     
     x := R_0;
@@ -190,6 +218,7 @@ numNegRoots (RingElement) := ZZ => f->(
     )
 
 
+--consolidate w/ signAt functions?
 variations = method()
 variations (List) := ZZ => l->(
     n := 0;
@@ -203,33 +232,38 @@ variations (List) := ZZ => l->(
     )
 
 
-variations (List) := ZZ => l->(
-    l = l|{0};
-    number(#l-1,i -> (l#i =!= 0) and ( (l#(i+1) < 0 and l#i > 0) or (l#(i+1) > 0 and l#i < 0) ) )
-    )--can't find a great way to do this
-
-
 traceForm = method()
 traceForm (RingElement) := RingElement => f->(
     R := ring f;
-    if not isArtinian R then error "Expected Artinian ring";
-    
+    if not isArtinian R then error "Error: Expected Artinian ring";    
     B := basis R;
     K := coefficientRing R;
+
     mm := substitute(contract(transpose B, f*B**B),K);--change name of mm to ?? and tr
     tr := matrix {apply(first entries B, x -> trace last regularRep x)};
     adjoint(tr*mm, source tr, source tr)
     )
 
+traceForm1 = method()
+traceForm1 (RingElement) := RingElement => f->(
+    R := ring f;
+    if not isArtinian(R) then error "Error: Expected Artinian ring";
+    B := first entries basis R;
+    
+    matrix table(B,B,(g,h)->trace last regularRep(f*g*h))
+    )--this is BAD
 
 traceFormSignature = method()
 traceFormSignature (RingElement) := Sequence => f->(
     R := ring f;
     if not isArtinian R then error "Expected Artinian ring";
-  
-    S := QQ[Z];
+    K := coefficientRing R;
+    
+    Z := getSymbol "Z";
+    S := K(monoid [Z]);
+    
     TrF := traceForm(f) ** S;
-    IdZ := Z * id_(S^(numgens source TrF));
+    IdZ := S_0 * id_(S^(numgens source TrF));
     ch := det(TrF - IdZ);  --use charPoly(TrF)
     << "The trace form S_f with f = " << f << 
       " has rank " << rank(TrF) << " and signature " << 
@@ -245,8 +279,11 @@ numRealTrace (List) := ZZ => F->() --Empty for now
 numRealTrace (QuotientRing) := ZZ => R->(
     --CONSIDER: input for trace stuff quotientRing/RingElement?
     if not isArtinian R then error "Expected Artinian ring";
+    K := coefficientRing R;
         
-    S := QQ[Z];
+    Z := getSymbol "Z";
+    S := K(monoid [Z]);
+    
     TrF := traceForm(1_R) ** S;
     IdZ := Z * id_(S^(numgens source TrF));
     ch := det(TrF - IdZ); --use charPoly(TrF)
