@@ -1,0 +1,200 @@
+%M2-real.tex
+%
+% Notes for Macaulay2-real package
+%
+% Jordy Lopez
+% Kelly Maluccio
+% Thomas Yahl
+% Frank Sottile
+%
+% 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Choose your paper size here and below
+%
+\documentclass[12pt]{amsart}
+%\documentclass[a4paper,12pt]{amsart} 
+\usepackage{amssymb}
+\usepackage{bbm}        % Blackboard Bold 1
+\usepackage{colordvi}
+\usepackage{graphicx}
+\usepackage{mathrsfs}   % for script fonts
+%%%%%%%%%%% Layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{vmargin}
+%\setpapersize{a4}
+%
+\setpapersize{USletter}
+\setmargrb{2.5cm}{2.5cm}{2.5cm}{2.5cm} % --- sets all four margins.  Cool.
+
+\hfuzz1.5pc % Don't bother to report overfull boxes if overage is < 1pc
+
+%%%%%%%%%%%% Environments %%%%%%%%%%%%%%%%%%%%%%%%%
+
+\numberwithin{equation}{section}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\publname{\scriptsize \Red{Draft of \today}
+\def\currentvolume{}
+\def\currentissue{}
+% for some reason it can't get the date info from here
+%\issueinfo{X}{3}{January}{2003}
+%\pagespan{1}{60}
+\PII{}}
+\copyrightinfo{}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{FNC}[page]
+\def\fauxfootnote#1{{\addtocounter{FNC}{2}\Magenta{$^\fnsymbol{FNC}$}%
+     \let\thefootnote\relax\footnotetext{\Magenta{$^\fnsymbol{FNC}$#1}}}}
+%%%%%%%%%%%%%%%%%%%% Macros %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\cprime{$'$}
+
+\newcommand{\CC}{{\mathbb C}}
+\newcommand{\NN}{{\mathbb N}}
+\newcommand{\QQ}{{\mathbb Q}}
+\newcommand{\RR}{{\mathbb R}}
+\newcommand{\ZZ}{{\mathbb Z}}
+
+\DeclareMathOperator{\ini}{{\rm in}}
+\DeclareMathOperator{\var}{{\rm var}}
+\DeclareMathOperator{\St}{{\rm St}}
+
+%\newcommand{\defcolor}[1]{\Cyan{#1}}
+\newcommand{\defcolor}[1]{\Blue{#1}}
+\newcommand{\demph}[1]{\defcolor{{\sl #1}}}
+
+\title{Notes for Macaulay2 real project}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\author{Jordy Lopez}
+%\address{Department of Mathematics\\
+%         Texas A\&M University\\
+%         College Station\\
+%         Texas \ 77843\\
+%         USA}
+\email{jordy.lopez@math.tamu.edu}
+%\urladdr{www.math.tamu.edu/\~{}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\author{Kelly Maluccio}
+%\address{Department of Mathematics\\
+%         Texas A\&M University\\
+%         College Station\\
+%         Texas \ 77843\\
+%         USA}
+\email{kmaluccio@math.tamu.edu}
+%\urladdr{www.math.tamu.edu/\~{}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\author{Thomas J.\ Yahl}
+%\address{Department of Mathematics\\
+%         Texas A\&M University\\
+%         College Station\\
+%         Texas \ 77843\\
+%         USA}
+\email{thomasjyahl@math.tamu.edu}
+%\urladdr{www.math.tamu.edu/\~{}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\author{Frank Sottile}
+%\address{Department of Mathematics\\
+%         Texas A\&M University\\
+%         College Station\\
+%         Texas \ 77843\\
+%         USA}
+\email{sottile@math.tamu.edu}
+\urladdr{www.math.tamu.edu/\~{}sottile}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subjclass[2020]{14P99}
+\keywords{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{abstract}
+These are notes around the project on implementing rountines to study real roots of polynomial systems in Macaulay2.
+\end{abstract}
+
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+For a sequence $c=(c_0,\dotsc,c_n)$ of real numbers, let \defcolor{$\var(c)$} be the variation (number of changes in sign) in the sequence
+$c$. 
+This is the number of times consecutive elements of the sequence $c$ have opposite signs, after removing any occurrences of 0 from $c$.
+Given a sequence $F=(f_0(t),\dotsc,f_m(t))$ of real univariate polynomials and $a\in \RR$, let \defcolor{$\var(F,a)$} be the variation in
+the sequence $(f_0(a),\dotsc,f_m(a))$.
+We define \defcolor{$\var(F,\infty)$} to be the variation in the leading coefficients of the polynomials in $F$, which is $\var(F,a)$ for
+$a\gg 0$ sufficiently positive, 
+and set \defcolor{$\var(F,-\infty)$} to be $\var(F,a)$ for $a\ll 0$ sufficiently negative.
+
+For a univariate polynomial $f\in\RR[t]$ of degree $m$, its derivative sequence \defcolor{$\delta f$} is the sequence of its derivatives,
+$\delta f:=(f(t), f'(t), f''(t), f^{(3)}(t),\dotsc, f^{(m)}(t))$.
+For numbers $a<b$ in $\RR\cup\{\pm\infty\}$, let \defcolor{$r(f,a,b)$} be the number of roots of $f$ in the interval $(a,b]$.
+
+\begin{theorem}[Budan-Fourier Theorem]
+Let $f\in\RR[t]$ be a univariate polynomial and $a<b$ be numbers in $\RR\cup\{\pm\infty\}$.
+Then $\var(\delta f,a)-\var(\delta f,b)\geq r(f,a,b)$, and the difference is even.
+\end{theorem}
+
+(This implies Descartes' rule of signs for roots in $(0,\infty)$.)
+
+
+Given univariate polynomials $f,g$, their \demph{Sturm sequence} \defcolor{$\St(f,g)$} is the sequence
+\[
+  f_0\ :=\ f\,,\
+  f_1\ :=\ f'g\,,\ \ f_2\,,\, f_3\,,\ \dotsc\,,\, f_m\,,
+\]
+where $f_m$ is a greatest common divisor of $f$ and $f'g$, and for each $i\geq 1$,
+$-f_{i+1}$ is the negative of the remainder from the Euclidean algorithm.
+That is, $f_{i+1}$ is the unique polynomial of degree less than the degree of $f_i$ such that there is a polynomial $q_i$
+with  $f_{i-1}=q_i f_i- f_{i+1}$.  
+
+\begin{theorem}[Sylvester's Theorem]
+Let $f,g\in\RR[x]$ be univariate polynomials and suppose that $a<b$ are numbers in  $\RR\cup\{\pm\infty\}$
+such that neither is a root of $f$.
+Then $\var(\St(f,g),a)-\var(\St(f,g),b)$ is the difference of the number of roots $x\in(a,b)$ of $f$ with $g(x)>0$
+and those with $g(x)<0$.
+\end{theorem}
+
+
+\begin{theorem}[Sturm's Theorem]
+Let $f\in\RR[x]$ be a univariate polynomial suppose that $a<b$ are two numbers in  $\RR\cup\{\pm\infty\}$
+such that neither is a root of $f$.
+Then $\var(\St(f,1),a)-\var(\St(f,1),b)$ is the number of roots of $f$ in the open interval $(a,b)$.
+\end{theorem}
+
+\begin{lemma}
+Let $f=c_0+c_1t+\dotsb+c_m t^m$ be a univariate polynomial and $M:=|c_0/c_m|+\dotsb+|c_{m-1}/c_m|+1$.
+Then all roots of $f$ lie in the interval $(-M,M)$.
+\end{lemma}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{proof}
+Let $|x|>M$.
+If $b_i:=c_i/c_m$, then $f(x)=c_m x^m(b_0 x^{-m}+\dotsb+b_{m-1}x^{-1} +1)$.
+As
+\[
+   |b_0 x^{-m}+\dotsb+b_{m-1} x^{-1}|\ <\
+   (|b_0|+\dotsb+|b_{m-1}|)M^{-1}\ <\ 1\,,
+\]
+we see that $f(x)\neq 0$.
+\end{proof}
+
+This gives the start of a bisection algorithm for locating the roots of $f$.
+
+
+
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{amsplain}    
+\bibliography{bibl}    
+
+
+
+
+
+%@
+\end{document}    
+
