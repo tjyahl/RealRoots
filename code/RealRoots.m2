@@ -336,23 +336,24 @@ document {
 	Inputs => {
 	 	"f"
 		},
-	Outputs => { RingElement => { "the eliminant of”, TT "f", "with respect to the polynomial ring in one variable”, TT “Z” }},
+	Outputs => { RingElement => { "the eliminant of", TT "f", "with respect to the polynomial ring in one variable", TT "Z"
+		 }},
 	PARA {
 	      "This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"
 	      },
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"eliminant1”, "eliminant2"}
+	SeeAlso => {"eliminant1", "eliminant2"}
      	}
 
 document {
 	Key => {(eliminant1, RingElement),eliminant1},
-	Usage => "eliminant1(f)”,
+	Usage => "eliminant1(f)",
 	Inputs => {
 	 	"f"
 		},
-	Outputs => { RingElement => { "the eliminant  of”, TT ”f", "with respect to the polynomial ring in one variable”, TT “Z” }},
+	Outputs => { RingElement => { "the eliminant  of", TT "f", "with respect to the polynomial ring in one variable", TT "Z" }},
 	PARA {
 	      "This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"
 	      },
@@ -364,110 +365,111 @@ document {
 
 document {
 	Key => {(eliminant2, RingElement),eliminant2},
-	Usage => "eliminant2(f)”,
+	Usage => "eliminant2(f)",
 	Inputs => {
 	 	"f"
 		},
-	Outputs => { RingElement => { "the eliminant  of”, TT ”f", "with respect to the polynomial ring in one variable”, TT “Z” }},
+	Outputs => { RingElement => { "the eliminant  of", TT "f", "with respect to the polynomial ring in one variable", TT "Z" }},
 	PARA {
 	      "This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"
 	      },
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"eliminant", "eliminant1”}
+	SeeAlso => {"eliminant", "eliminant1"}
      	}
 document {
 	Key => {(regularRep, RingElement),regularRep},
-	Usage => "regularRep(f)”,
+	Usage => "regularRep(f)",
 	Inputs => {
 	 	"f"
 		},
-	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by”, TT ”f", "in terms of the standard basis of a finite-dimensional k-vector space”, TT “A” }},
+	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by", TT "f", "in terms of the standard basis of a finite-dimensional k-vector space", TT "A" }},
 	PARA {
-	     “This command gives the matrix of the linear map defined by multiplication by f in terms of the standard basis of a finite-dimensional k-vector space A” 
+	     "This command gives the matrix of the linear map defined by multiplication by f in terms of the standard basis of a finite-dimensional k-vector space A" 
 	      },
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
-	 	 ///,
-	SeeAlso => {"", "”}
+	 	 ///--,
+--	SeeAlso => {"", ""}
      	}
 
 document {
 	Key => {(charPoly, Matrix),charPoly},
-	Usage => "charPoly(M)”,
+	Usage => "charPoly(M)",
 	Inputs => {
 	 	"M"
 		},
-	Outputs => { RingElement => { "the characteristic polynomial of”, TT “M"}},
+	Outputs => { RingElement => { "the characteristic polynomial of", TT "M"}},
 	PARA {
 	      "This computes the characteristic polynomial of M"
 	      },
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"eliminant", "eliminant1”}
+	SeeAlso => {"eliminant", "eliminant1"}
      	}
 
 
 document {
 	Key => {(SturmSequence, RingElement),SturmSequence},
-	Usage => "SturmSequence(f)”,
+	Usage => "SturmSequence(f)",
 	Inputs => {
 	 	"f"
 		},
-	Outputs => { List => { "the Sturm Sequence of”, TT “f"}},
+	Outputs => { List => { "the Sturm Sequence of", TT "f"}},
 	PARA {
 	      "This computes the Sturm Sequence of the polynomial f"
 	      },
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"eliminant", "eliminant1”}
+	SeeAlso => {"eliminant", "eliminant1"}
      	}
 
 
 document {
 	Key => {(numRealSturm, RingElement),numRealSturm},
-	Usage => "numRealSturm(M)”,
+	Usage => "numRealSturm(M)",
 	Inputs => {
 	 	"f"
 		},
-	Outputs => { ZZ => { "the number of real roots of a univariate polynomial”, TT “f"}},
+	Outputs => { ZZ => { "the number of real roots of a univariate polynomial", TT "f"}},
 	PARA {
 	      "This counts the number of real roots of a univariate polynomial"
 	      },
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"eliminant", "eliminant1”}
+	SeeAlso => {"eliminant", "eliminant1"}
      	}
 
 
 
 document {
 	Key => {(traceFormSignature, RingElement),traceFormSignature},
-	Usage => "traceFormSignature(f)”,
+
+	Usage => "traceFormSignature(f)",
 	Inputs => {
 	 	"f"
 		},
-	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of”, TT ”f" }},
+	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
 	PARA {
 	      "This computes the rank and the signature of the trace quadratic form of an element f in an Artinian ring of characteristic zero"
 	      },
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"traceForm", “traceForm1”, “numRealTrace”}
+	SeeAlso => {"traceForm", "traceForm1", "numRealTrace"}
      	}
 
 document {
 	Key => {(numRealTrace, QuotientRing),numRealTrace},
-	Usage => "numRealTrace(R)”,
+	Usage => "numRealTrace(R)",
 	Inputs => {
 	 	"R"
 		},
-	Outputs => { ZZ => { "the number of real points of Spec”, TT ”R" }},
+	Outputs => { ZZ => { "the number of real points of Spec", TT "R" }},
 	PARA {
 	      "This computes the number of real points of Spec(R) where R is an Artinian ring with characteristic zero"
 	      },
