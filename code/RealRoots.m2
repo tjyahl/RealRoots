@@ -181,6 +181,37 @@ signAtInfinity (RingElement) := ZZ => f->(
     sign( leadCoefficient f )
     )
 
+deltaList = method()
+deltaList (RingElement) := List => f ->(
+    R := ring f;
+    if not isUnivariate(R) then error "Error: Expected univariate polynomial";
+    if (f == 0) then error "Error: Expected nonzero polynomial";
+    
+    t := R_0;
+    d := first degree f;
+    apply(d+1, i -> diff(t^i,f))
+    )
+
+numRealdelta = method()
+numRealdelta (RingElement) := ZZ => f->( 
+    l := deltaList f;
+    variations apply(l,signAtNegInfinity) - variations apply(l,signAtInfinity)
+    )
+
+numRealdelta (RingElement,Number,Number) := ZZ => (f,a,b)->(
+    l := deltaList f;
+    variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
+    )
+
+numRealdelta (RingElement,Number,InfiniteNumber) := ZZ => (f,a,b)->(
+    l := deltaList f;
+    variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAtInfinity(g))
+    )
+
+numRealdelta (RingElement,InfiniteNumber,Number) := ZZ => (f,a,b)->(
+    l := deltaList f;
+    variations apply(l,g->signAtNegInfinity(g)) - variations apply(l,g->signAt(g,b))
+    )
 
 numRealSturm = method()
 numRealSturm (RingElement) := ZZ => f->( 
@@ -307,6 +338,7 @@ end
 ----
 ----
 ----
+
 
 
 
