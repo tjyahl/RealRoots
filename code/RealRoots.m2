@@ -323,7 +323,6 @@ numRealTrace (QuotientRing) := ZZ => R->(
 
 beginDocumentation()
 document {
-
 	Key => RealRoots,
 	Headline =>"Package for exploring counting and locating real solutions to polynomial systems",
 	"The purpose of this package is to provide tools for elimination and solving, with a particular emphasis
@@ -333,14 +332,9 @@ document {
 document {
 	Key => {(eliminant, RingElement),eliminant},
 	Usage => "eliminant(f)",
-	Inputs => {
-	 	"f"
-		},
-	Outputs => { RingElement => { "the eliminant of", TT "f", "with respect to the polynomial ring in one variable", TT "Z"
-		 }},
-	PARA {
-	      "This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"
-	      },
+	Inputs => {"f"},
+	Outputs => { RingElement => { "the eliminant of", TT "f", "with respect to the polynomial ring in one variable", TT "Z"}},
+	PARA {"This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"},
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
@@ -350,13 +344,9 @@ document {
 document {
 	Key => {(eliminant1, RingElement),eliminant1},
 	Usage => "eliminant1(f)",
-	Inputs => {
-	 	"f"
-		},
+	Inputs => {"f"},
 	Outputs => { RingElement => { "the eliminant  of", TT "f", "with respect to the polynomial ring in one variable", TT "Z" }},
-	PARA {
-	      "This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"
-	      },
+	PARA {"This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"},
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
@@ -366,13 +356,9 @@ document {
 document {
 	Key => {(eliminant2, RingElement),eliminant2},
 	Usage => "eliminant2(f)",
-	Inputs => {
-	 	"f"
-		},
+	Inputs => {"f"},
 	Outputs => { RingElement => { "the eliminant  of", TT "f", "with respect to the polynomial ring in one variable", TT "Z" }},
-	PARA {
-	      "This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"
-	      },
+	PARA {"This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"},
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
@@ -381,13 +367,9 @@ document {
 document {
 	Key => {(regularRep, RingElement),regularRep},
 	Usage => "regularRep(f)",
-	Inputs => {
-	 	"f"
-		},
+	Inputs => {"f"},
 	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by", TT "f", "in terms of the standard basis of a finite-dimensional k-vector space", TT "A" }},
-	PARA {
-	     "This command gives the matrix of the linear map defined by multiplication by f in terms of the standard basis of a finite-dimensional k-vector space A" 
-	      },
+	PARA {"This command gives the matrix of the linear map defined by multiplication by f in terms of the standard basis of a finite-dimensional k-vector space A" },
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///--,
@@ -397,13 +379,9 @@ document {
 document {
 	Key => {(charPoly, Matrix),charPoly},
 	Usage => "charPoly(M)",
-	Inputs => {
-	 	"M"
-		},
+	Inputs => {"M"},
 	Outputs => { RingElement => { "the characteristic polynomial of", TT "M"}},
-	PARA {
-	      "This computes the characteristic polynomial of M"
-	      },
+	PARA {"This computes the characteristic polynomial of M"},
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
@@ -414,13 +392,9 @@ document {
 document {
 	Key => {(SturmSequence, RingElement),SturmSequence},
 	Usage => "SturmSequence(f)",
-	Inputs => {
-	 	"f"
-		},
+	Inputs => {"f"},
 	Outputs => { List => { "the Sturm Sequence of", TT "f"}},
-	PARA {
-	      "This computes the Sturm Sequence of the polynomial f"
-	      },
+	PARA {"This computes the Sturm Sequence of the polynomial f"},
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
@@ -431,13 +405,9 @@ document {
 document {
 	Key => {(numRealSturm, RingElement),numRealSturm},
 	Usage => "numRealSturm(M)",
-	Inputs => {
-	 	"f"
-		},
+	Inputs => {"f"},
 	Outputs => { ZZ => { "the number of real roots of a univariate polynomial", TT "f"}},
-	PARA {
-	      "This counts the number of real roots of a univariate polynomial"
-	      },
+	PARA {"This counts the number of real roots of a univariate polynomial"},
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
@@ -450,13 +420,9 @@ document {
 	Key => {(traceFormSignature, RingElement),traceFormSignature},
 
 	Usage => "traceFormSignature(f)",
-	Inputs => {
-	 	"f"
-		},
+	Inputs => {"f"},
 	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
-	PARA {
-	      "This computes the rank and the signature of the trace quadratic form of an element f in an Artinian ring of characteristic zero"
-	      },
+	PARA {"This computes the rank and the signature of the trace quadratic form of an element f in an Artinian ring of characteristic zero"},
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
@@ -466,13 +432,9 @@ document {
 document {
 	Key => {(numRealTrace, QuotientRing),numRealTrace},
 	Usage => "numRealTrace(R)",
-	Inputs => {
-	 	"R"
-		},
+	Inputs => {"R"},
 	Outputs => { ZZ => { "the number of real points of Spec", TT "R" }},
-	PARA {
-	      "This computes the number of real points of Spec(R) where R is an Artinian ring with characteristic zero"
-	      },
+	PARA {"This computes the number of real points of Spec(R) where R is an Artinian ring with characteristic zero"},
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
