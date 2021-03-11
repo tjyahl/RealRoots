@@ -37,6 +37,8 @@ export{
     "numRealSturm",
     "numPosRoots",
     "numNegRoots",
+    --"deltaList", add this? also add to documentation
+    --"numRealDelta", add this? also add to documentation
     "variations",
     "traceForm",
     "traceForm1",
@@ -414,19 +416,64 @@ document {
 	SeeAlso => {"eliminant", "eliminant1"}
      	}
 
-
-
 document {
-	Key => {(traceFormSignature, RingElement),traceFormSignature},
-
-	Usage => "traceFormSignature(f)",
+    	Key => {(numPosRoots, RingElement), numPosRoots},
+	Usage => "numPosRoots(f)",
 	Inputs => {"f"},
-	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
-	PARA {"This computes the rank and the signature of the trace quadratic form of an element f in an Artinian ring of characteristic zero"},
+	Outputs => { ZZ => {"the number of positive real roots of a polynomial", TT "f"}},
+	PARA {"This uses Sturm sequences to compute the number of positive real roots of a polynomial f with real coefficients"},
+	EXAMPLE lines ///
+	    	--here write example code
+		///
+	See Also => {"numNegRoots","numRealSturm"}
+	}
+    
+document {
+    	Key => {(numNegRoots, RingElement), numNegRoots},
+	Usage => "numNegRoots(f)",
+	Inputs => {"f"},
+	Outputs => { ZZ => {"the number of negative real roots of a polynomial", TT "f"}},
+	PARA {"This uses Sturm sequences to compute the number of negative real roots of a polynomial f with real coefficients"},
+	EXAMPLE lines ///
+	    	--here write example code
+		///
+	See Also => {"numPosRoots","numRealSturm"}
+	}
+    
+document {
+    	Key => {(variations, List),variations},
+	Usage => "variations(l)",
+	Inputs => {"l"},
+	Outputs => { ZZ => { "the number of sign changes in a sequence", TT "l" }},
+	PARA {"This computes the number of changes of sign in a sequence l"},
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"traceForm", "traceForm1", "numRealTrace"}
+	SeeAlso => {}
+     	}
+    
+document {
+	Key => {(traceForm, RingElement),traceForm},
+	Usage => "traceForm(f)",
+	Inputs => {"f"},
+	Outputs => { RingElement => { "the trace quadratic form of", TT "f" }},
+	PARA {"This computes the trace quadratic form of an element f in an Artinian ring"},
+	EXAMPLE lines ///
+	 	 --here write example code for using this method
+	 	 ///,
+	SeeAlso => {"traceFormSignature", "numRealTrace"} --need to update this to add traceForm1 as another input? or its own documentation?
+     	}
+
+document {
+	Key => {(traceFormSignature, RingElement),traceFormSignature},
+	Usage => "traceFormSignature(f)",
+	Inputs => {"f"},
+	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
+	PARA {"This computes the rank and signature of the trace quadratic form of an element f in an Artinian ring of characteristic zero"},
+	EXAMPLE lines ///
+	 	 --here write example code for using this method
+	 	 ///,
+	SeeAlso => {"traceForm", "numRealTrace"}
      	}
 
 document {
@@ -438,7 +485,7 @@ document {
 	EXAMPLE lines ///
 	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"traceForm"} --need to look up how to write documentation for multiple types of inputs
+	SeeAlso => {"traceForm"} --need to update this documentation to allow for multiple inputs
      	}
 
 end
@@ -449,10 +496,9 @@ end
 ----
 ----1) Remember to include tests for the code in documentation.
 ----2) How do we make sure that polynomials f and g have real coefficients?
-----
-----
-----
-----
+----3) Optional inputs for certain methods? Update this in the code and in documentation
+----4) EXAMPLES to put in documentation: 
+         ----R = QQ[x,y], F = {x^5-49/95*x^3*y+y^6, y^5-49/95*x*y^3+x^6} (AG class example) and F = {y^2-x^2-1,x-y^2+4*y-2} (Frank's example)
 ----
 ----
 
