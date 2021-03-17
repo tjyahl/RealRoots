@@ -338,7 +338,7 @@ document {
 	Outputs => { RingElement => { "the eliminant of", TT "f", "with respect to the polynomial ring in one variable", TT "Z"}},
 	PARA {"This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"},
 	EXAMPLE lines ///
-	 	 --here write example code for using this method
+	        --here write example code for using this method
 	 	 ///,
 	SeeAlso => {"eliminant1", "eliminant2"}
      	}
@@ -373,6 +373,9 @@ document {
 	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by", TT "f", "in terms of the standard basis of a finite-dimensional k-vector space", TT "A" }},
 	PARA {"This command gives the matrix of the linear map defined by multiplication by f in terms of the standard basis of a finite-dimensional k-vector space A" },
 	EXAMPLE lines ///
+	         R = QQ[t]
+		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 regularRep(f)
 	 	 --here write example code for using this method
 	 	 ///--,
 --	SeeAlso => {"", ""}
@@ -385,6 +388,10 @@ document {
 	Outputs => { RingElement => { "the characteristic polynomial of", TT "M"}},
 	PARA {"This computes the characteristic polynomial of M"},
 	EXAMPLE lines ///
+	         R = QQ[t]
+		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 M = regularRep(f)
+		 charPoly(M)
 	 	 --here write example code for using this method
 	 	 ///,
 	SeeAlso => {"eliminant", "eliminant1"}
@@ -398,7 +405,10 @@ document {
 	Outputs => { List => { "the Sturm Sequence of", TT "f"}},
 	PARA {"This computes the Sturm Sequence of the polynomial f"},
 	EXAMPLE lines ///
-	 	 --here write example code for using this method
+	 	 R = QQ[t]
+		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 SturmSequence(f)
+		 --here write example code for using this method
 	 	 ///,
 	SeeAlso => {"eliminant", "eliminant1"}
      	}
@@ -411,6 +421,9 @@ document {
 	Outputs => { ZZ => { "the number of real roots of a univariate polynomial", TT "f"}},
 	PARA {"This counts the number of real roots of a univariate polynomial"},
 	EXAMPLE lines ///
+	    	 R = QQ[t]
+		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 numRealSturm(f)
 	 	 --here write example code for using this method
 	 	 ///,
 	SeeAlso => {"eliminant", "eliminant1"}
@@ -423,6 +436,9 @@ document {
 	Outputs => { ZZ => {"the number of positive real roots of a polynomial", TT "f"}},
 	PARA {"This uses Sturm sequences to compute the number of positive real roots of a polynomial f with real coefficients"},
 	EXAMPLE lines ///
+	        R = QQ[t]
+	        f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+	        numPosRoots(f)
 	    	--here write example code
 		///
 	See Also => {"numNegRoots","numRealSturm"}
@@ -435,6 +451,9 @@ document {
 	Outputs => { ZZ => {"the number of negative real roots of a polynomial", TT "f"}},
 	PARA {"This uses Sturm sequences to compute the number of negative real roots of a polynomial f with real coefficients"},
 	EXAMPLE lines ///
+	        R = QQ[t]
+	        f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+	        numNegRoots(f)
 	    	--here write example code
 		///
 	See Also => {"numPosRoots","numRealSturm"}
@@ -447,6 +466,10 @@ document {
 	Outputs => { ZZ => { "the number of sign changes in a sequence", TT "l" }},
 	PARA {"This computes the number of changes of sign in a sequence l"},
 	EXAMPLE lines ///
+	         R = QQ[t]
+		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 c =  SturmSequence(f)
+		 variations(c)
 	 	 --here write example code for using this method
 	 	 ///,
 	SeeAlso => {}
@@ -459,6 +482,9 @@ document {
 	Outputs => { RingElement => { "the trace quadratic form of", TT "f" }},
 	PARA {"This computes the trace quadratic form of an element f in an Artinian ring"},
 	EXAMPLE lines ///
+	         R = QQ[t]
+		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 traceForm(f)
 	 	 --here write example code for using this method
 	 	 ///,
 	SeeAlso => {"traceFormSignature", "numRealTrace"} --need to update this to add traceForm1 as another input? or its own documentation?
@@ -471,6 +497,9 @@ document {
 	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
 	PARA {"This computes the rank and signature of the trace quadratic form of an element f in an Artinian ring of characteristic zero"},
 	EXAMPLE lines ///
+	         R = QQ[t]
+		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 traceFormSignature(f)
 	 	 --here write example code for using this method
 	 	 ///,
 	SeeAlso => {"traceForm", "numRealTrace"}
@@ -483,6 +512,8 @@ document {
 	Outputs => { ZZ => { "the number of real points of Spec", TT "R" }},
 	PARA {"This computes the number of real points of Spec(R) where R is an Artinian ring with characteristic zero"},
 	EXAMPLE lines ///
+	         R = QQ[t]
+		 numRealTrace(R)
 	 	 --here write example code for using this method
 	 	 ///,
 	SeeAlso => {"traceForm"} --need to update this documentation to allow for multiple inputs
