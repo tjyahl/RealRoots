@@ -37,7 +37,7 @@ export{
     "numRealSturm",
     "numPosRoots",
     "numNegRoots",
-    --"deltaList", add this? also add to documentation
+    --"deltaList", add this? also add to documentation, Jordy:maybe we can call it bfBound (Budan-Fourier bound?)
     --"numRealDelta", add this? also add to documentation
     "variations",
     "traceForm",
@@ -338,34 +338,16 @@ document {
 	Outputs => { RingElement => { "the eliminant of", TT "f", "with respect to the polynomial ring in one variable", TT "Z"}},
 	PARA {"This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"},
 	EXAMPLE lines ///
-	        --here write example code for using this method
+	    	R = QQ[x,y]
+		F = {y^2-x^2-1,x-y^2+4*y-2}
+		I = ideal F
+		S = R/I
+		eliminant(x)
+	       	eliminant(y)	      
 	 	 ///,
 	SeeAlso => {"eliminant1", "eliminant2"}
      	}
 
-document {
-	Key => {(eliminant1, RingElement),eliminant1},
-	Usage => "eliminant1(f)",
-	Inputs => {"f"},
-	Outputs => { RingElement => { "the eliminant  of", TT "f", "with respect to the polynomial ring in one variable", TT "Z" }},
-	PARA {"This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"},
-	EXAMPLE lines ///
-	 	 --here write example code for using this method
-	 	 ///,
-	SeeAlso => {"eliminant", "eliminant2"}
-     	}
-
-document {
-	Key => {(eliminant2, RingElement),eliminant2},
-	Usage => "eliminant2(f)",
-	Inputs => {"f"},
-	Outputs => { RingElement => { "the eliminant  of", TT "f", "with respect to the polynomial ring in one variable", TT "Z" }},
-	PARA {"This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"},
-	EXAMPLE lines ///
-	 	 --here write example code for using this method
-	 	 ///,
-	SeeAlso => {"eliminant", "eliminant1"}
-     	}
 document {
 	Key => {(regularRep, RingElement),regularRep},
 	Usage => "regularRep(f)",
@@ -373,10 +355,11 @@ document {
 	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by", TT "f", "in terms of the standard basis of a finite-dimensional k-vector space", TT "A" }},
 	PARA {"This command gives the matrix of the linear map defined by multiplication by f in terms of the standard basis of a finite-dimensional k-vector space A" },
 	EXAMPLE lines ///
-	         R = QQ[t]
-		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		 regularRep(f)
-	 	 --here write example code for using this method
+		 R = QQ[x,y]
+		 F = {y^2-x^2-1,x-y^2+4*y-2}
+		 I = ideal F
+		 S = R/I
+		 regularRep(y)
 	 	 ///--,
 --	SeeAlso => {"", ""}
      	}
@@ -388,13 +371,14 @@ document {
 	Outputs => { RingElement => { "the characteristic polynomial of", TT "M"}},
 	PARA {"This computes the characteristic polynomial of M"},
 	EXAMPLE lines ///
-	         R = QQ[t]
-		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		 M = regularRep(f)
+	         R = QQ[x,y]
+		 F = {y^2-x^2-1,x-y^2+4*y-2}
+		 I = ideal F
+		 S = R/I
+		 M = regularRep(y)
 		 charPoly(M)
-	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"eliminant", "eliminant1"}
+--	SeeAlso => {"",""}
      	}
 
 
@@ -403,14 +387,13 @@ document {
 	Usage => "SturmSequence(f)",
 	Inputs => {"f"},
 	Outputs => { List => { "the Sturm Sequence of", TT "f"}},
-	PARA {"This computes the Sturm Sequence of the polynomial f"},
+	PARA {"This computes the Sturm Sequence of a polynomial f"},
 	EXAMPLE lines ///
 	 	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 		 SturmSequence(f)
-		 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"eliminant", "eliminant1"}
+--	SeeAlso => {"", ""}
      	}
 
 
@@ -424,9 +407,8 @@ document {
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 		 numRealSturm(f)
-	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {"eliminant", "eliminant1"}
+	SeeAlso => {"numPosRoots", "numNegRoots"}
      	}
 
 document {
@@ -439,9 +421,8 @@ document {
 	        R = QQ[t]
 	        f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 	        numPosRoots(f)
-	    	--here write example code
-		///
-	See Also => {"numNegRoots","numRealSturm"}
+		///,
+	SeeAlso => {"numNegRoots","numRealSturm"}
 	}
     
 document {
@@ -454,9 +435,8 @@ document {
 	        R = QQ[t]
 	        f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 	        numNegRoots(f)
-	    	--here write example code
-		///
-	See Also => {"numPosRoots","numRealSturm"}
+		///,
+	SeeAlso => {"numPosRoots","numRealSturm"}
 	}
     
 document {
@@ -470,9 +450,22 @@ document {
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 		 c =  SturmSequence(f)
 		 variations(c)
-	 	 --here write example code for using this method
 	 	 ///,
-	SeeAlso => {}
+--	SeeAlso => {}
+     	}
+    
+    document {
+	Key => {(numRealdelta, RingElement),numRealdelta}, --maybe we can call it bfBound (Budan-Fourier bound?)
+	Usage => "numRealdelta(f))",
+	Inputs => {"f"},
+	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f"}},
+	PARA {"This computes a sharp upper bound for the number of real roots of a univariate polynomial f"},
+	EXAMPLE lines ///
+	         R = QQ[t]
+		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 numRealdelta(f)
+	 	 ///,
+--	SeeAlso => {"", ""}
      	}
     
 document {
@@ -482,10 +475,8 @@ document {
 	Outputs => { RingElement => { "the trace quadratic form of", TT "f" }},
 	PARA {"This computes the trace quadratic form of an element f in an Artinian ring"},
 	EXAMPLE lines ///
-	         R = QQ[t]
-		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		 traceForm(f)
-	 	 --here write example code for using this method
+	         R = QQ[x,y]
+		 traceForm(x-y)
 	 	 ///,
 	SeeAlso => {"traceFormSignature", "numRealTrace"} --need to update this to add traceForm1 as another input? or its own documentation?
      	}
@@ -497,10 +488,8 @@ document {
 	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
 	PARA {"This computes the rank and signature of the trace quadratic form of an element f in an Artinian ring of characteristic zero"},
 	EXAMPLE lines ///
-	         R = QQ[t]
-		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		 traceFormSignature(f)
-	 	 --here write example code for using this method
+	         R = QQ[x,y]
+		 traceFormSignature(x-y+1)
 	 	 ///,
 	SeeAlso => {"traceForm", "numRealTrace"}
      	}
@@ -512,13 +501,14 @@ document {
 	Outputs => { ZZ => { "the number of real points of Spec", TT "R" }},
 	PARA {"This computes the number of real points of Spec(R) where R is an Artinian ring with characteristic zero"},
 	EXAMPLE lines ///
-	         R = QQ[t]
-		 numRealTrace(R)
-	 	 --here write example code for using this method
+	         R = QQ[x,y]
+		 F = {y^2-x^2-1,x-y^2+4*y-2}
+		 I = ideal F
+		 S = R/I
+		 numRealTrace(S)
 	 	 ///,
 	SeeAlso => {"traceForm"} --need to update this documentation to allow for multiple inputs
      	}
-
 end
 
 --Put notes, examples, etc down here. It won't go in the actual package.
