@@ -37,8 +37,8 @@ export{
     "numRealSturm",
     "numPosRoots",
     "numNegRoots",
-    --"deltaList", add this? also add to documentation, Jordy:maybe we can call it bfBound (Budan-Fourier bound?)
-    --"numRealDelta", add this? also add to documentation
+    --"derivSequence", add this? also add to documentation
+    "BudanFourierBound",
     "variations",
     "traceForm",
     "traceForm1",
@@ -183,8 +183,8 @@ signAtInfinity (RingElement) := ZZ => f->(
     sign( leadCoefficient f )
     )
 
-deltaList = method()
-deltaList (RingElement) := List => f ->(
+derivSequence = method()
+derivSequence (RingElement) := List => f ->(
     R := ring f;
     if not isUnivariate(R) then error "Error: Expected univariate polynomial";
     if (f == 0) then error "Error: Expected nonzero polynomial";
@@ -194,24 +194,24 @@ deltaList (RingElement) := List => f ->(
     apply(d+1, i -> diff(t^i,f))
     )
 
-numRealdelta = method()
-numRealdelta (RingElement) := ZZ => f->( 
-    l := deltaList f;
+BudanFourierBound = method()
+BudanFourierBound (RingElement) := ZZ => f->( 
+    l := derivSequence f;
     variations apply(l,signAtNegInfinity) - variations apply(l,signAtInfinity)
     )
 
-numRealdelta (RingElement,Number,Number) := ZZ => (f,a,b)->(
-    l := deltaList f;
+BudanFourierBound (RingElement,Number,Number) := ZZ => (f,a,b)->(
+    l := derivSequence f;
     variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
     )
 
-numRealdelta (RingElement,Number,InfiniteNumber) := ZZ => (f,a,b)->(
-    l := deltaList f;
+BudanFourierBound (RingElement,Number,InfiniteNumber) := ZZ => (f,a,b)->(
+    l := derivSequence f;
     variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAtInfinity(g))
     )
 
-numRealdelta (RingElement,InfiniteNumber,Number) := ZZ => (f,a,b)->(
-    l := deltaList f;
+BudanFourierBound (RingElement,InfiniteNumber,Number) := ZZ => (f,a,b)->(
+    l := derivSequence f;
     variations apply(l,g->signAtNegInfinity(g)) - variations apply(l,g->signAt(g,b))
     )
 
@@ -455,15 +455,15 @@ document {
      	}
     
     document {
-	Key => {(numRealdelta, RingElement),numRealdelta}, --maybe we can call it bfBound (Budan-Fourier bound?)
-	Usage => "numRealdelta(f))",
+	Key => {(BudanFourierBound, RingElement),BudanFourierBound}, --maybe we can call it bfBound (Budan-Fourier bound?)
+	Usage => "BudanFourierBound(f))",
 	Inputs => {"f"},
 	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f"}},
 	PARA {"This computes a sharp upper bound for the number of real roots of a univariate polynomial f"},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		 numRealdelta(f)
+		 BudanFourierBound(f)
 	 	 ///,
 --	SeeAlso => {"", ""}
      	}
