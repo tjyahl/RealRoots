@@ -34,6 +34,8 @@ export{
     "regularRep",
     "charPoly",
     "SturmSequence", --do we need to export this
+    "SylvesterSequence",
+    "numSylvester",
     "numRealSturm",
     "numPosRoots",
     "numNegRoots",
@@ -157,6 +159,31 @@ SturmSequence (RingElement) := List => f->(
     toList l
     )
 
+SylvesterSequence = method()
+SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
+   -- Brysiewicz trick to check polynomials are in same ring
+    try(I := ideal (f,g)) else error "Error: Polynomials should be in the same ring"; 
+    R := ring I;
+    if not isUnivariate(R) then error "Error: Expected univariate polynomial";
+    x := R_0;
+   -- A bound for the length of the Sylvester sequence:
+    m := if f == 0 then 0 else first degree f;
+    n := if g == 0 then 0 else first degree g;
+    d := 2 + min {m,n};
+    
+    Syl := new MutableList from toList(0..d);
+    Syl#0 = f;
+    Syl#1 = g;
+    scan(2..d, i -> Syl#i = -Syl#(i-2) % Syl#(i-1));
+    	    
+    toList Syl
+    )
+
+numSylvester = method()
+numSylvester (RingElement, RingElement, Number, Number) := ZZ => (f, g, a, b)->(
+    l := SylvesterSequence(f,diff((ring f)_0,f)*g);
+    variations apply(l,h->signAt(h,a)) - variations apply(l,h->signAt(h,b))
+    )
 
 sign = method()
 sign (Number) := ZZ => n ->(
@@ -164,7 +191,6 @@ sign (Number) := ZZ => n ->(
      else if n == 0 then 0
      else if n > 0 then 1
      )
-
 
 signAtNegInfinity = method()
 signAtNegInfinity (RingElement) := ZZ => f->(
@@ -381,21 +407,52 @@ document {
 --	SeeAlso => {"",""}
      	}
 
+ document {
+	Key => {(SylvesterSequence, RingElement, RingElement),SylvesterSequence},
+	Usage => "SylvesterSequence(f,g)",
+	Inputs => {"f","g"},
+	Outputs => { List => { "the Sylvester sequence of", TT "f", "and",TT "g"}},
+	PARA {"This computes the Sylvester sequence of two univariate polynomials f and g in the same ring"},
+	EXAMPLE lines ///
+	         R = QQ[t]
+		 f = (t+1)*(t+2)
+		 g = (t+2)
+		 SylvesterSequence(f,g)
+	 	 ///,
+	SeeAlso => {"numSylvester"}
+     	}
+    
+    document {
+	Key => {(numSylvester, RingElement, RingElement, Number, Number),numSylvester},
+	Usage => "numSylvester(f,g,a,b)",
+	Inputs => {"f","g","a","b"},
+	Outputs => { ZZ => {"the difference between number of roots of",TT "f","when",TT "g",
+		"is positive and when g is negative"}}, --check
+	PARA {""}, --need to fill this out
+	EXAMPLE lines ///
+	    	 R = QQ[t]
+		 f = (t-2)*(t-1)*(t+3)
+		 g = t+1
+		 a = -5
+		 b = 4
+		 numSylvester(f,g,a,b)
+	 	 ///,
+	SeeAlso => {"SylvesterSequence"}
+     	}
 
 document {
 	Key => {(SturmSequence, RingElement),SturmSequence},
 	Usage => "SturmSequence(f)",
 	Inputs => {"f"},
-	Outputs => { List => { "the Sturm Sequence of", TT "f"}},
-	PARA {"This computes the Sturm Sequence of a polynomial f"},
+	Outputs => { List => { "the Sturm sequence of", TT "f"}},
+	PARA {"This computes the Sturm Sequence of a univariate polynomial f"},
 	EXAMPLE lines ///
 	 	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 		 SturmSequence(f)
 	 	 ///,
---	SeeAlso => {"", ""}
+	SeeAlso => {"numRealSturm"}
      	}
-
 
 document {
 	Key => {(numRealSturm, RingElement),numRealSturm},
