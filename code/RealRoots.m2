@@ -33,7 +33,7 @@ export{
     "eliminant2",
     "regularRep",
     "charPoly",
-    "SturmSequence", --do we need to export this
+    "SturmSequence",
     "SylvesterSequence",
     "numSylvester",
     "numRealSturm",
@@ -147,16 +147,7 @@ SturmSequence (RingElement) := List => f->(
     if (f == 0) then error "Error: Expected nonzero polynomial";
     
     x := R_0;
-    d := first degree f;
-    l := new MutableList from toList(0..d);
-    if d >= 0 then (
-	l#0 = f;
-	if d >= 1 then (
-	    l#1 = diff(x,f);
-	    scan(2..d, i -> l#i = -l#(i-2) % l#(i-1))
-	    )
-	);
-    toList l
+    SylvesterSequence(f,diff(x,f))
     )
 
 SylvesterSequence = method()
@@ -179,6 +170,7 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     toList Syl
     )
 
+-- Letting g = 1 gives the number of roots from the Sturm sequence
 numSylvester = method()
 numSylvester (RingElement, RingElement, Number, Number) := ZZ => (f, g, a, b)->(
     l := SylvesterSequence(f,diff((ring f)_0,f)*g);
@@ -404,7 +396,7 @@ document {
 		 M = regularRep(y)
 		 charPoly(M)
 	 	 ///,
---	SeeAlso => {"",""}
+ --	SeeAlso => {"",""}
      	}
 
  document {
@@ -427,8 +419,8 @@ document {
 	Usage => "numSylvester(f,g,a,b)",
 	Inputs => {"f","g","a","b"},
 	Outputs => { ZZ => {"the difference between number of roots of",TT "f","when",TT "g",
-		"is positive and when g is negative"}}, --check
-	PARA {""}, --need to fill this out
+		"is positive and when g is negative"}},--check
+	PARA {"This computes the difference in variations of the Sylvester sequence of", TT "f"," and ",TT "f'g"," at the values", TT "a"," and ", TT "b"},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = (t-2)*(t-1)*(t+3)
@@ -458,8 +450,8 @@ document {
 	Key => {(numRealSturm, RingElement),numRealSturm},
 	Usage => "numRealSturm(M)",
 	Inputs => {"f"},
-	Outputs => { ZZ => { "the number of real roots of a univariate polynomial", TT "f"}},
-	PARA {"This counts the number of real roots of a univariate polynomial"},
+	Outputs => { ZZ => { "the number of real roots of a univariate polynomial", TT "f"," not counting multiplicity"}},
+	PARA {"This computes the difference in variation of the Sturm sequence of", TT "f", "at the values", TT "a"," and ",TT "b"},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
