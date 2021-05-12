@@ -3,40 +3,47 @@ Kelly Maluccio
 Thomas Yahl
 Frank Sottile
 
-Here are some capabilities that I'd like to have in the Macaulay2 real package
+-----
+To Do
+-----
 
-* There are several ways to compute eliminants.  Combine them into one method
-   with different strategies.
-
-  Thomas is working on this
-
-* Include a check for the shape Lemma (make sure that it applies before applying it)
-   and a fix to get it right (?)
-
-* Sturm.  Should do this for real roots in an interval, as well as positive
-           reals, negative reals, and all real.
+* eliminants and strategies (which is default?)
 
 * real root isolation using bisection method
 
-* Implement Budan-Fourier   Jordy and Kelly
+* trace form check
 
-* Trace form, including the multivariate case.
+* Hurwicz stability and/or other stability (Hermite-Biehler, Routh-Hurwicz, Hurwicz determinant)
 
-* (?) Hurwicz stability or other stability
+* documentation
 
-* Hermite-Biehler
+* email Dan Grayson about being named
 
-* Routh-Hurwicz
 
-* Hurwicz determinant
+----------
+To Discuss
+----------
+
+* Sturm sequences & multiple roots
+
+* include a check for the shape lemma
+
+* Sturm-Habicht in place of Sturm for height complexity
+
+* working over more interesting fields
 
 * Stickelberger's theorem, eigenvalues and solving
 
-* Brainstorm about other capabilities.
+* always print warnings? or give option?
 
-* Some of these should work over fields/rings with arbitrary coefficients.
 
-* Sturm-Habicht in place of Sturm for height complexity 
+---------
+Completed
+---------
+
+* Implement Budan-Fourier
 
 * Sylvester's Theorem Var(Syl(p,q),a,b) = 
-                    #{x| p(x)=0 and q(x)>0} -   #{x| p(x)=0 and q(x)<0} 
+                    #{x| p(x)=0 and q(x)>0} -   #{x| p(x)=0 and q(x)<0}
+
+
