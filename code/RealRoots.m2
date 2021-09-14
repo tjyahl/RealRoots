@@ -8,16 +8,16 @@ newPackage(
 	 Email=>"",
 	 HomePage=>""},
      	{Name=>"Jordy Lopez",
-	 Email=>"jordy.lopez@math.tamu.edu",
+	 Email=>"jordy.lopez@tamu.edu",
 	 HomePage=>""},
     	{Name=>"Kelly Maluccio",
 	 Email=>"kmaluccio@tamu.edu",
 	 HomePage=>"https://www.math.tamu.edu/~kmaluccio"},
     	{Name=>"Frank Sottile",
-	 Email=>"sottile@math.tamu.edu",
+	 Email=>"sottile@tamu.edu",
 	 HomePage=>"https://www.math.tamu.edu/~frank.sottile/"},
 	{Name=>"Thomas Yahl",
-	 Email=>"Thomasjyahl@math.tamu.edu",
+	 Email=>"Thomasjyahl@tamu.edu",
 	 HomePage=>"https://math.tamu.edu/~thomasjyahl"}
 	},
     Headline=>"Package for exploring, counting, and locating real solutions to polynomial systems",
@@ -134,11 +134,11 @@ eliminant (RingElement) := RingElement => opts->f->(
 	) else (
 	--This strategy computes the eliminant by finding a minimal linear combination in powers of f
     	B := basis R;
-    	n := numgens source B;
-    	K := coefficientRing R;
+    	n = numgens source B;
+    	K = coefficientRing R;
 	
-    	Z := getSymbol "Z";
-    	S := K(monoid [Z]);
+    	Z = getSymbol "Z";
+    	S = K(monoid [Z]);
     	
     	P := map(R^1,R^(n+1),(i,j)->f^j);
     	M := last coefficients(P, Monomials=>B);
@@ -203,7 +203,7 @@ variations (List) := ZZ => l->(
 SylvesterSequence = method()
 SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     R := ring f;
-    if not (ring g == R) then error "Error: Polynomials should be in the same ring";
+    if not (ring g === R) then error "Error: Polynomials should be in the same ring";
     if not isUnivariate(R) then error "Error: Expected univariate polynomials";
     
     --'d' is a bound for the length of the Sylvester sequence:
