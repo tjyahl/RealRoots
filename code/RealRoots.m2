@@ -200,11 +200,15 @@ variations (List) := ZZ => l->(
 
 
 --Computes the Sylvester sequence of a pair (f,g)
+----This isn't actually the Sylvester sequence since we divide by gcd(f,g)
 SylvesterSequence = method()
 SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     R := ring f;
     if not (ring g === R) then error "Error: Polynomials should be in the same ring";
     if not isUnivariate(R) then error "Error: Expected univariate polynomials";
+    
+    --checking for common factors
+    if not (gcd(f,g)==1) then (f = sub(f/gcd(f,g),R); g = sub(g/gcd(f,g),R));
     
     --'d' is a bound for the length of the Sylvester sequence:
     m := if f == 0 then 0 else first degree f;
