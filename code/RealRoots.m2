@@ -437,7 +437,7 @@ document {
 		eliminant(x)
 	       	eliminant(y)	      
 	 	 ///,
-	SeeAlso => {"eliminant1", "eliminant2"}
+--	SeeAlso => {"",""}
      	}
 
 document {
@@ -452,7 +452,7 @@ document {
 		 I = ideal F
 		 S = R/I
 		 regularRep(y)
-	 	 ///--,
+	 	 ///,
 --	SeeAlso => {"", ""}
      	}
 
@@ -488,7 +488,7 @@ document {
 	SeeAlso => {"numSylvester"}
      	}
     
-    document {
+document {
 	Key => {(numSylvester, RingElement, RingElement, Number, Number),numSylvester},
 	Usage => "numSylvester(f,g,a,b)",
 	Inputs => {"f","g","a","b"},
@@ -531,8 +531,22 @@ document {
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 		 numRealSturm(f)
 	 	 ///,
-	SeeAlso => {"numPosRoots", "numNegRoots"}
+	SeeAlso => {"numPosRoots", "numNegRoots", "SturmSequence"}
      	}
+    
+document {
+    	Key => {(numRealRoots, RingElement), numRealRoots},
+	Usage => "numRealRoots(f)",
+	Inputs => {"f"},
+	Outputs => { ZZ => {"the number of real roots of a polynomial", TT "f"}},
+	PARA {"This uses Sturm sequences to compute the number of real roots of a polynomial f with real coefficients"},
+	EXAMPLE lines ///
+	    	R = QQ[t]
+		f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		numRealRoots(f)
+		///,
+	SeeAlso => {"numPosRoots","numNegRoots"}
+	}
 
 document {
     	Key => {(numPosRoots, RingElement), numPosRoots},
@@ -577,7 +591,21 @@ document {
 --	SeeAlso => {}
      	}
     
-    document {
+document {
+        Key => {(realRootIsolation, RingElement,RR),realRootIsolation},
+	Usage => "realRootIsolation(f,eps)",
+	Inputs => {"f", "eps"},
+	Outputs => { List => { "the number of real roots of a univariate polynomial", TT "f"," not counting multiplicity"}},
+	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of a polynomial", TT "f"," to a real univariate polynomial"},
+	EXAMPLE lines ///
+	    	 R = QQ[t]
+		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 realRootIsolation(f,RR)
+	 	 ///,
+	SeeAlso => {"SturmSequence"}
+     	}
+    
+document {
 	Key => {(BudanFourierBound, RingElement),BudanFourierBound}, --maybe we can call it bfBound (Budan-Fourier bound?)
 	Usage => "BudanFourierBound(f))",
 	Inputs => {"f"},
@@ -630,7 +658,7 @@ document {
 		 S = R/I
 		 numRealTrace(S)
 	 	 ///,
-	SeeAlso => {"traceForm"} --need to update this documentation to allow for multiple inputs
+	SeeAlso => {"traceForm", "traceFormSignature"} --need to update this documentation to allow for multiple inputs
      	}
 end
 
@@ -641,7 +669,7 @@ end
 ----1) Remember to include tests for the code in documentation.
 ----2) How do we make sure that polynomials f and g have real coefficients?
 ----3) Optional inputs for certain methods? Update this in the code and in documentation
-----4) EXAMPLES to put in documentation: 
+----4) EXAMPLES to put in documentation - find 27 lines example to add here 
          ----R = QQ[x,y], F = {x^5-49/95*x^3*y+y^6, y^5-49/95*x*y^3+x^6} (AG class example) and F = {y^2-x^2-1,x-y^2+4*y-2} (Frank's example)
 ----
 ----
