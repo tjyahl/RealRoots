@@ -112,17 +112,17 @@ derivSequence (RingElement) := List => f ->(
 --Computes the number of real/positive/negative solutions to a real univariate polynomial
 numRealRoots = method()
 numRealRoots (RingElement) := ZZ => f->(
-    numRealSturm(f,infinity,infinity)
+    numSturm(f,infinity,infinity)
     )
 
 numPosRoots = method()
 numPosRoots (RingElement) := ZZ => f->(
-    numRealSturm(f,0,infinity)
+    numSturm(f,0,infinity)
     )
 
 numNegRoots = method()
 numNegRoots (RingElement) := ZZ => f->(
-    numRealSturm(f,infinity,0)
+    numSturm(f,infinity,0)
     )
 
 --------------------
