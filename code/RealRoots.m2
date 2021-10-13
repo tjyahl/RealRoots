@@ -35,16 +35,12 @@ export{
     "SylvesterSequence",
     "numSylvester",
     "SturmSequence",
-    "numRealSturm",
-    "numRealRoots",
-    "numPosRoots",
-    "numNegRoots",
+    "numSturm",
     "realRootIsolation",
-    "derivSequence",
     "BudanFourierBound",
     "traceForm",
     "traceFormSignature",
-    "numRealTrace"
+    "numTrace"
     }
 
 
@@ -52,8 +48,7 @@ export{
 --METHODS FOR INTERNAL USE--
 ----------------------------
 
---Check that a ring is a univariate polynomial ring over a field of characteristic zero 
-----better naming?
+--Check that a ring is a univariate polynomial ring over a field of characteristic zero
 ----worry about more interesting fields?
 isUnivariate = method()
 isUnivariate (Ring) := Boolean => R->(
@@ -102,7 +97,33 @@ signAtInfinity (RingElement) := ZZ => f->(
     )
 
 
+--Computes the sequence of derivatives of f
+derivSequence = method()
+derivSequence (RingElement) := List => f ->(
+    R := ring f;
+    if not isUnivariate(R) then error "Error: Expected univariate polynomial";
+    if (f == 0) then error "Error: Expected nonzero polynomial";
+    
+    t := R_0;
+    d := first degree f;
+    apply(d+1, i -> diff(t^i,f))
+    )
 
+--Computes the number of real/positive/negative solutions to a real univariate polynomial
+numRealRoots = method()
+numRealRoots (RingElement) := ZZ => f->(
+    numRealSturm(f,infinity,infinity)
+    )
+
+numPosRoots = method()
+numPosRoots (RingElement) := ZZ => f->(
+    numRealSturm(f,0,infinity)
+    )
+
+numNegRoots = method()
+numNegRoots (RingElement) := ZZ => f->(
+    numRealSturm(f,infinity,0)
+    )
 
 --------------------
 --EXPORTED METHODS--
@@ -234,19 +255,6 @@ numSylvester (RingElement, RingElement, Number, Number) := ZZ => (f, g, a, b)->(
     )
 
 
---Computes the sequence of derivatives of f
-derivSequence = method()
-derivSequence (RingElement) := List => f ->(
-    R := ring f;
-    if not isUnivariate(R) then error "Error: Expected univariate polynomial";
-    if (f == 0) then error "Error: Expected nonzero polynomial";
-    
-    t := R_0;
-    d := first degree f;
-    apply(d+1, i -> diff(t^i,f))
-    )
-
-
 --Computes the difference in variations of the derivative sequence at specified values
 BudanFourierBound = method()
 BudanFourierBound (RingElement) := ZZ => f->( 
@@ -285,56 +293,35 @@ SturmSequence (RingElement) := List => f->(
 
 --Computes the difference in variations of the Sturm sequence at specified values
 ----make it clear in documentation how infinity/-infinity works (because M2 doesn't do "-infinity")
-numRealSturm = method()
-numRealSturm (RingElement) := ZZ => f->( 
+numSturm = method()
+numSturm (RingElement) := ZZ => f->( 
     l := SturmSequence f;
     variations apply(l,signAtNegInfinity) - variations apply(l,signAtInfinity)
     )
 
 
-numRealSturm (RingElement,Number,Number) := ZZ => (f,a,b)->(
+numSturm (RingElement,Number,Number) := ZZ => (f,a,b)->(
     l := SturmSequence f;
     variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
     )
 
 
-numRealSturm (RingElement,Number,InfiniteNumber) := ZZ => (f,a,b)->(
+numSturm (RingElement,Number,InfiniteNumber) := ZZ => (f,a,b)->(
     l := SturmSequence f;
     variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAtInfinity(g))
     )
 
 
-numRealSturm (RingElement,InfiniteNumber,Number) := ZZ => (f,a,b)->(
+numSturm (RingElement,InfiniteNumber,Number) := ZZ => (f,a,b)->(
     l := SturmSequence f;
     variations apply(l,g->signAtNegInfinity(g)) - variations apply(l,g->signAt(g,b))
     )
 
 
-numRealSturm (RingElement,InfiniteNumber,InfiniteNumber) := ZZ => (f,a,b)->(
+numSturm (RingElement,InfiniteNumber,InfiniteNumber) := ZZ => (f,a,b)->(
     l := SturmSequence f;
     variations apply(l,g->signAtNegInfinity(g)) - variations apply(l,g->signAtInfinity(g))
     )
-
-
---Computes the number of real/positive/negative solutions to a real univariate polynomial
-----consolidate methods for each of these with options?
-numRealRoots = method()
-numRealRoots (RingElement) := ZZ => f->(
-    numRealSturm(f,infinity,infinity)
-    )
-
-
-numPosRoots = method()
-numPosRoots (RingElement) := ZZ => f->(
-    numRealSturm(f,0,infinity)
-    )
-
-
-numNegRoots = method()
-numNegRoots (RingElement) := ZZ => f->(
-    numRealSturm(f,infinity,0)
-    )
-
 
 --Uses Sturm sequence and a bisection method to isolate real solutions to a real univariate polynomial within a tolerance
 ----better naming?
@@ -384,8 +371,8 @@ traceFormSignature (RingElement) := Sequence => f->(
 
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 ----fix the below
-numRealTrace = method()
-numRealTrace (QuotientRing) := ZZ => R->(
+numTrace = method()
+numTrace (QuotientRing) := ZZ => R->(
     if not isArtinian R then error "Expected Artinian ring";
     K := coefficientRing R;
         
@@ -399,20 +386,17 @@ numRealTrace (QuotientRing) := ZZ => R->(
     )
 
 
-numRealTrace (RingElement) := ZZ => f->(
+numTrace (RingElement) := ZZ => f->(
     R := ring f;
-    numRealTrace(R/f)
+    numTrace(R/f)
     )
 
 
-numRealTrace (List) := ZZ => F->(
+numTrace (List) := ZZ => F->(
     I := ideal F;
     R := ring I;
-    numRealTrace(R/I)
+    numTrace(R/I)
     )
-
-
-
 
 
 beginDocumentation()
@@ -517,64 +501,22 @@ document {
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 		 SturmSequence(f)
 	 	 ///,
-	SeeAlso => {"numRealSturm"}
+	SeeAlso => {"numSturm"}
      	}
 
 document {
-	Key => {(numRealSturm, RingElement),numRealSturm},
-	Usage => "numRealSturm(M)",
+	Key => {(numSturm, RingElement),numSturm},
+	Usage => "numSturm(M)",
 	Inputs => {"f"},
 	Outputs => { ZZ => { "the number of real roots of a univariate polynomial", TT "f"," not counting multiplicity"}},
 	PARA {"This computes the difference in variation of the Sturm sequence of", TT "f", "at the values", TT "a"," and ",TT "b"},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		 numRealSturm(f)
+		 numSturm(f)
 	 	 ///,
-	SeeAlso => {"numPosRoots", "numNegRoots", "SturmSequence"}
+	SeeAlso => {"SturmSequence"}
      	}
-    
-document {
-    	Key => {(numRealRoots, RingElement), numRealRoots},
-	Usage => "numRealRoots(f)",
-	Inputs => {"f"},
-	Outputs => { ZZ => {"the number of real roots of a polynomial", TT "f"}},
-	PARA {"This uses Sturm sequences to compute the number of real roots of a polynomial f with real coefficients"},
-	EXAMPLE lines ///
-	    	R = QQ[t]
-		f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		numRealRoots(f)
-		///,
-	SeeAlso => {"numPosRoots","numNegRoots"}
-	}
-
-document {
-    	Key => {(numPosRoots, RingElement), numPosRoots},
-	Usage => "numPosRoots(f)",
-	Inputs => {"f"},
-	Outputs => { ZZ => {"the number of positive real roots of a polynomial", TT "f"}},
-	PARA {"This uses Sturm sequences to compute the number of positive real roots of a polynomial f with real coefficients"},
-	EXAMPLE lines ///
-	        R = QQ[t]
-	        f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-	        numPosRoots(f)
-		///,
-	SeeAlso => {"numNegRoots","numRealSturm"}
-	}
-    
-document {
-    	Key => {(numNegRoots, RingElement), numNegRoots},
-	Usage => "numNegRoots(f)",
-	Inputs => {"f"},
-	Outputs => { ZZ => {"the number of negative real roots of a polynomial", TT "f"}},
-	PARA {"This uses Sturm sequences to compute the number of negative real roots of a polynomial f with real coefficients"},
-	EXAMPLE lines ///
-	        R = QQ[t]
-	        f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-	        numNegRoots(f)
-		///,
-	SeeAlso => {"numPosRoots","numRealSturm"}
-	}
     
 document {
     	Key => {(variations, List),variations},
@@ -629,7 +571,7 @@ document {
 	         R = QQ[x,y]
 		 traceForm(x-y)
 	 	 ///,
-	SeeAlso => {"traceFormSignature", "numRealTrace"} --need to update this to add traceForm1 as another input? or its own documentation?
+	SeeAlso => {"traceFormSignature", "numTrace"} --need to update this to add traceForm1 as another input? or its own documentation?
      	}
 
 document {
@@ -642,11 +584,11 @@ document {
 	         R = QQ[x,y]
 		 traceFormSignature(x-y+1)
 	 	 ///,
-	SeeAlso => {"traceForm", "numRealTrace"}
+	SeeAlso => {"traceForm", "numTrace"}
      	}
 
 document {
-	Key => {(numRealTrace, QuotientRing),numRealTrace},
+	Key => {(numTrace, QuotientRing),numTrace},
 	Usage => "numRealTrace(R)",
 	Inputs => {"R"},
 	Outputs => { ZZ => { "the number of real points of Spec", TT "R" }},
@@ -656,7 +598,7 @@ document {
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
 		 I = ideal F
 		 S = R/I
-		 numRealTrace(S)
+		 numTrace(S)
 	 	 ///,
 	SeeAlso => {"traceForm", "traceFormSignature"} --need to update this documentation to allow for multiple inputs
      	}
@@ -671,7 +613,6 @@ end
 ----3) Optional inputs for certain methods? Update this in the code and in documentation
 ----4) EXAMPLES to put in documentation - find 27 lines example to add here 
          ----R = QQ[x,y], F = {x^5-49/95*x^3*y+y^6, y^5-49/95*x*y^3+x^6} (AG class example) and F = {y^2-x^2-1,x-y^2+4*y-2} (Frank's example)
-----
 ----
 
 
