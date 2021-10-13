@@ -542,7 +542,6 @@ document {
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		 --realRootIsolation(f,RR)
 	 	 ///,
 	SeeAlso => {"SturmSequence"}
      	}
@@ -569,7 +568,6 @@ document {
 	PARA {"This computes the trace quadratic form of an element f in an Artinian ring"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
-		 --traceForm(x-y)
 	 	 ///,
 	SeeAlso => {"traceFormSignature", "numTrace"} --need to update this to add traceForm1 as another input? or its own documentation?
      	}
@@ -582,7 +580,6 @@ document {
 	PARA {"This computes the rank and signature of the trace quadratic form of an element f in an Artinian ring of characteristic zero"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
-		 --traceFormSignature(x-y+1)
 	 	 ///,
 	SeeAlso => {"traceForm", "numTrace"}
      	}
@@ -598,7 +595,6 @@ document {
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
 		 I = ideal F
 		 S = R/I
-		 --numTrace(S)
 	 	 ///,
 	SeeAlso => {"traceForm", "traceFormSignature"} --need to update this documentation to allow for multiple inputs
      	}
