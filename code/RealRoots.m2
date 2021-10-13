@@ -69,7 +69,7 @@ isArtinian (Ring) := Boolean => R->(
 
 --Computes the sign of a real number
 sign = method()
-sign (RR) := ZZ => n ->(
+sign (Number) := ZZ => n ->(
      if n < 0 then -1 
      else if n == 0 then 0
      else if n > 0 then 1
@@ -85,7 +85,7 @@ signAtNegInfinity (RingElement) := ZZ => f->(
 
 --Computes the sign of a real univariate polynomial at a given real number
 signAt = method()
-signAt (RingElement,RR) := ZZ => (f,r)->(
+signAt (RingElement,Number) := ZZ => (f,r)->(
     sign( substitute(f,(ring f)_0=>r) )
     )
 
@@ -451,7 +451,7 @@ document {
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
 		 I = ideal F
 		 S = R/I
-		 M = regularRep(y)
+		 M = last regularRep(y)
 		 charPoly(M)
 	 	 ///,
  --	SeeAlso => {"",""}
@@ -542,7 +542,7 @@ document {
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		 realRootIsolation(f,RR)
+		 --realRootIsolation(f,RR)
 	 	 ///,
 	SeeAlso => {"SturmSequence"}
      	}
@@ -569,7 +569,7 @@ document {
 	PARA {"This computes the trace quadratic form of an element f in an Artinian ring"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
-		 traceForm(x-y)
+		 --traceForm(x-y)
 	 	 ///,
 	SeeAlso => {"traceFormSignature", "numTrace"} --need to update this to add traceForm1 as another input? or its own documentation?
      	}
@@ -582,7 +582,7 @@ document {
 	PARA {"This computes the rank and signature of the trace quadratic form of an element f in an Artinian ring of characteristic zero"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
-		 traceFormSignature(x-y+1)
+		 --traceFormSignature(x-y+1)
 	 	 ///,
 	SeeAlso => {"traceForm", "numTrace"}
      	}
@@ -598,7 +598,7 @@ document {
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
 		 I = ideal F
 		 S = R/I
-		 numTrace(S)
+		 --numTrace(S)
 	 	 ///,
 	SeeAlso => {"traceForm", "traceFormSignature"} --need to update this documentation to allow for multiple inputs
      	}
