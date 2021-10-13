@@ -36,11 +36,7 @@ export{
     "numSylvester",
     "SturmSequence",
     "numRealSturm",
-    "numRealRoots",
-    "numPosRoots",
-    "numNegRoots",
     "realRootIsolation",
-    "derivSequence",
     "BudanFourierBound",
     "traceForm",
     "traceFormSignature",
@@ -102,8 +98,17 @@ signAtInfinity (RingElement) := ZZ => f->(
     )
 
 
-
-
+--Computes the sequence of derivatives of f
+derivSequence = method()
+derivSequence (RingElement) := List => f ->(
+    R := ring f;
+    if not isUnivariate(R) then error "Error: Expected univariate polynomial";
+    if (f == 0) then error "Error: Expected nonzero polynomial";
+    
+    t := R_0;
+    d := first degree f;
+    apply(d+1, i -> diff(t^i,f))
+    )
 --------------------
 --EXPORTED METHODS--
 --------------------
@@ -234,19 +239,6 @@ numSylvester (RingElement, RingElement, Number, Number) := ZZ => (f, g, a, b)->(
     )
 
 
---Computes the sequence of derivatives of f
-derivSequence = method()
-derivSequence (RingElement) := List => f ->(
-    R := ring f;
-    if not isUnivariate(R) then error "Error: Expected univariate polynomial";
-    if (f == 0) then error "Error: Expected nonzero polynomial";
-    
-    t := R_0;
-    d := first degree f;
-    apply(d+1, i -> diff(t^i,f))
-    )
-
-
 --Computes the difference in variations of the derivative sequence at specified values
 BudanFourierBound = method()
 BudanFourierBound (RingElement) := ZZ => f->( 
@@ -314,27 +306,6 @@ numRealSturm (RingElement,InfiniteNumber,InfiniteNumber) := ZZ => (f,a,b)->(
     l := SturmSequence f;
     variations apply(l,g->signAtNegInfinity(g)) - variations apply(l,g->signAtInfinity(g))
     )
-
-
---Computes the number of real/positive/negative solutions to a real univariate polynomial
-----consolidate methods for each of these with options?
-numRealRoots = method()
-numRealRoots (RingElement) := ZZ => f->(
-    numRealSturm(f,infinity,infinity)
-    )
-
-
-numPosRoots = method()
-numPosRoots (RingElement) := ZZ => f->(
-    numRealSturm(f,0,infinity)
-    )
-
-
-numNegRoots = method()
-numNegRoots (RingElement) := ZZ => f->(
-    numRealSturm(f,infinity,0)
-    )
-
 
 --Uses Sturm sequence and a bisection method to isolate real solutions to a real univariate polynomial within a tolerance
 ----better naming?
@@ -410,9 +381,6 @@ numRealTrace (List) := ZZ => F->(
     R := ring I;
     numRealTrace(R/I)
     )
-
-
-
 
 
 beginDocumentation()
@@ -531,50 +499,8 @@ document {
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 		 numRealSturm(f)
 	 	 ///,
-	SeeAlso => {"numPosRoots", "numNegRoots", "SturmSequence"}
+	SeeAlso => {"SturmSequence"}
      	}
-    
-document {
-    	Key => {(numRealRoots, RingElement), numRealRoots},
-	Usage => "numRealRoots(f)",
-	Inputs => {"f"},
-	Outputs => { ZZ => {"the number of real roots of a polynomial", TT "f"}},
-	PARA {"This uses Sturm sequences to compute the number of real roots of a polynomial f with real coefficients"},
-	EXAMPLE lines ///
-	    	R = QQ[t]
-		f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		numRealRoots(f)
-		///,
-	SeeAlso => {"numPosRoots","numNegRoots"}
-	}
-
-document {
-    	Key => {(numPosRoots, RingElement), numPosRoots},
-	Usage => "numPosRoots(f)",
-	Inputs => {"f"},
-	Outputs => { ZZ => {"the number of positive real roots of a polynomial", TT "f"}},
-	PARA {"This uses Sturm sequences to compute the number of positive real roots of a polynomial f with real coefficients"},
-	EXAMPLE lines ///
-	        R = QQ[t]
-	        f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-	        numPosRoots(f)
-		///,
-	SeeAlso => {"numNegRoots","numRealSturm"}
-	}
-    
-document {
-    	Key => {(numNegRoots, RingElement), numNegRoots},
-	Usage => "numNegRoots(f)",
-	Inputs => {"f"},
-	Outputs => { ZZ => {"the number of negative real roots of a polynomial", TT "f"}},
-	PARA {"This uses Sturm sequences to compute the number of negative real roots of a polynomial f with real coefficients"},
-	EXAMPLE lines ///
-	        R = QQ[t]
-	        f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-	        numNegRoots(f)
-		///,
-	SeeAlso => {"numPosRoots","numRealSturm"}
-	}
     
 document {
     	Key => {(variations, List),variations},
