@@ -131,7 +131,6 @@ numNegRoots (RingElement) := ZZ => f->(
 
 --Compute the eliminant in an Artinian ring with respect to f
 ----better naming for strategies?
-----check that "Strategy" works as option name
 ----fix second option to use minimal polynomial/give better error
 eliminant = method(Options=>{Strategy=>0})
 eliminant (RingElement) := RingElement => opts->f->(
@@ -246,7 +245,6 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
 
 
 --Computes the difference in the number of roots of f where g is positive and where g is negative
-----consider naming "numRealSylvester" for consistency with "numRealSturm" and "numRealTrace"
 ----letting g = 1 gives the number of real roots from the Sturm sequence
 numSylvester = method()
 numSylvester (RingElement, RingElement, Number, Number) := ZZ => (f, g, a, b)->(
@@ -398,6 +396,9 @@ numTrace (List) := ZZ => F->(
     numTrace(R/I)
     )
 
+--------------------
+---DOCUMENTATION----
+--------------------
 
 beginDocumentation()
 document {
@@ -421,7 +422,6 @@ document {
 		eliminant(x)
 	       	eliminant(y)	      
 	 	 ///,
---	SeeAlso => {"",""}
      	}
 
 document {
@@ -437,7 +437,6 @@ document {
 		 S = R/I
 		 regularRep(y)
 	 	 ///,
---	SeeAlso => {"", ""}
      	}
 
 document {
@@ -454,7 +453,6 @@ document {
 		 M = last regularRep(y)
 		 charPoly(M)
 	 	 ///,
- --	SeeAlso => {"",""}
      	}
 
  document {
@@ -506,14 +504,15 @@ document {
 
 document {
 	Key => {(numSturm, RingElement),numSturm},
-	Usage => "numSturm(M)",
+	Usage => "numSturm(f)","numSturm(f,a,b)",
 	Inputs => {"f"},
 	Outputs => { ZZ => { "the number of real roots of a univariate polynomial", TT "f"," not counting multiplicity"}},
-	PARA {"This computes the difference in variation of the Sturm sequence of", TT "f", "at the values", TT "a"," and ",TT "b"},
+	PARA {"This computes the difference in variation of the Sturm sequence of", TT "f", "at the values", TT "a"," and ",TT "b. If no values are specified the variation will be taken from negative infinity to infinity."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 		 numSturm(f)
+		 numSturm(f,0,5)
 	 	 ///,
 	SeeAlso => {"SturmSequence"}
      	}
@@ -525,12 +524,9 @@ document {
 	Outputs => { ZZ => { "the number of sign changes in a sequence", TT "l" }},
 	PARA {"This computes the number of changes of sign in a sequence l"},
 	EXAMPLE lines ///
-	         R = QQ[t]
-		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		 c =  SturmSequence(f)
-		 variations(c)
+		 L = for i to 10 list random(-50,50);
+		 variations(L)
 	 	 ///,
---	SeeAlso => {}
      	}
     
 document {
@@ -548,16 +544,19 @@ document {
     
 document {
 	Key => {(BudanFourierBound, RingElement),BudanFourierBound}, --maybe we can call it bfBound (Budan-Fourier bound?)
-	Usage => "BudanFourierBound(f))",
-	Inputs => {"f"},
-	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f"}},
-	PARA {"This computes a sharp upper bound for the number of real roots of a univariate polynomial f"},
+	Usage => "BudanFourierBound(f)", "BudanFourierBound(f,a,b)",
+	Inputs => {"f","a","b"},
+	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f", "on the interval (", TT "a",",", TT "b",")"}},
+	PARA {"This computes a sharp upper bound for the number of real roots of a univariate polynomial f with the option of entering an interval otherwise it computes from negative infinity to infinity"},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 		 BudanFourierBound(f)
+		 g = (t-4)*(t-1)^2*(t+1)*(t+3)*(t+5)*(t-6)
+		 a = -6
+		 BudanFourierBound(g,a,infinity)
+		 BudanFourierBound(g,-1,5)
 	 	 ///,
---	SeeAlso => {"", ""}
      	}
     
 document {
@@ -600,14 +599,14 @@ document {
      	}
 end
 
---Put notes, examples, etc down here. It won't go in the actual package.
+--Put notes, examples, etc here. It won't go in the actual package.
 
 --Notes:
 ----
 ----1) Remember to include tests for the code in documentation.
 ----2) How do we make sure that polynomials f and g have real coefficients?
 ----3) Optional inputs for certain methods? Update this in the code and in documentation
-----4) EXAMPLES to put in documentation - find 27 lines example to add here 
+----4) EXAMPLES to put in documentation -  add 27 lines example
          ----R = QQ[x,y], F = {x^5-49/95*x^3*y+y^6, y^5-49/95*x*y^3+x^6} (AG class example) and F = {y^2-x^2-1,x-y^2+4*y-2} (Frank's example)
 ----
 
