@@ -504,7 +504,7 @@ document {
 
 document {
 	Key => {(numSturm, RingElement),numSturm},
-	Usage => "numSturm(f)","numSturm(f,a,b)",
+	Usage => "numSturm(f)",
 	Inputs => {"f"},
 	Outputs => { ZZ => { "the number of real roots of a univariate polynomial", TT "f"," not counting multiplicity"}},
 	PARA {"This computes the difference in variation of the Sturm sequence of", TT "f", "at the values", TT "a"," and ",TT "b. If no values are specified the variation will be taken from negative infinity to infinity."},
@@ -544,7 +544,7 @@ document {
     
 document {
 	Key => {(BudanFourierBound, RingElement),BudanFourierBound}, --maybe we can call it bfBound (Budan-Fourier bound?)
-	Usage => "BudanFourierBound(f)", "BudanFourierBound(f,a,b)",
+	Usage => "BudanFourierBound(f)",
 	Inputs => {"f","a","b"},
 	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f", "on the interval (", TT "a",",", TT "b",")"}},
 	PARA {"This computes a sharp upper bound for the number of real roots of a univariate polynomial f with the option of entering an interval otherwise it computes from negative infinity to infinity"},
