@@ -507,7 +507,7 @@ document {
 	Usage => "numSturm(f)",
 	Inputs => {"f"},
 	Outputs => { ZZ => { "the number of real roots of a univariate polynomial", TT "f"," not counting multiplicity"}},
-	PARA {"This computes the difference in variation of the Sturm sequence of", TT "f", "at the values", TT "a"," and ",TT "b. If no values are specified the variation will be taken from negative infinity to infinity."},
+	PARA {"This computes the difference in variation of the Sturm sequence of", TT "f", "If no values are specified the variation will be taken from negative infinity to infinity, however you can specify an interval (a,b)."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
@@ -545,8 +545,8 @@ document {
 document {
 	Key => {(BudanFourierBound, RingElement),BudanFourierBound}, --maybe we can call it bfBound (Budan-Fourier bound?)
 	Usage => "BudanFourierBound(f)",
-	Inputs => {"f","a","b"},
-	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f", "on the interval (", TT "a",",", TT "b",")"}},
+	Inputs => {"f"},
+	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f"}},
 	PARA {"This computes a sharp upper bound for the number of real roots of a univariate polynomial f with the option of entering an interval otherwise it computes from negative infinity to infinity"},
 	EXAMPLE lines ///
 	         R = QQ[t]
