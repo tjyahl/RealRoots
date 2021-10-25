@@ -339,7 +339,10 @@ realRootIsolation (RingElement,RR) := List => (f,eps)->(
     T := apply(S, i -> abs(sub(i/L#0, QQ)));
     M := sum(T) + 1; --bound
     
-    
+    --last coefficients, one line
+    --flatten entries, convert from matrix to list of entries
+    --sum works like apply, you can give it a function
+    --divide by (leadCoefficient f) after
     )
 
 
