@@ -331,13 +331,9 @@ realRootIsolation (RingElement,RR) := List => (f,eps)->(
     l := SturmSequence(f);
     
     --bound for real roots according to the Notes
-    (M,C) := coefficients f;
-    F := last(M,C);
-    d := (degree f)_0;
-    L := apply(splice{0..d}, i -> F_(i,0)); -- problem here: what if we skip an index, i.e. x^2+1??
-    S := drop(L,{0,0});
-    T := apply(S, i -> abs(sub(i/L#0, QQ)));
-    M := sum(T) + 1; --bound
+    C := sub(last coefficients f, coefficientRing R);
+    L := flatten entries C;
+    B := sum(L, i-> abs(i/(leadCoefficient f))); --bound
     
     --last coefficients, one line
     --flatten entries, convert from matrix to list of entries
