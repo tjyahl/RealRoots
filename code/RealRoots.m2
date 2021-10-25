@@ -472,7 +472,7 @@ document {
 	Key => {(SylvesterSequence, RingElement, RingElement),SylvesterSequence},
 	Usage => "SylvesterSequence(f,g)",
 	Inputs => {"f","g"},
-	Outputs => { List => { "the Sylvester sequence of", TT "f", "and",TT "g"}},
+	Outputs => { List => { "the Sylvester sequence of ", TT "f", " and ",TT "g"}},
 	PARA {"This computes the Sylvester sequence of two univariate polynomials f and g in the same ring"},
 	EXAMPLE lines ///
 	         R = QQ[t]
@@ -487,9 +487,9 @@ document {
 	Key => {(numSylvester, RingElement, RingElement, Number, Number),numSylvester},
 	Usage => "numSylvester(f,g,a,b)",
 	Inputs => {"f","g","a","b"},
-	Outputs => { ZZ => {"the difference between number of roots of",TT "f","when",TT "g",
+	Outputs => { ZZ => {"the difference between number of roots of ",TT "f"," when ",TT "g",
 		"is positive and when g is negative"}},--check
-	PARA {"This computes the difference in variations of the Sylvester sequence of", TT "f"," and ",TT "f'g"," at the values", TT "a"," and ", TT "b"},
+	PARA {"This computes the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g"," at the values", TT "a"," and ", TT "b"},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = (t-2)*(t-1)*(t+3)
@@ -510,23 +510,33 @@ document {
 	EXAMPLE lines ///
 	 	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 roots f
 		 SturmSequence(f)
 	 	 ///,
 	SeeAlso => {"numSturm"}
      	}
 
 document {
-	Key => {(numSturm, RingElement),numSturm},
-	Usage => "numSturm(f)",
-	Inputs => {"f"},
-	Outputs => { ZZ => { "the number of real roots of a univariate polynomial", TT "f"," not counting multiplicity"}},
-	PARA {"This computes the difference in variation of the Sturm sequence of", TT "f", "If no values are specified the variation will be taken from negative infinity to infinity, however you can specify an interval (a,b)."},
+	Key => {(numSturm, RingElement, Number, Number), (numSturm,RingElement,Number,InfiniteNumber), (numSturm, RingElement,InfiniteNumber,Number), (numSturm, RingElement,InfiniteNumber,InfiniteNumber),numSturm},
+	Usage => "numSturm(f,a,b)",
+	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
+	Outputs => { ZZ => { "the number of real roots of a univariate polynomial ", TT "f"," not counting multiplicity in the interval ", TT "(a,b]"}},
+	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified, the interval will be taken from negative infinity to infinity."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 roots f
 		 numSturm(f)
 		 numSturm(f,0,5)
+		 numSturm(f,-2,2)
+		 numSturm(f,-1,5)
 	 	 ///,
+	PARA {"If ", TT "a"," is an ", TT "InfiniteNumber", ", then the lower bound will be negative infinity and if ", TT "b"," is an ", TT "InfiniteNumber", ", then the upper bound is infinity."},
+	EXAMPLE lines ///
+	    	numSturm(f,-infinity, 0)
+		numSturm(f,0,infinity)
+		numSturm(f,-infinity,infinity)
+		///,
 	SeeAlso => {"SturmSequence"}
      	}
     
@@ -534,10 +544,10 @@ document {
     	Key => {(variations, List),variations},
 	Usage => "variations(l)",
 	Inputs => {"l"},
-	Outputs => { ZZ => { "the number of sign changes in a sequence", TT "l" }},
-	PARA {"This computes the number of changes of sign in a sequence l"},
+	Outputs => { ZZ => { "the number of sign changes in a sequence ", TT "l" }},
+	PARA {"This computes the number of changes of sign in a sequence ", TT "l"},
 	EXAMPLE lines ///
-		 L = for i to 10 list random(-50,50);
+		 L = for i to 10 list random(-50,50)
 		 variations(L)
 	 	 ///,
      	}
