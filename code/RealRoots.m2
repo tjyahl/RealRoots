@@ -326,6 +326,20 @@ numSturm (RingElement,InfiniteNumber,InfiniteNumber) := ZZ => (f,a,b)->(
 realRootIsolation = method()
 realRootIsolation (RingElement,RR) := List => (f,eps)->(
     
+    R := ring f;
+    if not isUnivariate(R) then error "Error: Expected univariate polynomial";
+    l := SturmSequence(f);
+    
+    --bound for real roots according to the Notes
+    (M,C) := coefficients f;
+    F := last(M,C);
+    d := (degree f)_0;
+    L := apply(splice{0..d}, i -> F_(i,0)); -- problem here: what if we skip an index, i.e. x^2+1??
+    S := drop(L,{0,0});
+    T := apply(S, i -> abs(sub(i/L#0, QQ)));
+    M := sum(T) + 1; --bound
+    
+    
     )
 
 
