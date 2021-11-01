@@ -12,7 +12,13 @@ c2 = {9, 0, 1, 0, -1, -2, 11, 0, 14}
 variations(c2)
 l = for i to 5 list random(-50,50)
 variations(l)
-
+R = QQ[t];
+f = (t-4)*(t-1)^2*(t+1)*(t+3)*(t+5)*(t-6);
+fp = diff(t,f);
+fpp = diff(t,fp);
+q = diff(t,fpp);
+a = -2;
+variations({substitute(f, t=>a),substitute(fp, t=>a), substitute(fpp, t=>a),substitute(q, t=>a)})--variation of sequence of polys at a
 
 ------------------------------------------
 -----Budan Fourier examples-----
@@ -30,8 +36,6 @@ BudanFourierBound(p)
 ------------------------------------------
 -----Sturm examples-----
 ------------------------------------------
-
-c = SturmSequence(f);
 
 numSturm(f)
 numSturm(f,-6,0)
