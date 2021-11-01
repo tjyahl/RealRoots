@@ -67,5 +67,8 @@ S = R[t]
 F = sub(h,{x => t, y => c + d*t, z => e + f*t}) --x=a+bt, assume a = 0 and b = 1
 C = sub(last coefficients F, coefficientRing S)
 s = flatten entries C
-X = solveSystem s;
+X = solveSystem s;--checks we have 27 solutions
 #X
+R' = R / (ideal s);
+f = eliminant(c);--do not output, very long
+numSturm(f)
