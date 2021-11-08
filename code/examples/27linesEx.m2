@@ -57,9 +57,8 @@ restart
 loadPackage("RealRoots")
 ---package used for solving the system of coeff equations
 loadPackage("NumericalAlgebraicGeometry")
---g is a cubic surface with lines at "infinity", so we do not get 27 solutions with the code
+g = 81*(x^3+y^3+z^3)-189*(x^2*y+x^2*z+x*y^2+x*z^2+y^2*z+y*z^2)+54*x*y*z+126*(x*y+x*z+y*z)-9*(x^2+y^2+z^2)-9*(x+y+z)+1;--is a cubic surface with lines at "infinity", so we do not get 27 solutions with the code
 T = QQ[x,y,z];
-g = 81*(x^3+y^3+z^3)-189*(x^2*y+x^2*z+x*y^2+x*z^2+y^2*z+y*z^2)+54*x*y*z+126*(x*y+x*z+y*z)-9*(x^2+y^2+z^2)-9*(x+y+z)+1;
 h = random(3,T)+random(2,T)+random(1,T) + random(QQ)--creates random  cubic polynomial in T
 --parametrize h with equations x(t),y(t),z(t)
 R = QQ[c,d,e,f]
@@ -72,3 +71,29 @@ X = solveSystem s;--checks we have 27 solutions
 R' = R / (ideal s);
 f = eliminant(c);--do not output, very long
 numSturm(f)
+
+
+
+---------------------------------------------
+R = QQ[c,d,e,f];
+S = R[t];
+T = QQ[x,y,z];
+for i from 1 to 10 do {
+    h = random(-100,100)*random(3,T)+random(-100,100)*random(2,T)+random(-100,100)*random(1,T) + random(-100,100);--creates random  cubic polynomial in T
+    print h;
+    --parametrize h with equations x(t),y(t),z(t)
+    use R;
+    F = sub(h,{x => t, y => c + d*t, z => e + f*t}); --x=a+bt, assume a = 0 and b = 1
+    C = sub(last coefficients F, coefficientRing S);
+    s = flatten entries C;
+    X = solveSystem s;--checks we have 27 solutions
+    if #X != 27 then (print "Error, not 27 solutions"; continue );
+    R' = R / (ideal s);
+    f = eliminant(c);--do not output, very long
+    print numSturm(f);
+    }
+
+--to change h above use basis? or take two h polys and subtract them?
+--eliminant input (ideal)
+--documentation: real roots isolation, update methods with multiple options
+--TEST before or after doc
