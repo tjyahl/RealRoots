@@ -228,7 +228,10 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     if not isUnivariate(R) then error "Error: Expected univariate polynomials";
     
     --checking for common factors
-    if not (gcd(f,g)==1) then (f = sub(f/gcd(f,g),R); g = sub(g/gcd(f,g),R));
+    h := gcd(f,g);
+    f = sub(f/h,R);
+    g = sub(g/h,R);
+    
     
     --'d' is a bound for the length of the Sylvester sequence:
     m := if f == 0 then 0 else first degree f;
