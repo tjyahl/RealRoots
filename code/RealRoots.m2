@@ -438,7 +438,7 @@ document {
 	Usage => "eliminant(f)",
 	Inputs => {"f"},
 	Outputs => { RingElement => { "the eliminant of", TT "f", "with respect to the polynomial ring in one variable", TT "Z"}},
-	PARA {"This computes the eliminant of an element f of an Artinian ring R and returns a polynomial in Z"},
+	PARA {"This computes the eliminant of an element ", TT "f", " of an Artinian ring ", TT "R", " and returns a polynomial in ",TT "Z"},
 	EXAMPLE lines ///
 	    	R = QQ[x,y]
 		F = {y^2-x^2-1,x-y^2+4*y-2}
@@ -454,7 +454,7 @@ document {
 	Usage => "regularRep(f)",
 	Inputs => {"f"},
 	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by", TT "f", "in terms of the standard basis of a finite-dimensional k-vector space", TT "A" }},
-	PARA {"This command gives the matrix of the linear map defined by multiplication by f in terms of the standard basis of a finite-dimensional k-vector space A" },
+	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of a finite-dimensional k-vector space ", TT "A" },
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
@@ -469,7 +469,7 @@ document {
 	Usage => "charPoly(M)",
 	Inputs => {"M"},
 	Outputs => { RingElement => { "the characteristic polynomial of", TT "M"}},
-	PARA {"This computes the characteristic polynomial of M"},
+	PARA {"This computes the characteristic polynomial of ", TT "M"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
@@ -485,7 +485,7 @@ document {
 	Usage => "SylvesterSequence(f,g)",
 	Inputs => {"f","g"},
 	Outputs => { List => { "the Sylvester sequence of ", TT "f", " and ",TT "g"}},
-	PARA {"This computes the Sylvester sequence of two univariate polynomials f and g in the same ring"},
+	PARA {"This computes the Sylvester sequence of two univariate polynomials ", TT "f", " and ", TT "g", " in the same ring"},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = (t+1)*(t+2)
@@ -518,7 +518,7 @@ document {
 	Usage => "SturmSequence(f)",
 	Inputs => {"f"},
 	Outputs => { List => { "the Sturm sequence of", TT "f"}},
-	PARA {"This computes the Sturm Sequence of a univariate polynomial f"},
+	PARA {"This computes the Sturm Sequence of a univariate polynomial ", TT "f"},
 	EXAMPLE lines ///
 	 	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
@@ -569,7 +569,7 @@ document {
 	Usage => "realRootIsolation(f,eps)",
 	Inputs => {"f", "eps"},
 	Outputs => { List => { "the number of real roots of a univariate polynomial", TT "f"," not counting multiplicity"}},
-	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of a polynomial", TT "f"," to a real univariate polynomial"},
+	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of a polynomial", TT "f"," to a real univariate polynomial and it lists an interval for which each real solution is located"},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
@@ -578,11 +578,11 @@ document {
      	}
     
 document {
-	Key => {(BudanFourierBound, RingElement),BudanFourierBound}, --maybe we can call it bfBound (Budan-Fourier bound?)
-	Usage => "BudanFourierBound(f)",
-	Inputs => {"f"},
-	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f"}},
-	PARA {"This computes a sharp upper bound for the number of real roots of a univariate polynomial f with the option of entering an interval otherwise it computes from negative infinity to infinity"},
+	Key => {(BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),BudanFourierBound}, --maybe we can call it BFbound (Budan-Fourier bound?)
+	Usage => "BudanFourierBound(f, a, b)",
+	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
+	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f", " in the interval ", TT "(a,b)"}},
+	PARA {"This computes a sharp upper bound for the number of real roots of a univariate polynomial ", TT "f", " from ", TT "a", " to ", TT "b", ". If interval is not specified, it computes a bound for the real roots of the function from negative infinity to infinity."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
@@ -599,11 +599,11 @@ document {
 	Usage => "traceForm(f)",
 	Inputs => {"f"},
 	Outputs => { RingElement => { "the trace quadratic form of", TT "f" }},
-	PARA {"This computes the trace quadratic form of an element f in an Artinian ring"},
+	PARA {"This computes the trace quadratic form of an element ", TT "f", " in an Artinian ring"},
 	EXAMPLE lines ///
-	         R = QQ[x,y]
+	         R = QQ[x,y] --need example here
 	 	 ///,
-	SeeAlso => {"traceFormSignature", "numTrace"} --need to update this to add traceForm1 as another input? or its own documentation?
+	SeeAlso => {"traceFormSignature", "numTrace"}
      	}
 
 document {
@@ -611,9 +611,9 @@ document {
 	Usage => "traceFormSignature(f)",
 	Inputs => {"f"},
 	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
-	PARA {"This computes the rank and signature of the trace quadratic form of an element f in an Artinian ring of characteristic zero"},
+	PARA {"This computes the rank and signature of the trace quadratic form of an element ", TT "f", " in an Artinian ring of characteristic zero"},
 	EXAMPLE lines ///
-	         R = QQ[x,y]
+	         R = QQ[x,y] --need example here
 	 	 ///,
 	SeeAlso => {"traceForm", "numTrace"}
      	}
@@ -623,7 +623,7 @@ document {
 	Usage => "numRealTrace(R)",
 	Inputs => {"R"},
 	Outputs => { ZZ => { "the number of real points of Spec", TT "R" }},
-	PARA {"This computes the number of real points of Spec(R) where R is an Artinian ring with characteristic zero"},
+	PARA {"This computes the number of real points of Spec", TT"R", " where ", TT "R", " is an Artinian ring with characteristic zero"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
@@ -634,16 +634,61 @@ document {
      	}
 end
 
---Put notes, examples, etc here. It won't go in the actual package.
+TEST ///
+    R = QQ[x,y];
+    F = {y^2-x^2-1,x-y^2+4*y-2};
+    I = ideal F;
+    S = R/I;
+    --below assertions fail, how do we test when output is ringElement or list?
+    --assert(last coefficients(eliminant(x)) == matrix{{1},{-2},{-9},{-6},{-7}});
+    --assert(flatten entries last regularRep(y) == matrix{0, 0, -3, -2, 0, 0, -1, 1, 0, 1, 4, 0, 1, 0, 4, 4});
+    ///
 
---Notes:
-----
-----1) Remember to include tests for the code in documentation.
-----2) How do we make sure that polynomials f and g have real coefficients?
-----3) Optional inputs for certain methods? Update this in the code and in documentation
-----4) EXAMPLES to put in documentation -  add 27 lines example
-         ----R = QQ[x,y], F = {x^5-49/95*x^3*y+y^6, y^5-49/95*x*y^3+x^6} (AG class example) and F = {y^2-x^2-1,x-y^2+4*y-2} (Frank's example)
-----
+TEST ///
+    c1 = {4, 5, -1, -11, 13, -9, 8};
+    c2 = {9, 0, 1, 0, -1, -2, 11, 0, 14};
+    assert(variations(c1) == 4);
+    assert(variations(c2) == 2);
+    ///
+
+TEST ///
+    R = QQ[t];
+    f = (t-4)*(t-1)^2*(t+1)*(t+3)*(t+5)*(t-6);--roots at 6, 4, 1 (mult 2), -1, -3, -5
+    g = (2*t-1)*(3*t+8)*(t-9)*(6*t+1);--rational roots at -8/3, -1/6, 1/2, 9
+    p = (t-5)*(t-2)*(t+3)*(t+4)*(t-8)*(t+13);--roots at -13, -4, -3, 2, 5, 8
+    assert(BudanFourierBound(f) == 7);
+    assert(BudanFourierBound(g) == 4);
+    assert(BudanFourierBound(p) == 6);
+    
+    assert(numSturm(f)== 6);
+    assert(numSturm(f,-6,0) == 3);
+    assert(numSturm(f,-1,10) == 3);
+    
+    assert(numSturm(g) == 4);
+    assert(numSturm(g,-3,1) == 3);
+    assert(numSturm(g,0,10) == 2);
+    
+    assert(numSturm(p) == 6);
+    assert(numSturm(p,-15,0) == 3);
+    assert(numSturm(p,2,10) == 2);
+    ///
+    
+TEST ///
+    R = QQ[t];
+    f = (t-2)*(t-1)*(t+3);
+    g = t+1;
+    assert(numSylvester(f,g,-5,4) == 1);
+    h = (t-4)*(t-1)^2*(t+1)*(t+3)*(t+5)*(t-6);
+    p = t+5;
+    assert(numSylvester(h,p,-10,10) == 5);
+    assert(numSylvester(h,p,0,10) == 3);
+    ///
+
+--Notes (to be deleted):
+----1) Do we test for every exported method? test any imported methods?
+----   Missing tests for charPoly, realRootIsolation, SylvesterSequence, SturmSequence, numTrace, 
+----	traceForm, traceFormSignature
+----2) How do we make allow polynomials f, g to have real coefficients (not necessarily Artinian ring)?
 
 
 
