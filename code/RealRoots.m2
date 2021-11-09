@@ -336,13 +336,22 @@ realRootIsolation (RingElement,RR) := List => (f,eps)->(
     --bound for real roots according to the Notes
     C := sub(last coefficients f, coefficientRing R);
     L := flatten entries C;
-    B := sum(L, i-> abs(i/(leadCoefficient f))); --bound
+    M := sum(L, i-> abs(i/(leadCoefficient f))); --bound
     
+    S := {{-M, M}, variations apply(l,g->signAt(g,-M)), variations apply(l,g->signAt(g,M))};
+    
+    while max apply(S, I -> I#1 - I#0) > eps do (
+	    
+    	    for I in S do drop(S,1);
+	    if numSturm(f,-M,0)>0 then append(S,{-M,0, variations apply(l,g->signAt(g,-M)),  variations apply(l,g->signAt(g,0))})
+	    else if numSturm(f,0,M)>0 then append(S,{0,M, variations apply(l,g->signAt(g,0)),  variations apply(l,g->signAt(g,M))})
+	    )
+            )
     --last coefficients, one line
     --flatten entries, convert from matrix to list of entries
     --sum works like apply, you can give it a function
     --divide by (leadCoefficient f) after
-    )
+    
 
 
 --Computes the trace form of f in an Artinian ring
