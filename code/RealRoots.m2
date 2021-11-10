@@ -240,9 +240,8 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     if not isUnivariate(R) then error "Error: Expected univariate polynomials";
     
     --dividing out common factors
-    h := gcd(f,g);
-    f = sub(f/h,R);
-    g = sub(g/h,R);
+    f = sub(f,R);
+    g = sub(g,R);
         
     --'d' is a bound for the length of the Sylvester sequence:
     m := if f == 0 then 0 else first degree f;
@@ -280,8 +279,7 @@ SturmSequence = method()
 SturmSequence (RingElement) := List => f->(
     if (f == 0) then error "Error: Expected nonzero polynomial";
     R := ring f;
-    x := R_0;
-    SylvesterSequence(f,diff(x,f))
+    SylvesterSequence(f,diff(R_0,f))
     )
 
 
@@ -292,6 +290,7 @@ for A in {Number,InfiniteNumber} do
 for B in {Number,InfiniteNumber} do
 numSturm (RingElement,A,B) := ZZ => (f,a,b)->(
     R := ring f;
+    f = sub(f/gcd(f,diff(R_0,f)),R);
     numSylvester(f,1_R,a,b)
     )
 
