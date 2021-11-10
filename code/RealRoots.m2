@@ -240,8 +240,7 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     if not isUnivariate(R) then error "Error: Expected univariate polynomials";
     
     --dividing out common factors
---    h := gcd(f,g);
-    h := 1;
+    h := gcd(f,g);
     f = sub(f/h,R);
     g = sub(g/h,R);
         
@@ -255,7 +254,7 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     Syl#1 = g;
     scan(2..d, i -> Syl#i = -Syl#(i-2) % Syl#(i-1));
     	    
-    toList Syl
+    apply(toList Syl,p->p*h)
     )
 
 
