@@ -4,9 +4,6 @@ newPackage(
     Version=>"0.1",
     Date=>"Oct 9, 2020",
     Authors=>{
-	{Name=>"Dan Grayson",
-	 Email=>"",
-	 HomePage=>""},
      	{Name=>"Jordy Lopez",
 	 Email=>"jordy.lopez@tamu.edu",
 	 HomePage=>""},
@@ -20,7 +17,7 @@ newPackage(
 	 Email=>"Thomasjyahl@tamu.edu",
 	 HomePage=>"https://math.tamu.edu/~thomasjyahl"}
 	},
-    Headline=>"Package for exploring, counting, and locating real solutions to polynomial systems",
+    Headline=>"Package for symbolically exploring, counting, and locating real solutions to polynomial systems",
     PackageImports=>{},
     PackageExports=>{},
     DebuggingMode=>true
@@ -28,6 +25,7 @@ newPackage(
 
 
 export{
+    --methods
     "eliminant",
     "regularRep",
     "charPoly",
@@ -41,6 +39,7 @@ export{
     "traceForm",
     "traceFormSignature",
     "numTrace"
+    --options
     }
 
 
@@ -50,6 +49,7 @@ export{
 
 --Check that a ring is a univariate polynomial ring over a field of characteristic zero
 ----worry about more interesting fields?
+----make warning optional?
 isUnivariate = method()
 isUnivariate (Ring) := Boolean => R->(
     K := coefficientRing R;
@@ -59,6 +59,7 @@ isUnivariate (Ring) := Boolean => R->(
 
 
 --Check that a ring is Artinian over a field of characteristic zero
+----check if warning is printed more than once
 isArtinian = method()
 isArtinian (Ring) := Boolean => R->(
     K := coefficientRing R;
@@ -76,30 +77,24 @@ sign (Number) := ZZ => n ->(
      )
 
 
---Computes the sign of a real univariate polynomial at negative infinity
-signAtNegInfinity = method()
-signAtNegInfinity (RingElement) := ZZ => f->(
-    sign( (if odd first degree f then -1 else 1) * leadCoefficient f )
-    )
-
-
 --Computes the sign of a real univariate polynomial at a given real number
 signAt = method()
 signAt (RingElement,Number) := ZZ => (f,r)->(
-    sign( substitute(f,(ring f)_0=>r) )
+    sign(substitute(f,(ring f)_0=>r))
     )
 
-
---Computes the sign of a real univariate polynomial at infinity
-signAtInfinity = method()
-signAtInfinity (RingElement) := ZZ => f->(
-    sign( leadCoefficient f )
+signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
+    if (r>0) then (
+	sign(leadCoefficient f)
+	) else (
+	sign((if odd first degree f then -1 else 1)*(leadCoefficient f))
+	)
     )
 
 
 --Computes the sequence of derivatives of f
 derivSequence = method()
-derivSequence (RingElement) := List => f ->(
+derivSequence (RingElement) := List => f->(
     R := ring f;
     if not isUnivariate(R) then error "Error: Expected univariate polynomial";
     if (f == 0) then error "Error: Expected nonzero polynomial";
@@ -109,31 +104,21 @@ derivSequence (RingElement) := List => f ->(
     apply(d+1, i -> diff(t^i,f))
     )
 
---Computes the number of real/positive/negative solutions to a real univariate polynomial
-numRealRoots = method()
-numRealRoots (RingElement) := ZZ => f->(
-    numSturm(f,infinity,infinity)
-    )
-
-numPosRoots = method()
-numPosRoots (RingElement) := ZZ => f->(
-    numSturm(f,0,infinity)
-    )
-
-numNegRoots = method()
-numNegRoots (RingElement) := ZZ => f->(
-    numSturm(f,infinity,0)
-    )
-
 --------------------
 --EXPORTED METHODS--
 --------------------
 
---Compute the eliminant in an Artinian ring with respect to f
+--Compute the eliminant of 'f' in the quotient ideal defined by 'I'
 ----better naming for strategies?
 ----fix second option to use minimal polynomial/give better error
 eliminant = method(Options=>{Strategy=>0})
-eliminant (RingElement) := RingElement => opts->f->(
+eliminant (RingElement,Ideal) := RingElement => opts-> (f,I)->(
+    R := ring f;
+    if not (ring I === R) then error "Error: Expected polynomial and ideal of the same ring";
+    eliminant(sub(f,R/I))
+    )
+    
+eliminant (RingElement) := RingElement => opts-> f->(
     R := ring f;
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
     
@@ -170,6 +155,12 @@ eliminant (RingElement) := RingElement => opts->f->(
 
 --Computes a matrix representation of the multiplication map determined by f
 regularRep = method()
+regularRep (RingElement,Ideal) := Matrix => (f,I)->(
+    R := ring f;
+    if not (ring I === R) then error "Error: Expected polynomial ring and ideal of the same ring";
+    regularRep(sub(f,R/I))
+    )
+
 regularRep (RingElement) := Matrix => f->(
     R := ring f;
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
@@ -198,6 +189,12 @@ charPoly (Matrix) := RingElement => M->(
     )
 
 --Computes the characteristic polynomial of the regular representation of f
+charPoly (RingElement,Ideal) := RingElement => (f,I)->(
+    R := ring f;
+    if not (ring I === R) then error "Error: Expected polynomial ring and ideal of the same ring";
+    charPoly(sub(f,R/I))
+    )
+
 charPoly (RingElement) := RingElement => f->(
     (B,mf) := regularRep(f);
     charPoly(mf)
@@ -205,7 +202,7 @@ charPoly (RingElement) := RingElement => f->(
 
 
 --Computes the number of sign changes in a list of real numbers
-----can likely be written better
+----can maybe be written better
 variations = method()
 variations (List) := ZZ => l->(
     n := 0;
@@ -219,6 +216,21 @@ variations (List) := ZZ => l->(
     )
 
 
+--Computes the difference in variations of the derivative sequence at specified values
+BudanFourierBound = method()
+for A in {Number,InfiniteNumber} do 
+for B in {Number,InfiniteNumber} do
+BudanFourierBound (RingElement,A,B) := ZZ => (f,a,b)->(
+    if not (a<b) then error "Error: Expected non-empty interval";
+    l := derivSequence f;
+    variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
+    )
+
+BudanFourierBound (RingElement) := ZZ => f->( 
+    BudanFourierBound(f,-infinity,infinity)
+    )
+
+
 --Computes the Sylvester sequence of a pair (f,g)
 ----This isn't actually the Sylvester sequence since we divide by gcd(f,g)
 SylvesterSequence = method()
@@ -227,12 +239,12 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     if not (ring g === R) then error "Error: Polynomials should be in the same ring";
     if not isUnivariate(R) then error "Error: Expected univariate polynomials";
     
-    --checking for common factors
-    h := gcd(f,g);
+    --dividing out common factors
+--    h := gcd(f,g);
+    h := 1;
     f = sub(f/h,R);
     g = sub(g/h,R);
-    
-    
+        
     --'d' is a bound for the length of the Sylvester sequence:
     m := if f == 0 then 0 else first degree f;
     n := if g == 0 then 0 else first degree g;
@@ -249,36 +261,18 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
 
 --Computes the difference in the number of roots of f where g is positive and where g is negative
 ----letting g = 1 gives the number of real roots from the Sturm sequence
+----WORRY ABOUT GCD(f,g)???
 numSylvester = method()
-numSylvester (RingElement, RingElement, Number, Number) := ZZ => (f, g, a, b)->(
+for A in {Number,InfiniteNumber} do 
+for B in {Number,InfiniteNumber} do
+numSylvester (RingElement,RingElement,A,B) := ZZ => (f, g, a, b)->(
+    if not (a<b) then error "Error: Expected non-empty interval";
     l := SylvesterSequence(f,diff((ring f)_0,f)*g);
     variations apply(l,h->signAt(h,a)) - variations apply(l,h->signAt(h,b))
     )
 
-
---Computes the difference in variations of the derivative sequence at specified values
-BudanFourierBound = method()
-BudanFourierBound (RingElement) := ZZ => f->( 
-    l := derivSequence f;
-    variations apply(l,signAtNegInfinity) - variations apply(l,signAtInfinity)
-    )
-
-
-BudanFourierBound (RingElement,Number,Number) := ZZ => (f,a,b)->(
-    l := derivSequence f;
-    variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
-    )
-
-
-BudanFourierBound (RingElement,Number,InfiniteNumber) := ZZ => (f,a,b)->(
-    l := derivSequence f;
-    variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAtInfinity(g))
-    )
-
-
-BudanFourierBound (RingElement,InfiniteNumber,Number) := ZZ => (f,a,b)->(
-    l := derivSequence f;
-    variations apply(l,g->signAtNegInfinity(g)) - variations apply(l,g->signAt(g,b))
+numSylvester (RingElement,RingElement) := ZZ => (f,g)->(
+    numSylvester(f,g,-infinity,infinity)
     )
 
 
@@ -293,67 +287,61 @@ SturmSequence (RingElement) := List => f->(
 
 
 --Computes the difference in variations of the Sturm sequence at specified values
-----make it clear in documentation how infinity/-infinity works (because M2 doesn't do "-infinity")
+----option for multiplicity?
 numSturm = method()
+for A in {Number,InfiniteNumber} do
+for B in {Number,InfiniteNumber} do
+numSturm (RingElement,A,B) := ZZ => (f,a,b)->(
+    R := ring f;
+    numSylvester(f,1_R,a,b)
+    )
+
 numSturm (RingElement) := ZZ => f->( 
-    l := SturmSequence f;
-    variations apply(l,signAtNegInfinity) - variations apply(l,signAtInfinity)
+    numSturm(f,-infinity,infinity)
     )
 
-
-numSturm (RingElement,Number,Number) := ZZ => (f,a,b)->(
-    l := SturmSequence f;
-    variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
-    )
-
-
-numSturm (RingElement,Number,InfiniteNumber) := ZZ => (f,a,b)->(
-    l := SturmSequence f;
-    variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAtInfinity(g))
-    )
-
-
-numSturm (RingElement,InfiniteNumber,Number) := ZZ => (f,a,b)->(
-    l := SturmSequence f;
-    variations apply(l,g->signAtNegInfinity(g)) - variations apply(l,g->signAt(g,b))
-    )
-
-
-numSturm (RingElement,InfiniteNumber,InfiniteNumber) := ZZ => (f,a,b)->(
-    l := SturmSequence f;
-    variations apply(l,g->signAtNegInfinity(g)) - variations apply(l,g->signAtInfinity(g))
-    )
 
 --Uses Sturm sequence and a bisection method to isolate real solutions to a real univariate polynomial within a tolerance
 ----better naming?
 realRootIsolation = method()
 realRootIsolation (RingElement,RR) := List => (f,eps)->(
-    
     R := ring f;
     if not isUnivariate(R) then error "Error: Expected univariate polynomial";
-    l := SturmSequence(f);
     
-    --bound for real roots according to the Notes
-    C := sub(last coefficients f, coefficientRing R);
-    L := flatten entries C;
-    M := sum(L, i-> abs(i/(leadCoefficient f))); --bound
+    f = sub(f/gcd(f,diff(R_0,f)),R);
     
-    S := {{-M, M}, variations apply(l,g->signAt(g,-M)), variations apply(l,g->signAt(g,M))};
+    if (numSturm(f)>0) then (
+	l := SturmSequence(f);
+	
+	--bound for real roots
+    	C := flatten entries sub(last coefficients f, coefficientRing R);
+    	M := (sum(C,abs))/(leadCoefficient f);
+	
+	L := {{-M,M}};
+	midp := 0;
+	v := new MutableHashTable from {M=>variations apply(l,g->signAt(g,M)),-M=>variations apply(l,g->signAt(g,-M))};
+	
+	while (max apply(L,I-> I#1-I#0) > eps) or (max apply(L,I-> v#(I#0)-v#(I#1)) > 1) do (
+	    for I in L do (
+		midp = (sum I)/2;
+		v#midp = variations apply(l,g->signAt(g,midp));
+		L = drop(L,1);
+		if (v#(I#0)-v#midp > 0) then (
+		    L = append(L,{I#0,midp})
+		    );
+		if (v#midp-v#(I#1) > 0) then (
+		    L = append(L,{midp,I#1})
+		    )
+		)
+	    );
+	L
+	) else (
+	{}
+	)
+    )
+        
     
-    while max apply(S, I -> I#1 - I#0) > eps do (
-	    
-    	    for I in S do drop(S,1);
-	    if numSturm(f,-M,0)>0 then append(S,{-M,0, variations apply(l,g->signAt(g,-M)),  variations apply(l,g->signAt(g,0))})
-	    else if numSturm(f,0,M)>0 then append(S,{0,M, variations apply(l,g->signAt(g,0)),  variations apply(l,g->signAt(g,M))})
-	    )
-            )
-    --last coefficients, one line
-    --flatten entries, convert from matrix to list of entries
-    --sum works like apply, you can give it a function
-    --divide by (leadCoefficient f) after
     
-
-
 --Computes the trace form of f in an Artinian ring
 ----change names? mm? tr?
 ----change the substitute(contract(...)) business
@@ -388,7 +376,7 @@ traceFormSignature (RingElement) := Sequence => f->(
     ch := det(TrF - IdZ); 
     << "The trace form S_f with f = " << f << 
       " has rank " << rank(TrF) << " and signature " << 
-      numPosRoots(ch) - numNegRoots(ch) << endl
+      numSturm(ch,0,infinity) - numSturm(ch,-infinity,0) << endl
     )
 
 
@@ -405,7 +393,7 @@ numTrace (QuotientRing) := ZZ => R->(
     TrF := traceForm(1_R) ** S;
     IdZ := Z * id_(S^(numgens source TrF));
     ch := det(TrF - IdZ);
-    numPosRoots(ch) - numNegRoots(ch)
+    numSturm(ch,0,infinity) - numSturm(ch,-infinity,0)
     )
 
 
@@ -434,7 +422,7 @@ document {
 	}
 
 document {
-	Key => {(eliminant, RingElement),eliminant},
+	Key => {(eliminant, RingElement),(eliminant,RingElement,Ideal),eliminant},
 	Usage => "eliminant(f)",
 	Inputs => {"f"},
 	Outputs => { RingElement => { "the eliminant of", TT "f", "with respect to the polynomial ring in one variable", TT "Z"}},
@@ -450,7 +438,7 @@ document {
      	}
 
 document {
-	Key => {(regularRep, RingElement),regularRep},
+	Key => {(regularRep, RingElement),(regularRep,RingElement,Ideal),regularRep},
 	Usage => "regularRep(f)",
 	Inputs => {"f"},
 	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by", TT "f", "in terms of the standard basis of a finite-dimensional k-vector space", TT "A" }},
@@ -496,7 +484,7 @@ document {
      	}
     
 document {
-	Key => {(numSylvester, RingElement, RingElement, Number, Number),numSylvester},
+	Key => {(numSylvester, RingElement, RingElement, Number,Number),(numSylvester, RingElement, RingElement, InfiniteNumber,InfiniteNumber),(numSylvester, RingElement, RingElement, InfiniteNumber,Number),(numSylvester, RingElement, RingElement, Number,InfiniteNumber),numSylvester},
 	Usage => "numSylvester(f,g,a,b)",
 	Inputs => {"f","g","a","b"},
 	Outputs => { ZZ => {"the difference between number of roots of ",TT "f"," when ",TT "g",
@@ -529,7 +517,7 @@ document {
      	}
 
 document {
-	Key => {(numSturm, RingElement, Number, Number), (numSturm,RingElement,Number,InfiniteNumber), (numSturm, RingElement,InfiniteNumber,Number), (numSturm, RingElement,InfiniteNumber,InfiniteNumber),numSturm},
+	Key => {(numSturm, RingElement, Number,Number), (numSturm,RingElement,Number,InfiniteNumber), (numSturm, RingElement,InfiniteNumber,Number), (numSturm, RingElement,InfiniteNumber,InfiniteNumber),numSturm},
 	Usage => "numSturm(f,a,b)",
 	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
 	Outputs => { ZZ => { "the number of real roots of a univariate polynomial ", TT "f"," not counting multiplicity in the interval ", TT "(a,b]"}},
@@ -578,7 +566,7 @@ document {
      	}
     
 document {
-	Key => {(BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),BudanFourierBound}, --maybe we can call it BFbound (Budan-Fourier bound?)
+	Key => {(BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),(BudanFourierBound, RingElement, InfiniteNumber, InfiniteNumber),BudanFourierBound}, --maybe we can call it BFbound (Budan-Fourier bound?)
 	Usage => "BudanFourierBound(f, a, b)",
 	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
 	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f", " in the interval ", TT "(a,b)"}},
