@@ -253,7 +253,7 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     Syl#1 = g;
     scan(2..d, i -> Syl#i = -Syl#(i-2) % Syl#(i-1));
     	    
-    apply(toList Syl,p->p*h)
+    toList Syl
     )
 
 
