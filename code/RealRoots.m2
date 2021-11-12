@@ -437,17 +437,18 @@ document {
      	}
 
 document {
-	Key => {(regularRep, RingElement),(regularRep,RingElement,Ideal),regularRep},
-	Usage => "regularRep(f)",
-	Inputs => {"f"},
-	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by", TT "f", "in terms of the standard basis of a finite-dimensional k-vector space", TT "A" }},
-	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of a finite-dimensional k-vector space ", TT "A" },
+	Key => {(regularRep, RingElement, Ideal), (regularRep, RingElement), regularRep},
+	Usage => "regularRep(f,I)",
+	Inputs => {"f", "I"},
+	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by", TT "f", "in terms of the standard basis of a finite-dimensional k-vector space", TT "I" }},
+	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of a finite-dimensional k-vector space ", TT "I" },
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
 		 I = ideal F
 		 S = R/I
 		 regularRep(y)
+		 regularRep(y,I)
 	 	 ///,
      	}
 
@@ -560,6 +561,7 @@ document {
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 realRootIsolation(f,0.5)
 	 	 ///,
 	SeeAlso => {"SturmSequence"}
      	}
@@ -588,7 +590,12 @@ document {
 	Outputs => { RingElement => { "the trace quadratic form of", TT "f" }},
 	PARA {"This computes the trace quadratic form of an element ", TT "f", " in an Artinian ring"},
 	EXAMPLE lines ///
-	         R = QQ[x,y] --need example here
+	         R = QQ[x,y]
+		 F = {y^2 - x^2 - 1, x-y^2+4*y-2}
+		 I = ideal F
+		 S = R/I
+		 f = y^2 - x^2 - x*y + 4
+		 traceForm(f)
 	 	 ///,
 	SeeAlso => {"traceFormSignature", "numTrace"}
      	}
@@ -600,24 +607,36 @@ document {
 	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
 	PARA {"This computes the rank and signature of the trace quadratic form of an element ", TT "f", " in an Artinian ring of characteristic zero"},
 	EXAMPLE lines ///
-	         R = QQ[x,y] --need example here
+	         R = QQ[x,y]
+		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
+		 A = R/I
+		 traceFormSignature(x*y)
+		 traceFormSignature(x - 2)
+		 traceFormSignature(x + y - 3)
 	 	 ///,
 	SeeAlso => {"traceForm", "numTrace"}
      	}
 
 document {
-	Key => {(numTrace, QuotientRing),numTrace},
+	Key => {(numTrace, QuotientRing), (numTrace, RingElement), (numTrace, List), numTrace},
 	Usage => "numRealTrace(R)",
 	Inputs => {"R"},
 	Outputs => { ZZ => { "the number of real points of Spec", TT "R" }},
-	PARA {"This computes the number of real points of Spec", TT"R", " where ", TT "R", " is an Artinian ring with characteristic zero"},
+	PARA {"This computes the number of real points of Spec", TT "R", " where ", TT "R", " is an Artinian ring with characteristic zero"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
 		 I = ideal F
 		 S = R/I
+		 --numTrace(S)
+		 ///,
+	EXAMPLE lines ///
+		 R = QQ[x,y]
+		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
+		 A = R/I
+		 --numTrace(A)
 	 	 ///,
-	SeeAlso => {"traceForm", "traceFormSignature"} --need to update this documentation to allow for multiple inputs
+	SeeAlso => {"traceForm", "traceFormSignature"}
      	}
 end
 
@@ -626,9 +645,15 @@ TEST ///
     F = {y^2-x^2-1,x-y^2+4*y-2};
     I = ideal F;
     S = R/I;
-    --below assertions fail, how do we test when output is ringElement or list?
-    --assert(last coefficients(eliminant(x)) == matrix{{1},{-2},{-9},{-6},{-7}});
-    --assert(flatten entries last regularRep(y) == matrix{0, 0, -3, -2, 0, 0, -1, 1, 0, 1, 4, 0, 1, 0, 4, 4});
+    a = eliminant(x);
+    T = ring a;
+    assert(flatten entries last coefficients(eliminant(x)) == {1,-2,-9,-6,-7});
+    assert(flatten entries last regularRep(y) == {0, 0, -3, -2, 0, 0, -1, 1, 0, 1, 4, 0, 1, 0, 4, 4});
+    M = last regularRep(y);
+    pol = charPoly(M);
+    G = ring pol;
+    ans = Z^4 - 8*Z^3 + 19*Z^2 - 16*Z + 5;
+    assert(pol == ans); 
     ///
 
 TEST ///
@@ -636,6 +661,14 @@ TEST ///
     c2 = {9, 0, 1, 0, -1, -2, 11, 0, 14};
     assert(variations(c1) == 4);
     assert(variations(c2) == 2);
+    ///
+
+TEST ///
+    R = QQ[t];
+    f = (t-1)*(t+1);
+    g = (t+1);
+    assert(SylvesterSequence(f,g) == {t-1, 1, 0});
+    assert(SturmSequence(f) == {t^2-1, 2*t, 1, 0});
     ///
 
 TEST ///
@@ -670,11 +703,34 @@ TEST ///
     assert(numSylvester(h,p,-10,10) == 5);
     assert(numSylvester(h,p,0,10) == 3);
     ///
+    
+TEST ///
+    R = QQ[t];
+    f = (t-1)^2*(t+3)*(t+5)*(t-6);
+    assert(realRootIsolation(f,0.5) == {{-161/32, -299/64}, {-207/64, -23/8}, {23/32, 69/64}, {23/4, 391/64}});
+    ///    
+    
+TEST ///
+    R = QQ[x,y];
+    F = {y^2 - x^2 - 1, x-y^2+4*y-2};
+    I = ideal F;
+    S = R/I;
+    f = y^2 - x^2 - x*y + 4;
+    assert(flatten entries traceForm(f) == {4, -86, -340, -42, -86, -266, -1262, -340, -340, -1262, -5884, -1454, -42, -340, -1454, -262});
+    ///
+    
+TEST ///
+    R = QQ[x,y];
+    I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
+    A = R/I;
+    --output for the following is a File or string so cannot get assert to work
+    traceFormSignature(x*y);
+    traceFormSignature(x - 2);
+    traceFormSignature(x + y - 3);
+    ///
 
 --Notes (to be deleted):
-----1) Do we test for every exported method? test any imported methods?
-----   Missing tests for charPoly, realRootIsolation, SylvesterSequence, SturmSequence, numTrace, 
-----	traceForm, traceFormSignature
+----1) Missing tests for numTrace since it gives an error
 ----2) How do we make allow polynomials f, g to have real coefficients (not necessarily Artinian ring)?
 
 
