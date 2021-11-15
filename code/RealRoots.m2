@@ -389,7 +389,8 @@ numTrace (QuotientRing) := ZZ=> R->(
     K := coefficientRing R;
     
     ch := charPoly(traceForm(1_R));
-    numSturm(ch,0,infinity,Multiplicity=>true)
+    chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
+    numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true)
     )
 
 
@@ -712,7 +713,6 @@ TEST ///
      S = R/I;
      assert(numTrace(S) == 2);
     ///
- 
     
 end
 
