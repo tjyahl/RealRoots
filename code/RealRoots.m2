@@ -37,7 +37,7 @@ export{
     "realRootIsolation",
     "BudanFourierBound",
     "traceForm",
-    "traceFormInfo",
+    --"traceFormInfo",
     "numTrace",
     --options
     "Multiplicity"
@@ -297,7 +297,7 @@ numSturm (RingElement,A,B) := ZZ => opts->(f,a,b)->(
     n := numSylvester(f,1_R,a,b);
     if (opts.Multiplicity==true) then (
 	while(first degree h > 0) do (
-	    n = n + numSturm(h,a,b);
+	    n = n + numSturm(h,a,b,opts);
 	    h = gcd(h,diff(R_0,h));
 	    )
 	);
@@ -529,6 +529,12 @@ document {
      	}
 
 document {
+    	Key =>{"Multiplicity(RealRoots)", [numSturm, Multiplicity]},
+	PARA {"This is an optional input for counting roots with multiplicity."}
+    }
+
+
+document {
 	Key => {(numSturm, RingElement, Number,Number), (numSturm,RingElement,Number,InfiniteNumber), (numSturm, RingElement,InfiniteNumber,Number), (numSturm, RingElement,InfiniteNumber,InfiniteNumber),numSturm},
 	Usage => "numSturm(f,a,b)",
 	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
@@ -536,7 +542,7 @@ document {
 	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified, the interval will be taken from negative infinity to infinity."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
-		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 f = (t-5)*(t-3)^2*(t-1)*(t+1)
 		 roots f
 		 numSturm(f)
 		 numSturm(f,0,5)
@@ -609,25 +615,25 @@ document {
 		 f = y^2 - x^2 - x*y + 4
 		 traceForm(f)
 	 	 ///,
-	SeeAlso => {"traceFormInfo", "numTrace"}
+	SeeAlso => {"numTrace"}
      	}
 
-document {
-	Key => {(traceFormInfo, RingElement),traceFormInfo},
-	Usage => "traceFormInfo(f)",
-	Inputs => {"f"},
-	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
-	PARA {"This computes the rank and signature of the trace quadratic form of an element ", TT "f", " in an Artinian ring of characteristic zero"},
-	EXAMPLE lines ///
-	         R = QQ[x,y]
-		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
-		 A = R/I
-		 traceFormInfo(x*y)
-		 traceFormInfo(x - 2)
-		 traceFormInfo(x + y - 3)
-	 	 ///,
-	SeeAlso => {"traceForm", "numTrace"}
-     	}
+--document {
+--	Key => {(traceFormInfo, RingElement),traceFormInfo},
+--	Usage => "traceFormInfo(f)",
+--	Inputs => {"f"},
+--	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
+--	PARA {"This computes the rank and signature of the trace quadratic form of an element ", TT "f", " in an Artinian ring of characteristic zero"},
+--	EXAMPLE lines ///
+--	         R = QQ[x,y]
+--		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
+--		 A = R/I
+--		 traceFormInfo(x*y)
+--		 traceFormInfo(x - 2)
+--		 traceFormInfo(x + y - 3)
+--	 	 ///,
+--	SeeAlso => {"traceForm", "numTrace"}
+  --   	}
 
 document {
 	Key => {(numTrace, QuotientRing), (numTrace, RingElement), (numTrace, List), numTrace},
@@ -648,7 +654,7 @@ document {
 --		 A = R/I
 --		 --numTrace(A)
 --	 	 ///,
-	SeeAlso => {"traceForm", "traceFormInfo"}
+	SeeAlso => {"traceForm"}
      	}
 end
 
@@ -736,9 +742,9 @@ TEST ///
     I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
     A = R/I;
     --output for the following is a File or string so cannot get assert to work
-    traceFormInfo(x*y);
-    traceFormInfo(x - 2);
-    traceFormInfo(x + y - 3);
+    --traceFormInfo(x*y);
+    --traceFormInfo(x - 2);
+    --traceFormInfo(x + y - 3);
     ///
 
 --Notes (to be deleted):
