@@ -37,7 +37,6 @@ export{
     "realRootIsolation",
     "BudanFourierBound",
     "traceForm",
-    --"traceFormInfo",
     "numTrace",
     --options
     "Multiplicity"
@@ -203,7 +202,6 @@ charPoly (RingElement) := RingElement => f->(
 
 
 --Computes the number of sign changes in a list of real numbers
-----can maybe be written better
 variations = method()
 variations (List) := ZZ => l->(
     n := 0;
@@ -261,7 +259,6 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
 
 --Computes the difference in the number of roots of f where g is positive and where g is negative
 ----letting g = 1 gives the number of real roots from the Sturm sequence
-----WORRY ABOUT GCD(f,g)???
 numSylvester = method()
 for A in {Number,InfiniteNumber} do 
 for B in {Number,InfiniteNumber} do
@@ -286,7 +283,6 @@ SturmSequence (RingElement) := List => f->(
 
 
 --Computes the difference in variations of the Sturm sequence at specified values
-----option for multiplicity?
 numSturm = method(Options=>{Multiplicity=>false})
 for A in {Number,InfiniteNumber} do
 for B in {Number,InfiniteNumber} do
@@ -310,7 +306,6 @@ numSturm (RingElement) := ZZ => opts-> f->(
 
 
 --Uses Sturm sequence and a bisection method to isolate real solutions to a real univariate polynomial within a tolerance
-----better naming?
 realRootIsolation = method()
 realRootIsolation (RingElement,RR) := List => (f,eps)->(
     R := ring f;
@@ -370,29 +365,8 @@ traceForm (RingElement) := Matrix => f->(
     )
 
 
---Computes the rank and signature of the trace form of f
-----change name
-----change output
-traceFormInfo = method()
-traceFormInfo (RingElement,Ideal) := Sequence => (f,I)->(
-    R := ring f;
-    traceFormInfo(sub(f,R/I))
-    )
-
-traceFormInfo (RingElement) := Sequence => f->(
-    R := ring f;
-    if not isArtinian R then error "Expected Artinian ring";
-    
-    trf := traceForm f;
-    ch := charPoly(trf);
-    chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
-    sig := numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true);
-    (rank(trf),sig)
-    )
-
-
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
-----are there ever negative eigenvalues here?..
+--Use numSylvester for this
 numTrace = method()
 numTrace (RingElement) := ZZ => f->(
     R := ring f;
@@ -415,8 +389,7 @@ numTrace (QuotientRing) := ZZ=> R->(
     K := coefficientRing R;
     
     ch := charPoly(traceForm(1_R));
-    chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
-    numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true)
+    numSturm(ch,0,infinity,Multiplicity=>true)
     )
 
 
@@ -500,7 +473,7 @@ document {
 	Usage => "numSylvester(f,g,a,b)",
 	Inputs => {"f","g","a","b"},
 	Outputs => { ZZ => {"the difference between number of roots of ",TT "f"," when ",TT "g",
-		"is positive and when g is negative"}},--check
+		"is positive and when g is negative"}},
 	PARA {"This computes the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g"," at the values", TT "a"," and ", TT "b"},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
@@ -549,6 +522,12 @@ document {
 		 numSturm(f,-2,2)
 		 numSturm(f,-1,5)
 	 	 ///,
+	PARA {"In the above example, multiplicity is not included so to include this we can make the multiplicity option true in the below example."},
+	EXAMPLE lines ///
+		numSturm(f,Multiplicity=>true)
+		numSturm(f,0,5,Multiplicity=>true)
+		numSturm(f,0,3,Multiplicity=>true)
+		///,
 	PARA {"If ", TT "a"," is an ", TT "InfiniteNumber", ", then the lower bound will be negative infinity and if ", TT "b"," is an ", TT "InfiniteNumber", ", then the upper bound is infinity."},
 	EXAMPLE lines ///
 	    	numSturm(f,-infinity, 0)
@@ -617,46 +596,28 @@ document {
 	 	 ///,
 	SeeAlso => {"numTrace"}
      	}
-
---document {
---	Key => {(traceFormInfo, RingElement),traceFormInfo},
---	Usage => "traceFormInfo(f)",
---	Inputs => {"f"},
---	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
---	PARA {"This computes the rank and signature of the trace quadratic form of an element ", TT "f", " in an Artinian ring of characteristic zero"},
---	EXAMPLE lines ///
---	         R = QQ[x,y]
---		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
---		 A = R/I
---		 traceFormInfo(x*y)
---		 traceFormInfo(x - 2)
---		 traceFormInfo(x + y - 3)
---	 	 ///,
---	SeeAlso => {"traceForm", "numTrace"}
-  --   	}
+    
 
 document {
-	Key => {(numTrace, QuotientRing), (numTrace, RingElement), (numTrace, List), numTrace},
+	Key => {(numTrace, QuotientRing), (numTrace, RingElement), (numTrace, List),(numTrace,Ideal), numTrace},
 	Usage => "numRealTrace(R)",
 	Inputs => {"R"},
 	Outputs => { ZZ => { "the number of real points of Spec", TT "R" }},
 	PARA {"This computes the number of real points of Spec", TT "R", " where ", TT "R", " is an Artinian ring with characteristic zero"},
---	EXAMPLE lines ///
---	         R = QQ[x,y]
---		 F = {y^2-x^2-1,x-y^2+4*y-2}
---		 I = ideal F
---		 S = R/I
---		 --numTrace(S)
---		 ///,
---	EXAMPLE lines ///
---		 R = QQ[x,y]
---		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
---		 A = R/I
---		 --numTrace(A)
---	 	 ///,
+	EXAMPLE lines ///
+	         R = QQ[x,y]
+		 F = {y^2-x^2-1,x-y^2+4*y-2}
+		 I = ideal F
+		 S = R/I
+		 numTrace(S)
+		 ///,
+	EXAMPLE lines ///
+		 R = QQ[x,y]
+		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
+		 numTrace(I)
+	 	 ///,
 	SeeAlso => {"traceForm"}
      	}
-end
 
 TEST ///
     R = QQ[x,y];
@@ -701,6 +662,10 @@ TEST ///
     assert(numSturm(f)== 6);
     assert(numSturm(f,-6,0) == 3);
     assert(numSturm(f,-1,10) == 3);
+    assert(numSturm(f,Multiplicity=>true) == 7);
+    assert(numSturm(f,-10,5,Multiplicity=>true) == 6);
+    assert(numSturm(f,0,6,Multiplicity=>true) == 4);
+    
     
     assert(numSturm(g) == 4);
     assert(numSturm(g,-3,1) == 3);
@@ -738,20 +703,52 @@ TEST ///
     ///
     
 TEST ///
-    R = QQ[x,y];
-    I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
-    A = R/I;
-    --output for the following is a File or string so cannot get assert to work
-    --traceFormInfo(x*y);
-    --traceFormInfo(x - 2);
-    --traceFormInfo(x + y - 3);
+     R = QQ[x,y];
+     I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
+     assert(numTrace(I) == 3);
+     F = {y^2-x^2-1,x-y^2+4*y-2};
+     assert(numTrace(F) == 2);
+     I = ideal F;
+     S = R/I;
+     assert(numTrace(S) == 2);
     ///
+ 
+    
+end
 
---Notes (to be deleted):
-----1) Missing tests for numTrace since it gives an error
-----2) How do we make allow polynomials f, g to have real coefficients (not necessarily Artinian ring)?
+--Computes the rank and signature of the trace form of f
+----change name
+----change output
+traceFormInfo = method()
+traceFormInfo (RingElement,Ideal) := Sequence => (f,I)->(
+    R := ring f;
+    traceFormInfo(sub(f,R/I))
+    )
 
+traceFormInfo (RingElement) := Sequence => f->(
+    R := ring f;
+    if not isArtinian R then error "Expected Artinian ring";
+    
+    trf := traceForm f;
+    ch := charPoly(trf);
+    chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
+    sig := numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true);
+    (rank(trf),sig)
+    )
 
-
-
-
+--document {
+--	Key => {(traceFormInfo, RingElement),traceFormInfo},
+--	Usage => "traceFormInfo(f)",
+--	Inputs => {"f"},
+--	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
+--	PARA {"This computes the rank and signature of the trace quadratic form of an element ", TT "f", " in an Artinian ring of characteristic zero"},
+--	EXAMPLE lines ///
+--	         R = QQ[x,y]
+--		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
+--		 A = R/I
+--		 traceFormInfo(x*y)
+--		 traceFormInfo(x - 2)
+--		 traceFormInfo(x + y - 3)
+--	 	 ///,
+--	SeeAlso => {"traceForm", "numTrace"}
+  --   	}
