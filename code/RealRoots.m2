@@ -38,8 +38,9 @@ export{
     "BudanFourierBound",
     "traceForm",
     "traceFormSignature",
-    "numTrace"
+    "numTrace",
     --options
+    "Multiplicity"
     }
 
 
@@ -286,17 +287,25 @@ SturmSequence (RingElement) := List => f->(
 
 --Computes the difference in variations of the Sturm sequence at specified values
 ----option for multiplicity?
-numSturm = method()
+numSturm = method(Options=>{Multiplicity=>false})
 for A in {Number,InfiniteNumber} do
 for B in {Number,InfiniteNumber} do
-numSturm (RingElement,A,B) := ZZ => (f,a,b)->(
+numSturm (RingElement,A,B) := ZZ => opts->(f,a,b)->(
     R := ring f;
-    f = sub(f/gcd(f,diff(R_0,f)),R);
-    numSylvester(f,1_R,a,b)
+    h := gcd(f,diff(R_0,f));
+    f = sub(f/h,R);
+    n := numSylvester(f,1_R,a,b);
+    if (opts.Multiplicity==true) then (
+	while(first degree h > 0) do (
+	    n = n + numSturm(h,a,b);
+	    h = gcd(h,diff(R_0,h));
+	    )
+	);
+    n
     )
 
-numSturm (RingElement) := ZZ => f->( 
-    numSturm(f,-infinity,infinity)
+numSturm (RingElement) := ZZ => opts-> f->( 
+    numSturm(f,-infinity,infinity,opts)
     )
 
 
@@ -341,17 +350,21 @@ realRootIsolation (RingElement,RR) := List => (f,eps)->(
         
     
     
---Computes the trace form of f in an Artinian ring
+--Computes the trace form of f in an Artinian ring 
 ----change names? mm? tr?
-----change the substitute(contract(...)) business
 traceForm = method()
-traceForm (RingElement) := RingElement => f->(
+traceForm (RingElement,Ideal) := Matrix => (f,I)->(
+    R := ring f;
+    traceForm(sub(f,R/I))
+    )
+
+traceForm (RingElement) := Matrix => f->(
     R := ring f;
     if not isArtinian R then error "Error: Expected Artinian ring";    
     B := basis R;
     K := coefficientRing R;
 
-    mm := substitute(contract(transpose B, f*B**B),K);
+    mm := sub(last coefficients(f*B**B,Monomials=>B),K);
     tr := matrix {apply(first entries B, x -> trace last regularRep x)};
     adjoint(tr*mm, source tr, source tr)
     )
@@ -382,31 +395,31 @@ traceFormSignature (RingElement) := Sequence => f->(
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 ----fix the below
 numTrace = method()
-numTrace (QuotientRing) := ZZ => R->(
-    if not isArtinian R then error "Expected Artinian ring";
-    K := coefficientRing R;
-        
-    Z := getSymbol "Z";
-    S := K(monoid [Z]);
-    
-    TrF := traceForm(1_R) ** S;
-    IdZ := Z * id_(S^(numgens source TrF));
-    ch := det(TrF - IdZ);
-    numSturm(ch,0,infinity) - numSturm(ch,-infinity,0)
-    )
-
-
 numTrace (RingElement) := ZZ => f->(
     R := ring f;
     numTrace(R/f)
     )
-
 
 numTrace (List) := ZZ => F->(
     I := ideal F;
     R := ring I;
     numTrace(R/I)
     )
+
+numTrace (Ideal) := ZZ=> I->(
+    R := ring I;
+    numTrace(R/I)
+    )
+
+numTrace (QuotientRing) := ZZ=> R->(
+    if not isArtinian R then error "Expected Artinian ring";
+    K := coefficientRing R;
+    
+    ch := charPoly(traceForm(1_R));
+    chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
+    numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true)
+    )
+
 
 --------------------
 ---DOCUMENTATION----
@@ -446,9 +459,9 @@ document {
 		 R = QQ[x,y]
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
 		 I = ideal F
+		 regularRep(y,I)
 		 S = R/I
 		 regularRep(y)
-		 regularRep(y,I)
 	 	 ///,
      	}
 
@@ -587,7 +600,7 @@ document {
 	Key => {(traceForm, RingElement),traceForm},
 	Usage => "traceForm(f)",
 	Inputs => {"f"},
-	Outputs => { RingElement => { "the trace quadratic form of", TT "f" }},
+	Outputs => { Matrix => { "the trace quadratic form of", TT "f" }},
 	PARA {"This computes the trace quadratic form of an element ", TT "f", " in an Artinian ring"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
@@ -623,19 +636,19 @@ document {
 	Inputs => {"R"},
 	Outputs => { ZZ => { "the number of real points of Spec", TT "R" }},
 	PARA {"This computes the number of real points of Spec", TT "R", " where ", TT "R", " is an Artinian ring with characteristic zero"},
-	EXAMPLE lines ///
-	         R = QQ[x,y]
-		 F = {y^2-x^2-1,x-y^2+4*y-2}
-		 I = ideal F
-		 S = R/I
-		 --numTrace(S)
-		 ///,
-	EXAMPLE lines ///
-		 R = QQ[x,y]
-		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
-		 A = R/I
-		 --numTrace(A)
-	 	 ///,
+--	EXAMPLE lines ///
+--	         R = QQ[x,y]
+--		 F = {y^2-x^2-1,x-y^2+4*y-2}
+--		 I = ideal F
+--		 S = R/I
+--		 --numTrace(S)
+--		 ///,
+--	EXAMPLE lines ///
+--		 R = QQ[x,y]
+--		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
+--		 A = R/I
+--		 --numTrace(A)
+--	 	 ///,
 	SeeAlso => {"traceForm", "traceFormSignature"}
      	}
 end
