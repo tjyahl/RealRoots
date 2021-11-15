@@ -37,7 +37,7 @@ export{
     "realRootIsolation",
     "BudanFourierBound",
     "traceForm",
-    "traceFormSignature",
+    "traceFormInfo",
     "numTrace",
     --options
     "Multiplicity"
@@ -373,27 +373,26 @@ traceForm (RingElement) := Matrix => f->(
 --Computes the rank and signature of the trace form of f
 ----change name
 ----change output
-----use charpoly below
-traceFormSignature = method()
-traceFormSignature (RingElement) := Sequence => f->(
+traceFormInfo = method()
+traceFormInfo (RingElement,Ideal) := Sequence => (f,I)->(
+    R := ring f;
+    traceFormInfo(sub(f,R/I))
+    )
+
+traceFormInfo (RingElement) := Sequence => f->(
     R := ring f;
     if not isArtinian R then error "Expected Artinian ring";
-    K := coefficientRing R;
     
-    Z := getSymbol "Z";
-    S := K(monoid [Z]);
-    
-    TrF := traceForm(f) ** S;
-    IdZ := S_0 * id_(S^(numgens source TrF));
-    ch := det(TrF - IdZ); 
-    << "The trace form S_f with f = " << f << 
-      " has rank " << rank(TrF) << " and signature " << 
-      numSturm(ch,0,infinity) - numSturm(ch,-infinity,0) << endl
+    trf := traceForm f;
+    ch := charPoly(trf);
+    chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
+    sig := numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true);
+    (rank(trf),sig)
     )
 
 
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
-----fix the below
+----are there ever negative eigenvalues here?..
 numTrace = method()
 numTrace (RingElement) := ZZ => f->(
     R := ring f;
@@ -610,12 +609,12 @@ document {
 		 f = y^2 - x^2 - x*y + 4
 		 traceForm(f)
 	 	 ///,
-	SeeAlso => {"traceFormSignature", "numTrace"}
+	SeeAlso => {"traceFormInfo", "numTrace"}
      	}
 
 document {
-	Key => {(traceFormSignature, RingElement),traceFormSignature},
-	Usage => "traceFormSignature(f)",
+	Key => {(traceFormInfo, RingElement),traceFormInfo},
+	Usage => "traceFormInfo(f)",
 	Inputs => {"f"},
 	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
 	PARA {"This computes the rank and signature of the trace quadratic form of an element ", TT "f", " in an Artinian ring of characteristic zero"},
@@ -623,9 +622,9 @@ document {
 	         R = QQ[x,y]
 		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
 		 A = R/I
-		 traceFormSignature(x*y)
-		 traceFormSignature(x - 2)
-		 traceFormSignature(x + y - 3)
+		 traceFormInfo(x*y)
+		 traceFormInfo(x - 2)
+		 traceFormInfo(x + y - 3)
 	 	 ///,
 	SeeAlso => {"traceForm", "numTrace"}
      	}
@@ -649,7 +648,7 @@ document {
 --		 A = R/I
 --		 --numTrace(A)
 --	 	 ///,
-	SeeAlso => {"traceForm", "traceFormSignature"}
+	SeeAlso => {"traceForm", "traceFormInfo"}
      	}
 end
 
@@ -737,9 +736,9 @@ TEST ///
     I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
     A = R/I;
     --output for the following is a File or string so cannot get assert to work
-    traceFormSignature(x*y);
-    traceFormSignature(x - 2);
-    traceFormSignature(x + y - 3);
+    traceFormInfo(x*y);
+    traceFormInfo(x - 2);
+    traceFormInfo(x + y - 3);
     ///
 
 --Notes (to be deleted):
