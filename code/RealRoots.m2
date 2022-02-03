@@ -6,7 +6,7 @@ newPackage(
     Authors=>{
      	{Name=>"Jordy Lopez",
 	 Email=>"jordy.lopez@tamu.edu",
-	 HomePage=>""},
+	 HomePage=>"https://www.jordylopez27.github.io"},
     	{Name=>"Kelly Maluccio",
 	 Email=>"kmaluccio@tamu.edu",
 	 HomePage=>"https://www.math.tamu.edu/~kmaluccio"},
@@ -38,6 +38,8 @@ export{
     "BudanFourierBound",
     "traceForm",
     "numTrace",
+    "HurwitzDeterminant",
+    "isHurwitzStable",
     --options
     "Multiplicity"
     }
@@ -67,6 +69,7 @@ isArtinian (Ring) := Boolean => R->(
     (isField K) and (char K===0) and (dim R===0)
     )
 
+        
 
 --Computes the sign of a real number
 sign = method()
@@ -90,7 +93,6 @@ signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
 	sign((if odd first degree f then -1 else 1)*(leadCoefficient f))
 	)
     )
-
 
 --Computes the sequence of derivatives of f
 derivSequence = method()
@@ -393,6 +395,42 @@ numTrace (QuotientRing) := ZZ=> R->(
     numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true)
     )
 
+--Computes a Hurwitz matrix of order k and then computes its determinant
+HurwitzDeterminant = method()
+HurwitzDeterminant (RingElement,Number) := RR => (f,k)->(
+    R := ring f;
+   
+    if k < 0 then error "Error: Expected non-negative integer in second input.";  
+    if k == 0 then print 1 else (
+	
+    d := (degree f)_0;
+    x := R_0;
+    C := toList reverse apply(0..d, i -> coefficient(x^i,f));
+    zerocoeff := (l,a) -> (if a < 0 or d-a < 0 then 0 else l#(d-a));
+    Z := toList apply(1..d, i -> zerocoeff(C,d+1-2*i));
+    
+    --here we generate the d x d matrix
+    L := for j from 2 to d when j < d + 1 list toList apply(1..d, i -> zerocoeff(C,d+j-2*i));
+    T := join({Z},L);
+    M := matrix T; 
+    
+    --now we find the minors
+    I := minors(k,M);
+    I_0
+    )
+    )
+
+--Determines whether or not a univariate polynomial of degree >=1 and leading coefficient > 0
+isHurwitzStable = method()
+isHurwitzStable (RingElement) := Boolean => f->(
+    R := ring f;
+    d := (degree f)_0;
+    if d < 1 then print "Warning: polynomial must be of degree 1 or higher.";
+    if leadCoefficient f <= 0 then print "Warning: leading coefficient must be positive.";
+    S := for i from 2 to d when i < d + 1 list HurwitzDeterminant(f,i); 
+    T := apply(S, i -> sign(i));
+    sum T == d-1 
+    )
 
 --------------------
 ---DOCUMENTATION----
