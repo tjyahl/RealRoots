@@ -657,6 +657,38 @@ document {
 	 	 ///,
 	SeeAlso => {"traceForm"}
      	}
+    
+    
+document {
+	Key => {(HurwitzDeterminant, RingElement, Number),HurwitzDeterminant},
+	Usage => "HurwitzDeterminant(f,k)",
+	Inputs => {"f","k"},
+	Outputs => { RR => { "the Hurwitz determinant of", TT "f", "of order k"}},
+	PARA {"This computes the Hurwitz determinant of a univariate polynomial ", TT "f", " with positive leading coefficient and degree at least 1"},
+	EXAMPLE lines ///
+	    	R = QQ[x]
+	        f = 3*x^4 - 7*x^3 +5*x - 7 
+		HurwitzDeterminant(f,4)
+	        HurwitzDeterminant(f,3)	      
+	 	 ///,
+	SeeAlso => {"isHurwitzStable"}
+     	}
+    
+document {
+	Key => {(isHurwitzStable, RingElement),isHurwitzStable},
+	Usage => "isHurwitzStable(f)",
+	Inputs => {"f"},
+	Outputs => { Boolean => { "the Hurwitz stability of", TT "f"}},
+	PARA {"This determines the Hurwitz stability of a univariate polynomial ", TT "f", " with positive leading coefficient and degree at least 1"},
+	EXAMPLE lines ///
+	    	R = QQ[x]
+            	f = 3*x^4 - 7*x^3 +5*x - 7 
+		g = x^2 + 10*x + 21
+		isHurwitzStable(f)
+		isHurwitzStable(g)	      
+	 	 ///,
+	SeeAlso => {"HurwitzDeterminant"}	 
+     	}
 
 TEST ///
     R = QQ[x,y];
@@ -751,6 +783,17 @@ TEST ///
      S = R/I;
      assert(numTrace(S) == 2);
     ///
+    
+TEST ///
+     R = QQ[x];
+     f = 3*x^4 - 7*x^3 +5*x - 7;
+     assert(HurwitzDeterminant(f,4)== 1873);
+     assert(HurwitzDeterminant(f,3)==268);
+     assert(isHurwitzStable(f)== false);
+     g = x^2 +10*x+21;
+     assert(isHurwitzStable(g)== true);
+     ///
+     	 
     
 end
 
