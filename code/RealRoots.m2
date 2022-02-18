@@ -448,7 +448,7 @@ document {
 	Key => {(eliminant, RingElement),(eliminant,RingElement,Ideal),eliminant},
 	Usage => "eliminant(f)",
 	Inputs => {"f"},
-	Outputs => { RingElement => { "the eliminant of", TT "f", "with respect to the polynomial ring in one variable", TT "Z"}},
+	Outputs => { RingElement => { "the eliminant of ", TT "f", " with respect to the polynomial ring in one variable ", TT "Z"}},
 	PARA {"This computes the eliminant of an element ", TT "f", " of an Artinian ring ", TT "R", " and returns a polynomial in ",TT "Z"},
 	EXAMPLE lines ///
 	    	R = QQ[x,y]
@@ -464,7 +464,7 @@ document {
 	Key => {(regularRep, RingElement, Ideal), (regularRep, RingElement), regularRep},
 	Usage => "regularRep(f,I)",
 	Inputs => {"f", "I"},
-	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by", TT "f", "in terms of the standard basis of a finite-dimensional k-vector space", TT "I" }},
+	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of a finite-dimensional k-vector space ", TT "I" }},
 	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of a finite-dimensional k-vector space ", TT "I" },
 	EXAMPLE lines ///
 		 R = QQ[x,y]
@@ -480,7 +480,7 @@ document {
 	Key => {(charPoly, Matrix),charPoly},
 	Usage => "charPoly(M)",
 	Inputs => {"M"},
-	Outputs => { RingElement => { "the characteristic polynomial of", TT "M"}},
+	Outputs => { RingElement => { "the characteristic polynomial of ", TT "M"}},
 	PARA {"This computes the characteristic polynomial of ", TT "M"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
