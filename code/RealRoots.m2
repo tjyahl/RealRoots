@@ -2,17 +2,17 @@
 newPackage(
     "RealRoots",
     Version=>"0.1",
-    Date=>"Oct 9, 2020",
+    Date=>"February 19, 2022",
     Authors=>{
      	{Name=>"Jordy Lopez",
 	 Email=>"jordy.lopez@tamu.edu",
-	 HomePage=>"https://www.jordylopez27.github.io"},
+	 HomePage=>"https://jordylopez27.github.io"},
     	{Name=>"Kelly Maluccio",
-	 Email=>"kmaluccio@tamu.edu",
+	 Email=>"keleburke@aggienetwork.com",
 	 HomePage=>"https://www.math.tamu.edu/~kmaluccio"},
     	{Name=>"Frank Sottile",
 	 Email=>"sottile@tamu.edu",
-	 HomePage=>"https://www.math.tamu.edu/~frank.sottile/"},
+	 HomePage=>"https://www.math.tamu.edu/~sottile/"},
 	{Name=>"Thomas Yahl",
 	 Email=>"Thomasjyahl@tamu.edu",
 	 HomePage=>"https://math.tamu.edu/~thomasjyahl"}
@@ -217,7 +217,8 @@ variations (List) := ZZ => l->(
     )
 
 
---Computes the difference in variations of the derivative sequence at specified values
+--Computes the difference in variations of the derivative sequence of a univariate polynomial f at specified values, 
+--  which gives the bound of Budan and Fourier
 BudanFourierBound = method()
 for A in {Number,InfiniteNumber} do 
 for B in {Number,InfiniteNumber} do
@@ -441,7 +442,8 @@ document {
 	Key => RealRoots,
 	Headline =>"Package for exploring counting and locating real solutions to polynomial systems",
 	"The purpose of this package is to provide tools for elimination and solving, with a particular emphasis
-	on counting and isolating real zeros of ideals in QQ[X].",
+	on counting and isolating real zeros of zero-dimensional ideals in a (possibly) multivariate polynomial
+        ring ", TT "QQ[x]", ".",
 	}
 
 document {
@@ -463,9 +465,9 @@ document {
 document {
 	Key => {(regularRep, RingElement, Ideal), (regularRep, RingElement), regularRep},
 	Usage => "regularRep(f,I)",
-	Inputs => {"f", "I"},
-	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of a finite-dimensional k-vector space ", TT "I" }},
-	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of a finite-dimensional k-vector space ", TT "I" },
+	Inputs => {"f, a multivariate polynomial", "I, a zero-dimensional ideal defining an artinian ring"},
+	Outputs => { Matrix => { "the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of the artinian ring given by the ideal ", TT "I" }},
+	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of the artinian ring given by the ideal ", TT "I" },
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
@@ -511,9 +513,9 @@ document {
 	Key => {(numSylvester, RingElement, RingElement, Number,Number),(numSylvester, RingElement, RingElement, InfiniteNumber,InfiniteNumber),(numSylvester, RingElement, RingElement, InfiniteNumber,Number),(numSylvester, RingElement, RingElement, Number,InfiniteNumber),numSylvester},
 	Usage => "numSylvester(f,g,a,b)",
 	Inputs => {"f","g","a","b"},
-	Outputs => { ZZ => {"the difference between number of roots of ",TT "f"," when ",TT "g",
-		"is positive and when g is negative"}},
-	PARA {"This computes the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g"," at the values", TT "a"," and ", TT "b"},
+	Outputs => { ZZ => {"the difference between number of roots of ",TT "f"," at which ",TT "g",
+		" is positive and the number of roots of ",TT "f"," at which ",TT "g", " is negative"}},
+	PARA {"This computes the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g"," at the endpoints ", TT "a"," and ", TT "b", " of the interval"},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = (t-2)*(t-1)*(t+3)
@@ -528,8 +530,8 @@ document {
 document {
 	Key => {(SturmSequence, RingElement),SturmSequence},
 	Usage => "SturmSequence(f)",
-	Inputs => {"f"},
-	Outputs => { List => { "the Sturm sequence of", TT "f"}},
+	Inputs => {"f, a univariate polynomial"},
+	Outputs => { List => { "the Sturm sequence of ", TT "f"}},
 	PARA {"This computes the Sturm Sequence of a univariate polynomial ", TT "f"},
 	EXAMPLE lines ///
 	 	 R = QQ[t]
@@ -551,7 +553,7 @@ document {
 	Usage => "numSturm(f,a,b)",
 	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
 	Outputs => { ZZ => { "the number of real roots of a univariate polynomial ", TT "f"," not counting multiplicity in the interval ", TT "(a,b]"}},
-	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified, the interval will be taken from negative infinity to infinity."},
+	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", " over the interval ", TT "(a,b]", ". If ", TT "a", " and ", TT "b"," are not specified, the interval will be taken to be the whole real line."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = (t-5)*(t-3)^2*(t-1)*(t+1)
@@ -591,9 +593,9 @@ document {
 document {
         Key => {(realRootIsolation, RingElement,RR),realRootIsolation},
 	Usage => "realRootIsolation(f,eps)",
-	Inputs => {"f", "eps"},
-	Outputs => { List => { "the number of real roots of a univariate polynomial", TT "f"," not counting multiplicity"}},
-	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of a polynomial", TT "f"," to a real univariate polynomial and it lists an interval for which each real solution is located"},
+	Inputs => {"f, a real univariate polynomial", "eps, a tolerance, which is an ?upper bound? on the length of each isolating interval"},
+	Outputs => { List => { "the number of real roots of a univariate polynomial ", TT "f"," not counting multiplicity"}},
+	PARA {"This method uses a Sturm sequence and a bisection method to isolate real roots of a real univariate polynomial ", TT "f", ", for each root, it gives an interval containing that root"},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
@@ -606,8 +608,8 @@ document {
 	Key => {(BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),(BudanFourierBound, RingElement, InfiniteNumber, InfiniteNumber),BudanFourierBound}, --maybe we can call it BFbound (Budan-Fourier bound?)
 	Usage => "BudanFourierBound(f, a, b)",
 	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
-	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f", " in the interval ", TT "(a,b)"}},
-	PARA {"This computes a sharp upper bound for the number of real roots of a univariate polynomial ", TT "f", " from ", TT "a", " to ", TT "b", ". If interval is not specified, it computes a bound for the real roots of the function from negative infinity to infinity."},
+	Outputs => { ZZ => { "the Budan-Fourier upper  bound for the number of real roots (counting multiplicity) of a univariate polynomial ", TT "f", " in the interval ", TT "(a,b]"}},
+	PARA {"This computes the Budan-Fourier upper bound for the number of real roots (counting multiplicity) of a univariate polynomial ", TT "f", " on the half-open interval ", TT "(a,b]", ". The endpoint ", TT "a",  " could be negative infinity, and ", TT "b", " could be infinity.   If interval is not specified, it computes the Budan-Fourier for the number of real roots of the function on the real line."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
@@ -623,7 +625,7 @@ document {
 	Key => {(traceForm, RingElement),traceForm},
 	Usage => "traceForm(f)",
 	Inputs => {"f"},
-	Outputs => { Matrix => { "the trace quadratic form of", TT "f" }},
+	Outputs => { Matrix => { "the trace quadratic form of ", TT "f" }},
 	PARA {"This computes the trace quadratic form of an element ", TT "f", " in an Artinian ring"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
@@ -639,10 +641,10 @@ document {
 
 document {
 	Key => {(numTrace, QuotientRing), (numTrace, RingElement), (numTrace, List),(numTrace,Ideal), numTrace},
-	Usage => "numRealTrace(R)",
+	Usage => "numTrace(R)",
 	Inputs => {"R"},
-	Outputs => { ZZ => { "the number of real points of Spec", TT "R" }},
-	PARA {"This computes the number of real points of Spec", TT "R", " where ", TT "R", " is an Artinian ring with characteristic zero"},
+	Outputs => { ZZ => { "the number of real points of Spec(", TT "R", ")" }},
+	PARA {"This computes the number of real points of Spec(", TT "R", ") where ", TT "R", " is a real Artinian ring"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
@@ -662,9 +664,9 @@ document {
 document {
 	Key => {(HurwitzDeterminant, RingElement, Number),HurwitzDeterminant},
 	Usage => "HurwitzDeterminant(f,k)",
-	Inputs => {"f","k"},
-	Outputs => { RR => { "the Hurwitz determinant of", TT "f", "of order k"}},
-	PARA {"This computes the Hurwitz determinant of a univariate polynomial ", TT "f", " with positive leading coefficient and degree at least 1"},
+	Inputs => {"f, a nonconstant univariate polynomial","k, a positive integer"},
+	Outputs => { RR => { "the Hurwitz determinant of ", TT "f", " of order ", TT "k"}},
+	PARA {"This computes the Hurwitz determinant of a nonconstant univariate polynomial ", TT "f", " with positive leading coefficient"},
 	EXAMPLE lines ///
 	    	R = QQ[x]
 	        f = 3*x^4 - 7*x^3 +5*x - 7 
@@ -677,9 +679,9 @@ document {
 document {
 	Key => {(isHurwitzStable, RingElement),isHurwitzStable},
 	Usage => "isHurwitzStable(f)",
-	Inputs => {"f"},
-	Outputs => { Boolean => { "the Hurwitz stability of", TT "f"}},
-	PARA {"This determines the Hurwitz stability of a univariate polynomial ", TT "f", " with positive leading coefficient and degree at least 1"},
+	Inputs => {"f, a nonconstant univariate polynomial"},
+	Outputs => { Boolean => { "the Hurwitz stability of ", TT "f"}},
+	PARA {"This determines the Hurwitz stability of a nonconstant univariate polynomial ", TT "f", " with positive leading coefficient"},
 	EXAMPLE lines ///
 	    	R = QQ[x]
             	f = 3*x^4 - 7*x^3 +5*x - 7 
