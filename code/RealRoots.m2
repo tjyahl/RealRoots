@@ -8,14 +8,14 @@ newPackage(
 	 Email=>"jordy.lopez@tamu.edu",
 	 HomePage=>"https://www.jordylopez27.github.io"},
     	{Name=>"Kelly Maluccio",
-	 Email=>"kmaluccio@tamu.edu",
-	 HomePage=>"https://www.math.tamu.edu/~kmaluccio"},
+	 Email=>"keleburke@aggienetwork.com",
+	 HomePage=>"https://www.github.com/kmaluccio"},
     	{Name=>"Frank Sottile",
 	 Email=>"sottile@tamu.edu",
 	 HomePage=>"https://www.math.tamu.edu/~frank.sottile/"},
 	{Name=>"Thomas Yahl",
 	 Email=>"Thomasjyahl@tamu.edu",
-	 HomePage=>"https://math.tamu.edu/~thomasjyahl"}
+	 HomePage=>"https://www.math.tamu.edu/directory/formalpg.php?user=thomasjyahl"}
 	},
     Headline=>"Package for symbolically exploring, counting, and locating real solutions to polynomial systems",
     PackageImports=>{},
@@ -38,6 +38,7 @@ export{
     "BudanFourierBound",
     "traceForm",
     "numTrace",
+    "HurwitzMatrix",
     "HurwitzDeterminant",
     "isHurwitzStable",
     --options
@@ -68,7 +69,6 @@ isArtinian (Ring) := Boolean => R->(
     if instance(K,InexactField) then print "Warning: Computations over inexact field";
     (isField K) and (char K===0) and (dim R===0)
     )
-
         
 
 --Computes the sign of a real number
@@ -222,6 +222,8 @@ BudanFourierBound = method()
 for A in {Number,InfiniteNumber} do 
 for B in {Number,InfiniteNumber} do
 BudanFourierBound (RingElement,A,B) := ZZ => (f,a,b)->(
+    R := ring f;
+    if not isUnivariate(R) then error "Error: Expected univariate polynomial"; 
     if not (a<b) then error "Error: Expected non-empty interval";
     l := derivSequence f;
     variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
@@ -395,6 +397,33 @@ numTrace (QuotientRing) := ZZ=> R->(
     numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true)
     )
 
+--Computes a Hurwitz matrix of order k
+HurwitzMatrix = method()
+HurwitzMatrix (RingElement,Number) := Matrix => (f,k)->(
+    R := ring f;
+   
+    if k < 0 then error "Error: Expected non-negative integer in second input.";  
+	
+    d := (degree f)_0;
+    
+    if k > d then error "Error: k is at most d.";
+    
+    x := R_0;
+    C := toList reverse apply(0..d, i -> coefficient(x^i,f));
+    zerocoeff := (l,a) -> (if a < 0 or d-a < 0 then 0 else l#(d-a));
+    Z := toList apply(1..d, i -> zerocoeff(C,d+1-2*i));
+    
+    --here we generate the d x d matrix
+    if k == 0 then print matrix{{C#1}} else (
+    L := for j from 2 to d when j < d + 1 list toList apply(1..d, i -> zerocoeff(C,d+j-2*i));
+    T := join({Z},L);
+    M := matrix T; 
+    
+    --now we find the submatrices of the d x x matrix
+    I := submatrix'(M,{k..d},{k..d})
+    )
+    )
+
 --Computes a Hurwitz matrix of order k and then computes its determinant
 HurwitzDeterminant = method()
 HurwitzDeterminant (RingElement,Number) := RR => (f,k)->(
@@ -445,7 +474,7 @@ document {
 	}
 
 document {
-	Key => {(eliminant, RingElement),(eliminant,RingElement,Ideal),eliminant},
+	Key => {(eliminant, RingElement),(eliminant,RingElement,Ideal),eliminant,[eliminant,Strategy]},
 	Usage => "eliminant(f)",
 	Inputs => {"f"},
 	Outputs => { RingElement => { "the eliminant of", TT "f", "with respect to the polynomial ring in one variable", TT "Z"}},
@@ -477,11 +506,11 @@ document {
      	}
 
 document {
-	Key => {(charPoly, Matrix),charPoly},
-	Usage => "charPoly(M)",
-	Inputs => {"M"},
-	Outputs => { RingElement => { "the characteristic polynomial of", TT "M"}},
-	PARA {"This computes the characteristic polynomial of ", TT "M"},
+	Key => {(charPoly, Matrix),(charPoly,RingElement),(charPoly,RingElement,Ideal),charPoly},
+	Usage => "charPoly(M)", "charPoly(M,f)","charPoly(M,f,I)",
+	Inputs => {"M"},{"M","f"},{"M","f","I"},
+	Outputs => { RingElement => {"the characteristic polynomial of", TT "M", "and the characterisric polynomial of the regular representation of", TT "f"}},
+	PARA {"This computes the characteristic polynomial of ", TT "M", "and the characterisric polynomial of the regular representation of", TT "f"},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
@@ -508,9 +537,9 @@ document {
      	}
     
 document {
-	Key => {(numSylvester, RingElement, RingElement, Number,Number),(numSylvester, RingElement, RingElement, InfiniteNumber,InfiniteNumber),(numSylvester, RingElement, RingElement, InfiniteNumber,Number),(numSylvester, RingElement, RingElement, Number,InfiniteNumber),numSylvester},
-	Usage => "numSylvester(f,g,a,b)",
-	Inputs => {"f","g","a","b"},
+	Key => {(numSylvester, RingElement, RingElement, Number,Number),(numSylvester, RingElement, RingElement, InfiniteNumber,InfiniteNumber),(numSylvester, RingElement, RingElement, InfiniteNumber,Number),(numSylvester, RingElement, RingElement, Number,InfiniteNumber),(numSylvester,RingElement,RingElement),numSylvester},
+	Usage => "numSylvester(f,g,a,b)","numSylvester(f,g)",
+	Inputs => {"f","g","a","b"},{"f","g"},
 	Outputs => { ZZ => {"the difference between number of roots of ",TT "f"," when ",TT "g",
 		"is positive and when g is negative"}},
 	PARA {"This computes the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g"," at the values", TT "a"," and ", TT "b"},
@@ -541,14 +570,18 @@ document {
      	}
 
 document {
-    	Key =>{"Multiplicity(RealRoots)", [numSturm, Multiplicity]},
+    	Key => {"Multiplicity(RealRoots)", [numSturm, Multiplicity]},
 	PARA {"This is an optional input for counting roots with multiplicity."}
     }
 
+document {
+    	Key => {"Multiplicity"},
+	PARA {"This is a symbol for counting roots with multiplicity."}
+    }
 
 document {
-	Key => {(numSturm, RingElement, Number,Number), (numSturm,RingElement,Number,InfiniteNumber), (numSturm, RingElement,InfiniteNumber,Number), (numSturm, RingElement,InfiniteNumber,InfiniteNumber),numSturm},
-	Usage => "numSturm(f,a,b)",
+	Key => {(numSturm, RingElement, Number,Number), (numSturm,RingElement,Number,InfiniteNumber), (numSturm, RingElement,InfiniteNumber,Number), (numSturm, RingElement,InfiniteNumber,InfiniteNumber),(numSturm,RingElement),numSturm},
+	Usage => "numSturm(f,a,b)","numSturm(f)",
 	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
 	Outputs => { ZZ => { "the number of real roots of a univariate polynomial ", TT "f"," not counting multiplicity in the interval ", TT "(a,b]"}},
 	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified, the interval will be taken from negative infinity to infinity."},
@@ -603,11 +636,11 @@ document {
      	}
     
 document {
-	Key => {(BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),(BudanFourierBound, RingElement, InfiniteNumber, InfiniteNumber),BudanFourierBound}, --maybe we can call it BFbound (Budan-Fourier bound?)
-	Usage => "BudanFourierBound(f, a, b)",
+	Key => {(BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),(BudanFourierBound, RingElement, InfiniteNumber, InfiniteNumber),(BudanFourierBound,RingElement),BudanFourierBound}, --maybe we can call it BFbound (Budan-Fourier bound?)
+	Usage => "BudanFourierBound(f, a, b)","BudanFourierBound(f)",
 	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
-	Outputs => { ZZ => { "a sharp upper  bound for the number of real roots of a univariate polynomial", TT "f", " in the interval ", TT "(a,b)"}},
-	PARA {"This computes a sharp upper bound for the number of real roots of a univariate polynomial ", TT "f", " from ", TT "a", " to ", TT "b", ". If interval is not specified, it computes a bound for the real roots of the function from negative infinity to infinity."},
+	Outputs => { ZZ => { "an upper bound that is a positive even integer for the number of real roots of a univariate polynomial", TT "f", " in the interval ", TT "(a,b)"}},
+	PARA {"This computes an upper bound that is a positive even integer for the number of real roots of a univariate polynomial ", TT "f", " from ", TT "a", " to ", TT "b", " from the Budan-Fourier Theorem. If interval is not specified, it computes a bound for the real roots of the function from negative infinity to infinity."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
@@ -620,9 +653,9 @@ document {
      	}
     
 document {
-	Key => {(traceForm, RingElement),traceForm},
-	Usage => "traceForm(f)",
-	Inputs => {"f"},
+	Key => {(traceForm, RingElement),(traceForm,RingElement,Ideal),traceForm},
+	Usage => "traceForm(f)","traceForm(f,I),",
+	Inputs => {"f"},{"f","I"},
 	Outputs => { Matrix => { "the trace quadratic form of", TT "f" }},
 	PARA {"This computes the trace quadratic form of an element ", TT "f", " in an Artinian ring"},
 	EXAMPLE lines ///
@@ -658,28 +691,42 @@ document {
 	SeeAlso => {"traceForm"}
      	}
     
+document {
+	Key => {(HurwitzMatrix, RingElement, Number),HurwitzMatrix},
+	Usage => "HurwitzMatrix(f,k)",
+	Inputs => {"f","k"},
+	Outputs => { Matrix => { "the k x k Hurwitz matrix of a real univariate polynomial", TT "f"}},
+	PARA {"This computes the k x k Hurwitz matrix of a real univariate polynomial ", TT "f", "with positive leading coefficient and degree at least 1. The polynomial, however, is not necessarily from a ring with one indeterminate."},
+	EXAMPLE lines ///
+	    	R = QQ[x]
+	        f = 3*x^4 - 7*x^3 +5*x - 7 
+		HurwitzMatrix(f,4)
+	        HurwitzMatrix(f,3)	      
+	 	 ///,
+	SeeAlso => {"HurwitzDeterminant","isHurwitzStable"} 
+	}   
     
 document {
 	Key => {(HurwitzDeterminant, RingElement, Number),HurwitzDeterminant},
 	Usage => "HurwitzDeterminant(f,k)",
 	Inputs => {"f","k"},
-	Outputs => { RR => { "the Hurwitz determinant of", TT "f", "of order k"}},
-	PARA {"This computes the Hurwitz determinant of a univariate polynomial ", TT "f", " with positive leading coefficient and degree at least 1"},
+	Outputs => { RR => { "the Hurwitz determinant of a real univariate polynomial", TT "f", "of order k"}},
+	PARA {"This computes the Hurwitz determinant of a real univariate polynomial ", TT "f", "with positive leading coefficient and degree at least 1. The polynomial, however, is not necessarily from a ring with one indeterminate."},
 	EXAMPLE lines ///
 	    	R = QQ[x]
 	        f = 3*x^4 - 7*x^3 +5*x - 7 
 		HurwitzDeterminant(f,4)
 	        HurwitzDeterminant(f,3)	      
 	 	 ///,
-	SeeAlso => {"isHurwitzStable"}
+	SeeAlso => {"HurwitzMatrix","isHurwitzStable"}
      	}
     
 document {
 	Key => {(isHurwitzStable, RingElement),isHurwitzStable},
 	Usage => "isHurwitzStable(f)",
 	Inputs => {"f"},
-	Outputs => { Boolean => { "the Hurwitz stability of", TT "f"}},
-	PARA {"This determines the Hurwitz stability of a univariate polynomial ", TT "f", " with positive leading coefficient and degree at least 1"},
+	Outputs => { Boolean => { "the Hurwitz stability of a real univariate polynomial", TT "f"}},
+	PARA {"This determines the Hurwitz stability of a real univariate polynomial ", TT "f", "with positive leading coefficient and degree at least 1. The polynomial, however, is not necessarily from a ring with one indeterminate."},
 	EXAMPLE lines ///
 	    	R = QQ[x]
             	f = 3*x^4 - 7*x^3 +5*x - 7 
@@ -687,7 +734,7 @@ document {
 		isHurwitzStable(f)
 		isHurwitzStable(g)	      
 	 	 ///,
-	SeeAlso => {"HurwitzDeterminant"}	 
+	SeeAlso => {"HurwitzMatrix","HurwitzDeterminant"}	 
      	}
 
 TEST ///
@@ -787,8 +834,10 @@ TEST ///
 TEST ///
      R = QQ[x];
      f = 3*x^4 - 7*x^3 +5*x - 7;
+     assert(HurwitzMatrix(f,4) == sub(matrix{{-7,5,0,0},{3,0,-7,0},{0,-7,5,0},{0,3,0,-7}},QQ));
      assert(HurwitzDeterminant(f,4)== -1876);
-     assert(HurwitzDeterminant(f,3)==268);
+     assert(HurwitzMatrix(f,3) == sub( matrix{{-7,5,0},{3,0,-7},{0,-7,5}},QQ));
+     assert(HurwitzDeterminant(f,3) == 268);
      assert(isHurwitzStable(f)== false);
      g = x^2 +10*x+21;
      assert(isHurwitzStable(g)== true);
