@@ -787,7 +787,7 @@ TEST ///
 TEST ///
      R = QQ[x];
      f = 3*x^4 - 7*x^3 +5*x - 7;
-     assert(HurwitzDeterminant(f,4)== 1873);
+     assert(HurwitzDeterminant(f,4)== -1876);
      assert(HurwitzDeterminant(f,3)==268);
      assert(isHurwitzStable(f)== false);
      g = x^2 +10*x+21;
