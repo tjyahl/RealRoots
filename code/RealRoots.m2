@@ -4,9 +4,9 @@ newPackage(
     Version=>"0.1",
     Date=>"Oct 9, 2020",
     Authors=>{
-     	{Name=>"Jordy Lopez",
+     	{Name=>"Jordy Lopez Garcia",
 	 Email=>"jordy.lopez@tamu.edu",
-	 HomePage=>"https://www.jordylopez27.github.io"},
+	 HomePage=>"https://www.github.com/jordylopez27"},
     	{Name=>"Kelly Maluccio",
 	 Email=>"keleburke@aggienetwork.com",
 	 HomePage=>"https://www.github.com/kmaluccio"},
@@ -14,8 +14,8 @@ newPackage(
 	 Email=>"sottile@tamu.edu",
 	 HomePage=>"https://www.math.tamu.edu/~frank.sottile/"},
 	{Name=>"Thomas Yahl",
-	 Email=>"Thomasjyahl@tamu.edu",
-	 HomePage=>"https://www.math.tamu.edu/directory/formalpg.php?user=thomasjyahl"}
+	 Email=>"thomasjyahl@tamu.edu",
+	 HomePage=>"https://www.github.com/tjyahl"}
 	},
     Headline=>"Package for symbolically exploring, counting, and locating real solutions to polynomial systems",
     PackageImports=>{},
@@ -58,8 +58,7 @@ isUnivariate (Ring) := Boolean => R->(
     K := coefficientRing R;
     if instance(K,InexactField) then print "Warning: Computations over inexact field";
     (isPolynomialRing R) and (numgens R === 1) and (isField K) and (char K === 0)
-    )
-
+    )  
 
 --Check that a ring is Artinian over a field of characteristic zero
 ----check if warning is printed more than once
@@ -70,7 +69,6 @@ isArtinian (Ring) := Boolean => R->(
     (isField K) and (char K===0) and (dim R===0)
     )
         
-
 --Computes the sign of a real number
 sign = method()
 sign (Number) := ZZ => n ->(
@@ -223,7 +221,7 @@ for A in {Number,InfiniteNumber} do
 for B in {Number,InfiniteNumber} do
 BudanFourierBound (RingElement,A,B) := ZZ => (f,a,b)->(
     R := ring f;
-    if not isUnivariate(R) then error "Error: Expected univariate polynomial"; 
+    if not isUnivariate(R) then error "Error: Expected univariate polynomial or expected polynomial ring with one indeterminate"; 
     if not (a<b) then error "Error: Expected non-empty interval";
     l := derivSequence f;
     variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
@@ -636,20 +634,36 @@ document {
      	}
     
 document {
-	Key => {(BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),(BudanFourierBound, RingElement, InfiniteNumber, InfiniteNumber),(BudanFourierBound,RingElement),BudanFourierBound}, --maybe we can call it BFbound (Budan-Fourier bound?)
-	Usage => "BudanFourierBound(f, a, b)","BudanFourierBound(f)",
-	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
-	Outputs => { ZZ => { "an upper bound that is a positive even integer for the number of real roots of a univariate polynomial", TT "f", " in the interval ", TT "(a,b)"}},
-	PARA {"This computes an upper bound that is a positive even integer for the number of real roots of a univariate polynomial ", TT "f", " from ", TT "a", " to ", TT "b", " from the Budan-Fourier Theorem. If interval is not specified, it computes a bound for the real roots of the function from negative infinity to infinity."},
+	Key => {BudanFourierBound,(BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),(BudanFourierBound, RingElement, InfiniteNumber, InfiniteNumber),(BudanFourierBound,RingElement)},
+	Headline => "a bound for the number of real roots of a real univariate polynomial",
+	Usage => "BudanFourierBound(f, a, b)
+	          BudanFourierBound(f)",
+	Inputs => {
+	    RingElement => "f" => {"a univariate polynomial"},
+	    Number => "a" => {"(optional) the lower bound of the interval"},
+	    InfiniteNumber => "a" => {"(optional) the lower bound of the interval"},
+	    Number => "b" => {"(optional) the upper bound of the interval"},
+	    InfiniteNumber => "b" => {"(optional) the upper bound of the interval"},
+	    },
+	Outputs => { ZZ => { "a bound for the number of real roots of a univariate polynomial", TT " f ", " in the interval ", TT "(a,b]"}},
+	PARA {"This computes a bound for the number of real roots of a univariate polynomial", TT " f ", "in the interval", TT "(a,b]",
+	      ", counted with multiplicity, according to the Budan-Fourier Theorem. Note that if the interval is not specified, it 
+	      computes such bound on ", TEX///$(-\infty, \infty)$///,". Moreover, if ", TT "ring f", " is not a polynomial ring of one 
+	      indeterminate, then we obtain an error."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
 		 BudanFourierBound(f)
-		 g = (t-4)*(t-1)^2*(t+1)*(t+3)*(t+5)*(t-6)
-		 a = -6
-		 BudanFourierBound(g,a,infinity)
+		 g = (t+5)*(t+3)*(t+1)*(t-1)^2*(t-4)*(t-6)
+		 BudanFourierBound(g,-6,infinity)
 		 BudanFourierBound(g,-1,5)
 	 	 ///,
+	PARA {"We also provide examples when the interval includes ", TEX///$-\infty$///," or ", TEX///$\infty$///, "."},
+	EXAMPLE lines ///
+	         BudanFourierBound(g,-infinity,0)
+	         BudanFourierBound(g,3,infinity)
+		 BudanFourierBound(g,-infinity,infinity)
+		 ///
      	}
     
 document {
@@ -776,6 +790,10 @@ TEST ///
     assert(BudanFourierBound(f) == 7);
     assert(BudanFourierBound(g) == 4);
     assert(BudanFourierBound(p) == 6);
+    assert(BudanFourierBound(g,-infinity,0) == 2);
+    assert(BudanFourierBound(g,-1,infinity) == 3);
+    
+    
     
     assert(numSturm(f)== 6);
     assert(numSturm(f,-6,0) == 3);
