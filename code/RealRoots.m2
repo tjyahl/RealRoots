@@ -41,6 +41,7 @@ export{
     "HurwitzMatrix",
     "HurwitzDeterminant",
     "isHurwitzStable",
+    "isUnivariatePolynomial",
     --options
     "Multiplicity"
     }
@@ -59,6 +60,14 @@ isUnivariate (Ring) := Boolean => R->(
     if instance(K,InexactField) then print "Warning: Computations over inexact field";
     (isPolynomialRing R) and (numgens R === 1) and (isField K) and (char K === 0)
     )  
+
+isUnivariatePolynomial = method()
+isUnivariatePolynomial (RingElement) := Boolean => f->(
+    R := ring f;
+    L := support f; 
+    n := length L;
+    n === 1
+    )
 
 --Check that a ring is Artinian over a field of characteristic zero
 ----check if warning is printed more than once
@@ -96,10 +105,12 @@ signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
 derivSequence = method()
 derivSequence (RingElement) := List => f->(
     R := ring f;
-    if not isUnivariate(R) then error "Error: Expected univariate polynomial";
+   -- if not isUnivariate(R) then error "Error: Expected univariate polynomial";
+    if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
     if (f == 0) then error "Error: Expected nonzero polynomial";
     
-    t := R_0;
+   -- t := R_0;
+    t := (support f)_0;
     d := first degree f;
     apply(d+1, i -> diff(t^i,f))
     )
@@ -221,13 +232,14 @@ for A in {Number,InfiniteNumber} do
 for B in {Number,InfiniteNumber} do
 BudanFourierBound (RingElement,A,B) := ZZ => (f,a,b)->(
     R := ring f;
-    if not isUnivariate(R) then error "Error: Expected univariate polynomial or expected polynomial ring with one indeterminate"; 
+  -- if not isUnivariate(R) then error "Error: Expected univariate polynomial or expected polynomial ring with one indeterminate"; 
+    if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
     if not (a<b) then error "Error: Expected non-empty interval";
     l := derivSequence f;
     variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
     )
 
-BudanFourierBound (RingElement) := ZZ => f->( 
+BudanFourierBound (RingElement) := ZZ => f->(
     BudanFourierBound(f,-infinity,infinity)
     )
 
