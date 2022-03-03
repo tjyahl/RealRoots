@@ -41,7 +41,6 @@ export{
     "HurwitzMatrix",
     "HurwitzDeterminant",
     "isHurwitzStable",
-    "isUnivariatePolynomial",
     --options
     "Multiplicity"
     }
@@ -63,7 +62,6 @@ isUnivariate (Ring) := Boolean => R->(
 
 isUnivariatePolynomial = method()
 isUnivariatePolynomial (RingElement) := Boolean => f->(
-    R := ring f;
     L := support f; 
     n := length L;
     n === 1
@@ -90,7 +88,7 @@ sign (Number) := ZZ => n ->(
 --Computes the sign of a real univariate polynomial at a given real number
 signAt = method()
 signAt (RingElement,Number) := ZZ => (f,r)->(
-    sign(substitute(f,(ring f)_0=>r))
+    sign(substitute(f,(support f)_0=>r))
     )
 
 signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
@@ -104,7 +102,6 @@ signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
 --Computes the sequence of derivatives of f
 derivSequence = method()
 derivSequence (RingElement) := List => f->(
-    R := ring f;
    -- if not isUnivariate(R) then error "Error: Expected univariate polynomial";
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
     if (f == 0) then error "Error: Expected nonzero polynomial";
@@ -231,7 +228,6 @@ BudanFourierBound = method()
 for A in {Number,InfiniteNumber} do 
 for B in {Number,InfiniteNumber} do
 BudanFourierBound (RingElement,A,B) := ZZ => (f,a,b)->(
-    R := ring f;
   -- if not isUnivariate(R) then error "Error: Expected univariate polynomial or expected polynomial ring with one indeterminate"; 
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
     if not (a<b) then error "Error: Expected non-empty interval";
@@ -278,7 +274,7 @@ for A in {Number,InfiniteNumber} do
 for B in {Number,InfiniteNumber} do
 numSylvester (RingElement,RingElement,A,B) := ZZ => (f, g, a, b)->(
     if not (a<b) then error "Error: Expected non-empty interval";
-    l := SylvesterSequence(f,diff((ring f)_0,f)*g);
+    l := SylvesterSequence(f,diff((support f)_0,f)*g);
     variations apply(l,h->signAt(h,a)) - variations apply(l,h->signAt(h,b))
     )
 
@@ -291,8 +287,7 @@ numSylvester (RingElement,RingElement) := ZZ => (f,g)->(
 SturmSequence = method()
 SturmSequence (RingElement) := List => f->(
     if (f == 0) then error "Error: Expected nonzero polynomial";
-    R := ring f;
-    SylvesterSequence(f,diff(R_0,f))
+    SylvesterSequence(f,diff((support f)_0),f)
     )
 
 
@@ -410,7 +405,6 @@ numTrace (QuotientRing) := ZZ=> R->(
 --Computes a Hurwitz matrix of order k
 HurwitzMatrix = method()
 HurwitzMatrix (RingElement,Number) := Matrix => (f,k)->(
-    R := ring f;
    
     if k < 0 then error "Error: Expected non-negative integer in second input.";  
 	
@@ -418,7 +412,7 @@ HurwitzMatrix (RingElement,Number) := Matrix => (f,k)->(
     
     if k > d then error "Error: k is at most d.";
     
-    x := R_0;
+    x := (support f)_0;
     C := toList reverse apply(0..d, i -> coefficient(x^i,f));
     zerocoeff := (l,a) -> (if a < 0 or d-a < 0 then 0 else l#(d-a));
     Z := toList apply(1..d, i -> zerocoeff(C,d+1-2*i));
