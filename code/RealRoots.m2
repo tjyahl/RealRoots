@@ -41,6 +41,11 @@ export{
     "HurwitzMatrix",
     "HurwitzDeterminant",
     "isHurwitzStable",
+   -- "variable",
+   -- "signAt",
+   -- "derivSequence",
+   -- "sign",
+   -- "isArtinian",
     --options
     "Multiplicity"
     }
@@ -62,7 +67,7 @@ isUnivariate (Ring) := Boolean => R->(
 
 isUnivariatePolynomial = method()
 isUnivariatePolynomial (RingElement) := Boolean => f->(
-    L := support f; 
+    L := toList(variable f); 
     n := length L;
     n === 1
     )
@@ -88,7 +93,7 @@ sign (Number) := ZZ => n ->(
 --Computes the sign of a real univariate polynomial at a given real number
 signAt = method()
 signAt (RingElement,Number) := ZZ => (f,r)->(
-    sign(substitute(f,(support f)_0=>r))
+    sign(substitute(f,{variable f => r}))
     )
 
 signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
@@ -107,10 +112,19 @@ derivSequence (RingElement) := List => f->(
     if (f == 0) then error "Error: Expected nonzero polynomial";
     
    -- t := R_0;
-    t := (support f)_0;
+    t := variable f;
     d := first degree f;
     apply(d+1, i -> diff(t^i,f))
     )
+
+variable = method()
+variable (RingElement) := RingElement => f->(
+    S := support f;
+    R := ring f;
+    if S === {} then (ring f)_0
+    else (support f)_0
+    )
+    
 
 --------------------
 --EXPORTED METHODS--
@@ -181,15 +195,18 @@ regularRep (RingElement) := Matrix => f->(
 
 
 --Computes the characteristic polynomial of a matrix
-charPoly = method()
-charPoly (Matrix) := RingElement => M->(
+charPoly = method(Options => {Variable => "Z"})
+charPoly (Matrix) := RingElement => o -> M ->(
     n := numgens source M;
     if not (numgens target M === n) then error "Error: Expected a square matrix";
     
-    K := ring M;
+    K := ring M; 
+
     if not (isField K and char K === 0) then error "Error: Expected a field of characteristic zero";
-    
-    Z := getSymbol "Z";
+  -- L := substitute(M,toField(ring M));
+  -- K' := ring L;); 
+      
+    Z := o.Variable;
     S := K(monoid [Z]);
 
     IdZ := S_0*id_(S^n);
@@ -199,7 +216,7 @@ charPoly (Matrix) := RingElement => M->(
 --Computes the characteristic polynomial of the regular representation of f
 charPoly (RingElement,Ideal) := RingElement => (f,I)->(
     R := ring f;
-    if not (ring I === R) then error "Error: Expected polynomial ring and ideal of the same ring";
+    if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
     charPoly(sub(f,R/I))
     )
 
@@ -274,7 +291,7 @@ for A in {Number,InfiniteNumber} do
 for B in {Number,InfiniteNumber} do
 numSylvester (RingElement,RingElement,A,B) := ZZ => (f, g, a, b)->(
     if not (a<b) then error "Error: Expected non-empty interval";
-    l := SylvesterSequence(f,diff((support f)_0,f)*g);
+    l := SylvesterSequence(f,diff(variable f,f)*g);
     variations apply(l,h->signAt(h,a)) - variations apply(l,h->signAt(h,b))
     )
 
@@ -287,7 +304,7 @@ numSylvester (RingElement,RingElement) := ZZ => (f,g)->(
 SturmSequence = method()
 SturmSequence (RingElement) := List => f->(
     if (f == 0) then error "Error: Expected nonzero polynomial";
-    SylvesterSequence(f,diff((support f)_0),f)
+    SylvesterSequence(f,diff(variable f,f))
     )
 
 
@@ -412,7 +429,7 @@ HurwitzMatrix (RingElement,Number) := Matrix => (f,k)->(
     
     if k > d then error "Error: k is at most d.";
     
-    x := (support f)_0;
+    x := variable f;
     C := toList reverse apply(0..d, i -> coefficient(x^i,f));
     zerocoeff := (l,a) -> (if a < 0 or d-a < 0 then 0 else l#(d-a));
     Z := toList apply(1..d, i -> zerocoeff(C,d+1-2*i));
@@ -510,19 +527,35 @@ document {
      	}
 
 document {
-	Key => {(charPoly, Matrix),(charPoly,RingElement),(charPoly,RingElement,Ideal),charPoly},
-	Usage => "charPoly(M)", "charPoly(M,f)","charPoly(M,f,I)",
-	Inputs => {"M"},{"M","f"},{"M","f","I"},
-	Outputs => { RingElement => {"the characteristic polynomial of", TT "M", "and the characterisric polynomial of the regular representation of", TT "f"}},
-	PARA {"This computes the characteristic polynomial of ", TT "M", "and the characterisric polynomial of the regular representation of", TT "f"},
+	Key => {charPoly, (charPoly, Matrix),(charPoly,RingElement),(charPoly,RingElement,Ideal),[charPoly,Variable]},
+	Headline => "the characteristic polynomial of a matrix and the characteristic polynomial of the regular representation of a polynomial",
+	Usage => "charPoly(M)
+	         charPoly(f)
+		 charPoly(f,I)",
+	Inputs => {
+	    Matrix => "M" => {"a square matrix"},
+	    RingElement => "f" => {"a polynomial"},
+	    Ideal => "I"  => {"(optional) a zero-dimensional ideal"},
+	    },
+	Outputs => { RingElement => {"the characteristic polynomial of ", TT "M", " and the characteristic polynomial of the regular representation of ", TT "f"}},
+	PARA {"This computes the characteristic polynomial of ", TT "M", " and the characteristic polynomial of the regular representation of ", TT "f","."},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
+		 M = matrix{{2,1},{1,-1}}
+		 N = substitute(M,QQ)
+		 charPoly(N)
+		 ///,
+    	PARA {"We can also change the variable name, as we show below."},
+	EXAMPLE lines ///
+	         charPoly(N,Variable => x)
+		 ///,
+       	EXAMPLE lines ///
 		 F = {y^2-x^2-1,x-y^2+4*y-2}
 		 I = ideal F
 		 S = R/I
-		 M = last regularRep(y)
-		 charPoly(M)
-	 	 ///,
+		 N = last regularRep(y)
+		 charPoly(N)
+		 ///
      	}
 
  document {
@@ -640,7 +673,7 @@ document {
      	}
     
 document {
-	Key => {BudanFourierBound,(BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),(BudanFourierBound, RingElement, InfiniteNumber, InfiniteNumber),(BudanFourierBound,RingElement)},
+	Key => {BudanFourierBound, (BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),(BudanFourierBound, RingElement, InfiniteNumber, InfiniteNumber),(BudanFourierBound,RingElement)},
 	Headline => "a bound for the number of real roots of a real univariate polynomial",
 	Usage => "BudanFourierBound(f, a, b)
 	          BudanFourierBound(f)",
