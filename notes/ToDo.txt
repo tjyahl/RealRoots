@@ -3,13 +3,13 @@ Kelly Maluccio
 Thomas Yahl
 Frank Sottile
 
------
+---------------
 To Do
------
+---------------
 
 * eliminants and strategies (which is default?)
 
-* real root isolation using bisection method
+* real root isolation using bisection method 
 
 * trace form check
 
@@ -28,22 +28,41 @@ To Discuss
 
 * include a check for the shape lemma
 
-* Sturm-Habicht in place of Sturm for height complexity
-
-* working over more interesting fields
-
 * Stickelberger's theorem, eigenvalues and solving
 
 * always print warnings? or give option?
 
+--------------------------------------
+more
+--------------------------------------
+From: 19 October 2021
 
----------
-Completed
----------
+Frank has some thoughts on final routines to add
 
-* Implement Budan-Fourier
+*) Check if an ideal I of K[x_1,...,x_n] is zero-dimensional
 
-* Sylvester's Theorem Var(Syl(p,q),a,b) = 
-                    #{x| p(x)=0 and q(x)>0} -   #{x| p(x)=0 and q(x)<0}
+*) Compute the number of complex roots of an ideal using the trace form
+    (note deg I = this number ==> I is radical)
 
+*) Compute the number of real roots of I using the trace form
+
+*) Algorithmically compute a separating linear form -- this may need characteristic zero
+
+    Input   (I,d) where d is the degree of the radical of I
+                  (could also have an option where d is computed to be the degree of I, but then
+		     we only compute an eliminant of degree d, if there is one)
+		     
+     Goal: compute an elininant f w.r.t. a linear form whose number of zeroes is d
+
+       First: for each variable x
+     *     compute eliminant f(x) if degree f is d, export f
+     *       otherwise if degree f/(gcd(f,f')) = d, then export f
+       If this fails, go to the next variable.
+
+     Otherwise, for j = 1,2,....,d(d-1)/2, set
+        l = x_1 + j x_2 + j^2 x_3 + ... + j^{n-1} x_n, and
+	compute the eliminant with respect to l, and apply the previous steps *
+
+   One of these forms (variables or the interesting linear forms) will take distinct values
+     at the roots of I (and thus be separating)
 

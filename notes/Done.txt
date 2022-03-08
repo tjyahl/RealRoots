@@ -1,0 +1,15 @@
+Jordy Lopez
+Kelly Maluccio
+Thomas Yahl
+Frank Sottile
+
+---------------
+Done
+---------------
+
+* Implement Budan-Fourier
+
+* Sylvester's Theorem Var(Syl(p,q),a,b) = 
+                    #{x| p(x)=0 and q(x)>0} -   #{x| p(x)=0 and q(x)<0}
+
+
