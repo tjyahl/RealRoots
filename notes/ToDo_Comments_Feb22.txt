@@ -1,0 +1,130 @@
+Maybe need something for the trace form for real root location and counting numbers of real roots
+
+----------------------------------------------------------------------------------------------------  
+check  "RealRoots";
+has error message:
+ -- capturing check(8, "RealRoots")                                          -- capture failed; retrying ...
+ -- running   check(8, "RealRoots")                                         
+ ulimit -c unlimited; ulimit -t 700; ulimit -m 850000; ulimit -s 8192; ulimit -n 512;  cd /tmp/M2-274890-0/1-rundir/; GC_MAXIMUM_HEAP_SIZE=400M "/usr/bin/M2-binary" --int --no-randomize --no-readline --silent --stop --print-width 77 -e 'needsPackage("RealRoots",Reload=>true,FileName=>"/home/sottile/papers/manuscripts/M2_Real/RealRoots/code/RealRoots.m2")' <"/tmp/M2-274890-0/0.m2" >>"/tmp/M2-274890-0/0.tmp" 2>&1
+/tmp/M2-274890-0/0.tmp:0:1: (output file) error: Macaulay2 exited with status code 1
+/tmp/M2-274890-0/0.m2:0:1: (input file)
+M2: *** Error 1
+ -- 0.383358 seconds elapsed
+stdio:3:1:(3): error: test(s) #8 of package RealRoots failed.
+----------------------------------------------------------------------------------------------------
+ABOVE CODE CORRECTED, assert(HurwitzDeterminant(f,4)== -1876) and I accidentally had another number.
+----------------------------------------------------------------------------------------------------
+When I ran:
+installPackage("RealRoots", RemakeAllDocumentation => true, Verbose => false)
+
+I got error messages, including
+ -- making example results for "traceForm(RingElement)"                      -- 0.759358 seconds elapsed
+ -- warning: found 16 documentation node(s) not listed as a subnode
+ -- warning: method has no documentation: RealRoots :: numSylvester(RingElement,RingElement), key (numSylvester,RingElement,RingElement), package RealRoots
+ -- warning: symbol has no documentation: RealRoots :: Multiplicity, package RealRoots
+ -- warning: method has no documentation: RealRoots :: charPoly(RingElement), key (charPoly,RingElement), package RealRoots
+ -- warning: method has no documentation: RealRoots :: charPoly(RingElement,Ideal), key (charPoly,RingElement,Ideal), package RealRoots
+ -- warning: method has no documentation: RealRoots :: numSturm(RingElement), key (numSturm,RingElement), package RealRoots
+ -- warning: method has no documentation: RealRoots :: traceForm(RingElement,Ideal), key (traceForm,RingElement,Ideal), package RealRoots
+ -- warning: method has no documentation: RealRoots :: BudanFourierBound(RingElement), key (BudanFourierBound,RingElement), package RealRoots
+ -- warning: missing node: eliminant(...,Strategy=>...) cited by eliminant(RingElement)
+ -- warning: 8 warning(s) occurred in documentation for package RealRoots
+----------------------------------------------------------------------------------------------------
+ABOVE CORRECTED
+----------------------------------------------------------------------------------------------------
+The following are not valid (at least from Germany)
+	 HomePage=>"https://www.math.tamu.edu/~kmaluccio"},
+	 HomePage=>"https://math.tamu.edu/~thomasjyahl"}
+----------------------------------------------------------------------------------------------------
+MATH DEPT does not support those websites any more...suggestions: Kelly: https://www.linkedin.com/in/kelly-maluccio-burke and Thomas: https://www.math.tamu.edu/directory/formalpg.php?user=thomasjyahl
+----------------------------------------------------------------------------------------------------
+The basic documentation (and name) suggests a limit to QQ[x], but some routines, such as eliminants, are just fine over
+any field.
+----------------------------------------------------------------------------------------------------
+TO BE CORRECTED...usually when we compute over RR, we obtain a warning "computation over inexact field"
+It just means that our output may be a float...perhaps we should include more examples over RR either way
+----------------------------------------------------------------------------------------------------
+Documentation for BudanFourierBound:
+  Maybe 'sharp' can be removed, and it should be said that this computes the upper bound from the
+    Budan-Fourier Theorem, with a mumble about difference being positive   
+  The numbers a, b can also be infinity (as an example shows for b), but also negative infinity for a?
+  Is the coefficient field QQ or RR or some totally real field?
+
+In the code, it does not test that the input f is a univariate polynomial
+Does f need to be univariate, or must it be a element in a ring with one variable.  (These are different?)
+----------------------------------------------------------------------------------------------------  
+The polynomial must be univariate, and at the moment, 
+it must also be an element in a ring with one variable, ex. x^2-1 in RR[x] works but not in RR[x,y]
+I am working on this
+----------------------------------------------------------------------------------------------------  
+charPoly(Matrix)
+  What field/ring is the matrix over?
+  The variable for the characteristic polynomial; is it specified by the user or not?  Can it be specified by the user?
+  What ring is the characteristic polynomial in ?  Can it have an arbitrary field.
+----------------------------------------------------------------------------------------------------
+The variable is not specified by the user, it is Z. I need to check with Thomas...According to the M2 documentation for "ring -- get the associated ring of an object", ring(matrix) is associated to its natural base ring; however, I think we can modify it in such a way that it is over another field we 
+Prefer (maybe using the command _ and choosing what ring we want). Since we set the symbol "Z" in the 
+Code, I don't think we can change the variable for the characteristic polynomial. Similar to the change
+Of base ring for our matrix, I think we can also change the base field of the characteristic polynomial 
+----------------------------------------------------------------------------------------------------  
+eliminant(RingElement)
+  Does f need to be in an Artinian ring?   How is that specified?   This is particularly missing a lot.
+  There are different usages that need to be specified in the documentation.
+  Strategy is missing ?
+  Also missing a discussion that there are different methods,...
+  Can we eliminate w.r.t out choice of variables?  How about with respect to a linear form or some other polynomial?
+----------------------------------------------------------------------------------------------------
+I need to ask Thomas here
+----------------------------------------------------------------------------------------------------
+HurwitzDeterminant(RingElement,Number)
+  What if f is a univariate polynomial not over an ordered field ?
+  Is the output necessarily a real number?
+----------------------------------------------------------------------------------------------------
+Theorem 5.2.10 is for real univariate polynomials. Perhaps we can generalize... The output can be real yes
+----------------------------------------------------------------------------------------------------
+isHurwitzStable(RingElement)
+  This, like the last, should say something in the documentation about the input is a univariate polynomial
+     (but not necessarily in a ring with one indeterminate).
+----------------------------------------------------------------------------------------------------
+CORRECTED
+----------------------------------------------------------------------------------------------------
+ Can we have a command for returning a Hurwitz matrix?
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+numSturm(f,a,b)
+  This is also missing documentation, such as the meaning of the multiplicity option, and perhaps other options.
+  What is the coefficient field?  Do we check for it?  Why not?
+  (Many routines are mission checks.)
+----------------------------------------------------------------------------------------------------
+numSylvester(RingElement,RingElement,Number,Number)
+  This also has missing documentation
+----------------------------------------------------------------------------------------------------
+numTrace(QuotientRing)
+  This also has missing documentation.  How does it do it?
+  What about the more sophisticated routines for quadratic trace form?
+  Does it test that it is Artinian  and the field is RR or QQ (or do our routines only work over QQ), which is OK.
+----------------------------------------------------------------------------------------------------
+realRootIsolation(RingElement,RR)
+  How is can a list be "the number of real roots..."?
+  We need to discuss what this does and what to do with it.
+  What is the role of eps?  Is eps checked to be positive ?
+----------------------------------------------------------------------------------------------------
+regularRep(RingElement,Ideal)
+  A little more documentation may be needed (linear map on what?)  Is this OK for any field?
+
+----------------------------------------------------------------------------------------------------
+SturmSequence(RingElement)
+  What field is needed here ?
+----------------------------------------------------------------------------------------------------
+traceForm(RingElement)
+ More documentation is needed, such as what is the ring?  Can it be an Artinian ring, or a polynomial ring plus a
+ zero-dimensional ideal?
+
+ Maybe we can have something to help determine zeroes in the positive orthant or.....
+
+ There is some definition inconsistency in what types or rings hold our various elements, and etc.
+----------------------------------------------------------------------------------------------------
+variations(List)
+  What is the sequence of?  Do we test for that? ??
+
