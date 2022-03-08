@@ -12,4 +12,4 @@ Done
 * Sylvester's Theorem Var(Syl(p,q),a,b) = 
                     #{x| p(x)=0 and q(x)>0} -   #{x| p(x)=0 and q(x)<0}
 
-
+* Sturm sequences & multiple roots

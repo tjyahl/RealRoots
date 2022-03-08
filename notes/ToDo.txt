@@ -13,6 +13,8 @@ To Do
 
 * trace form check
 
+* Add checks, tools are symbolic, work over Q for real counting
+
 * Hurwicz stability and/or other stability (Hermite-Biehler, Routh-Hurwicz, Hurwicz determinant)
 
 * documentation
@@ -24,10 +26,6 @@ To Do
 To Discuss
 ----------
 
-* Sturm sequences & multiple roots
-
-* include a check for the shape lemma
-
 * Stickelberger's theorem, eigenvalues and solving
 
 * always print warnings? or give option?
@@ -36,8 +34,6 @@ To Discuss
 more
 --------------------------------------
 From: 19 October 2021
-
-Frank has some thoughts on final routines to add
 
 *) Check if an ideal I of K[x_1,...,x_n] is zero-dimensional
 
@@ -59,10 +55,73 @@ Frank has some thoughts on final routines to add
      *       otherwise if degree f/(gcd(f,f')) = d, then export f
        If this fails, go to the next variable.
 
-     Otherwise, for j = 1,2,....,d(d-1)/2, set
+     Otherwise, for j = 1,2,....,(n-1)d(d-1)/2, set
         l = x_1 + j x_2 + j^2 x_3 + ... + j^{n-1} x_n, and
 	compute the eliminant with respect to l, and apply the previous steps *
 
    One of these forms (variables or the interesting linear forms) will take distinct values
      at the roots of I (and thus be separating)
+
+  Implement Rational univariate representation.  (See Rouillier_RUR.pdf )
+
+Maybe need something for the trace form for real root location and counting numbers of real roots
+
+----------------------------------------------------------------------------------------------------  
+charPoly(Matrix)
+  What field/ring is the matrix over?
+  Must work over an arbitrary field, as it is used in elimination.
+  Field [ my Variable ]
+----------------------------------------------------------------------------------------------------
+eliminant(RingElement)
+  Does f need to be in an Artinian ring?   How is that specified?   This is particularly missing a lot.
+  There are different usages that need to be specified in the documentation.
+  Strategy is missing ?
+  Also missing a discussion that there are different methods,...
+  Can we eliminate w.r.t out choice of variables?  How about with respect to a linear form or some other polynomial?
+----------------------------------------------------------------------------------------------------
+I need to ask Thomas here
+----------------------------------------------------------------------------------------------------
+HurwitzDeterminant(RingElement,Number)
+  What if f is a univariate polynomial not over an ordered field ?
+  Is the output necessarily a real number?
+----------------------------------------------------------------------------------------------------
+Theorem 5.2.10 is for real univariate polynomials. Perhaps we can generalize... The output can be real yes
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+numSturm(f,a,b)
+  This is also missing documentation, such as the meaning of the multiplicity option, and perhaps other options.
+  What is the coefficient field?  Do we check for it?  Why not?
+  (Many routines are mission checks.)
+----------------------------------------------------------------------------------------------------
+numSylvester(RingElement,RingElement,Number,Number)
+  This also has missing documentation
+----------------------------------------------------------------------------------------------------
+numTrace(QuotientRing)
+  This also has missing documentation.  How does it do it?
+  What about the more sophisticated routines for quadratic trace form?
+  Does it test that it is Artinian  and the field is RR or QQ (or do our routines only work over QQ), which is OK.
+----------------------------------------------------------------------------------------------------
+realRootIsolation(RingElement,RR)
+  How is can a list be "the number of real roots..."?
+  We need to discuss what this does and what to do with it.
+  What is the role of eps?  Is eps checked to be positive ?
+----------------------------------------------------------------------------------------------------
+regularRep(RingElement,Ideal)
+  A little more documentation may be needed (linear map on what?)  Is this OK for any field?
+
+----------------------------------------------------------------------------------------------------
+SturmSequence(RingElement)
+  What field is needed here ?
+----------------------------------------------------------------------------------------------------
+traceForm(RingElement)
+ More documentation is needed, such as what is the ring?  Can it be an Artinian ring, or a polynomial ring plus a
+ zero-dimensional ideal?
+
+ Maybe we can have something to help determine zeroes in the positive orthant or.....
+
+ There is some definition inconsistency in what types or rings hold our various elements, and etc.
+----------------------------------------------------------------------------------------------------
+variations(List)
+  What is the sequence of?  Do we test for that? ??
 
