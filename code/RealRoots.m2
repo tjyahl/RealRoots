@@ -491,7 +491,7 @@ document {
 	Key => RealRoots,
 	Headline =>"Package for exploring counting and locating real solutions to polynomial systems",
 	"The purpose of this package is to provide tools for elimination and solving, with a particular emphasis
-	on counting and isolating real zeros of ideals in QQ[X].",
+	on counting and isolating real zeros of ideals in ",TEX///$\mathbb{Q}[x]$///,".",
 	}
 
 document {
