@@ -205,11 +205,16 @@ charPoly (Matrix) := RingElement => o -> M ->(
     if not (isField K and char K === 0) then ( --error "Error: Expected a field of characteristic zero";
     	L := substitute(M,frac(ring M));
     	K' := ring L; 
-        if not (isField K' and char K === 0) then error "Error: Expected a field of characteristic zero";
+        if not (isField K' and char K' === 0) then error "Error: Expected a field of characteristic zero";
+          Z' := o.Variable;
+          S' := K'(monoid [Z']);
+
+          IdZ' := S'_0*id_(S'^n);
+          det(IdZ' - M)
 	);
       
     Z := o.Variable;
-    S := K'(monoid [Z]);
+    S := K(monoid [Z]);
 
     IdZ := S_0*id_(S^n);
     det(IdZ - M)
@@ -544,15 +549,15 @@ document {
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 M = matrix{{2,1},{1,-1}}
-		 N = substitute(M,QQ)
-		 charPoly(N)
+		-- N = substitute(M,QQ)
+		 charPoly(M)
 		 ///,
     	PARA {"We can also change the variable name, as we show below."},
 	EXAMPLE lines ///
 	         charPoly(N,Variable => x)
 		 ///,
        	EXAMPLE lines ///
-		 F = {y^2-x^2-1,x-y^2+4*y-2}
+		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
 		 I = ideal F
 		 S = R/I
 		 N = last regularRep(y)
@@ -692,9 +697,9 @@ document {
 	      computes such bound on ", TEX///$(-\infty, \infty)$///,". Moreover,", TT " ring f ", "is allowed to be multivariate."},
 	EXAMPLE lines ///
 	         R = QQ[t]
-		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
 		 BudanFourierBound(f)
-		 g = (t+5)*(t+3)*(t+1)*(t-1)^2*(t-4)*(t-6)
+		 g = (t + 5)*(t + 3)*(t + 1)*(t - 1)^2*(t - 4)*(t - 6)
 		 BudanFourierBound(g,-6,infinity)
 		 BudanFourierBound(g,-1,5)
 	 	 ///,
