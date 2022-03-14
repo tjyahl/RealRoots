@@ -496,9 +496,9 @@ isHurwitzStable (RingElement) := Boolean => f->(
 beginDocumentation()
 document {
 	Key => RealRoots,
-	Headline =>"Package for exploring counting and locating real solutions to polynomial systems",
-	"The purpose of this package is to provide tools for elimination and solving, with a particular emphasis
-	on counting and isolating real zeros of ideals in ",TEX///$\mathbb{Q}[x]$///,".",
+	Headline => "Package for exploring counting and locating real solutions to polynomial systems",
+	"The purpose of this package is to provide general tools for elimination and solving.", -- with a particular emphasis
+	--on counting and isolating real zeros of ideals in ",TEX///$\mathbb{Q}[x]$///,".",
 	}
 
 document {
@@ -549,12 +549,11 @@ document {
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 M = matrix{{2,1},{1,-1}}
-		-- N = substitute(M,QQ)
 		 charPoly(M)
 		 ///,
     	PARA {"We can also change the variable name, as we show below."},
 	EXAMPLE lines ///
-	         charPoly(N,Variable => x)
+	         charPoly(M,Variable => "x")
 		 ///,
        	EXAMPLE lines ///
 		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
@@ -562,7 +561,7 @@ document {
 		 S = R/I
 		 N = last regularRep(y)
 		 charPoly(N)
-		 ///
+		 ///,
      	}
 
  document {
