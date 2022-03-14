@@ -17,7 +17,7 @@ newPackage(
 	 Email=>"thomasjyahl@tamu.edu",
 	 HomePage=>"https://www.github.com/tjyahl"}
 	},
-    Headline=>"Package for symbolically exploring, counting, and locating real solutions to polynomial systems",
+    Headline=>"Package for symbolically exploring, counting, and locating real solutions to general polynomial systems",
     PackageImports=>{},
     PackageExports=>{},
     DebuggingMode=>true
@@ -194,7 +194,7 @@ regularRep (RingElement) := Matrix => f->(
     )
 
 
---Computes the characteristic polynomial of a matrix
+--Computes the characteristic polynomial of a matrix. Should we be concerned in what ring the characteristic polynomial ends up in?
 charPoly = method(Options => {Variable => "Z"})
 charPoly (Matrix) := RingElement => o -> M ->(
     n := numgens source M;
@@ -202,12 +202,14 @@ charPoly (Matrix) := RingElement => o -> M ->(
     
     K := ring M; 
 
-    if not (isField K and char K === 0) then error "Error: Expected a field of characteristic zero";
-  -- L := substitute(M,toField(ring M));
-  -- K' := ring L;); 
+    if not (isField K and char K === 0) then ( --error "Error: Expected a field of characteristic zero";
+    	L := substitute(M,frac(ring M));
+    	K' := ring L; 
+        if not (isField K' and char K === 0) then error "Error: Expected a field of characteristic zero";
+	);
       
     Z := o.Variable;
-    S := K(monoid [Z]);
+    S := K'(monoid [Z]);
 
     IdZ := S_0*id_(S^n);
     det(IdZ - M)
@@ -674,21 +676,20 @@ document {
     
 document {
 	Key => {BudanFourierBound, (BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),(BudanFourierBound, RingElement, InfiniteNumber, InfiniteNumber),(BudanFourierBound,RingElement)},
-	Headline => "a bound for the number of real roots of a real univariate polynomial",
+	Headline => "a bound for the number of real roots of a univariate polynomial with rational coefficients",
 	Usage => "BudanFourierBound(f, a, b)
 	          BudanFourierBound(f)",
 	Inputs => {
-	    RingElement => "f" => {"a univariate polynomial"},
+	    RingElement => "f" => {"a univariate polynomial with rational coefficients, where", TT " ring f ", "is not necessarily univariate"},
 	    Number => "a" => {"(optional) the lower bound of the interval"},
 	    InfiniteNumber => "a" => {"(optional) the lower bound of the interval"},
 	    Number => "b" => {"(optional) the upper bound of the interval"},
 	    InfiniteNumber => "b" => {"(optional) the upper bound of the interval"},
 	    },
-	Outputs => { ZZ => { "a bound for the number of real roots of a univariate polynomial", TT " f ", " in the interval ", TT "(a,b]"}},
-	PARA {"This computes a bound for the number of real roots of a univariate polynomial", TT " f ", "in the interval", TT "(a,b]",
+	Outputs => { ZZ => { "a bound for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval ", TT "(a,b]"}},
+	PARA {"This computes a bound for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval", TT "(a,b]",
 	      ", counted with multiplicity, according to the Budan-Fourier Theorem. Note that if the interval is not specified, it 
-	      computes such bound on ", TEX///$(-\infty, \infty)$///,". Moreover, if ", TT "ring f", " is not a polynomial ring of one 
-	      indeterminate, then we obtain an error."},
+	      computes such bound on ", TEX///$(-\infty, \infty)$///,". Moreover,", TT " ring f ", "is allowed to be multivariate."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
