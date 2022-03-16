@@ -340,7 +340,7 @@ numSturm (RingElement) := ZZ => opts-> f->(
 
 --Uses Sturm sequence and a bisection method to isolate real solutions to a real univariate polynomial within a tolerance
 realRootIsolation = method()
-realRootIsolation (RingElement,RR) := List => (f,eps)->(
+realRootIsolation (RingElement,Number) := List => (f,r)->(
     R := ring f;
     if not isUnivariate(R) then error "Error: Expected univariate polynomial";
     
@@ -357,7 +357,7 @@ realRootIsolation (RingElement,RR) := List => (f,eps)->(
 	midp := 0;
 	v := new MutableHashTable from {M=>variations apply(l,g->signAt(g,M)),-M=>variations apply(l,g->signAt(g,-M))};
 	
-	while (max apply(L,I-> I#1-I#0) > eps) or (max apply(L,I-> v#(I#0)-v#(I#1)) > 1) do (
+	while (max apply(L,I-> I#1-I#0) > r) or (max apply(L,I-> v#(I#0)-v#(I#1)) > 1) do (
 	    for I in L do (
 		midp = (sum I)/2;
 		v#midp = variations apply(l,g->signAt(g,midp));
@@ -537,8 +537,8 @@ document {
 	Key => {charPoly, (charPoly, Matrix),(charPoly,RingElement),(charPoly,RingElement,Ideal),[charPoly,Variable]},
 	Headline => "the characteristic polynomial of a matrix and the characteristic polynomial of the regular representation of a polynomial",
 	Usage => "charPoly(M)
-	         charPoly(f)
-		 charPoly(f,I)",
+	          charPoly(f)
+		  charPoly(f,I)",
 	Inputs => {
 	    Matrix => "M" => {"a square matrix"},
 	    RingElement => "f" => {"a polynomial"},
@@ -565,31 +565,42 @@ document {
      	}
 
  document {
-	Key => {(SylvesterSequence, RingElement, RingElement),SylvesterSequence},
+	Key => {SylvesterSequence,(SylvesterSequence, RingElement, RingElement)},
+	Headline => "the Sylvester sequence of two rational univariate polynomials",
 	Usage => "SylvesterSequence(f,g)",
-	Inputs => {"f","g"},
+	Inputs => {
+	    RingElement => "f" => {"a rational univariate polynomial"},
+	    RingElement => "g" => {"a rational univariate polynomial"},
+	    },
 	Outputs => { List => { "the Sylvester sequence of ", TT "f", " and ",TT "g"}},
-	PARA {"This computes the Sylvester sequence of two univariate polynomials ", TT "f", " and ", TT "g", " in the same ring"},
+	PARA {"This computes the Sylvester sequence of two rational univariate polynomials ", TT "f", " and ", TT "g", " in the same ring."},
 	EXAMPLE lines ///
 	         R = QQ[t]
-		 f = (t+1)*(t+2)
-		 g = (t+2)
+		 f = (t + 1)*(t + 2)
+		 g = t + 2
 		 SylvesterSequence(f,g)
 	 	 ///,
 	SeeAlso => {"numSylvester"}
      	}
     
 document {
-	Key => {(numSylvester, RingElement, RingElement, Number,Number),(numSylvester, RingElement, RingElement, InfiniteNumber,InfiniteNumber),(numSylvester, RingElement, RingElement, InfiniteNumber,Number),(numSylvester, RingElement, RingElement, Number,InfiniteNumber),(numSylvester,RingElement,RingElement),numSylvester},
-	Usage => "numSylvester(f,g,a,b)","numSylvester(f,g)",
-	Inputs => {"f","g","a","b"},{"f","g"},
+	Key => {numSylvester,(numSylvester, RingElement, RingElement, Number,Number),(numSylvester, RingElement, RingElement, InfiniteNumber,InfiniteNumber),(numSylvester, RingElement, RingElement, InfiniteNumber,Number),(numSylvester, RingElement, RingElement, Number,InfiniteNumber),(numSylvester,RingElement,RingElement)},
+	Headline => "the difference in variations of the Sylvester sequence of two rational univariate polynomials",
+	Usage => "numSylvester(f,g,a,b)
+	          numSylvester(f,g)",
+	Inputs => {
+	    RingElement => "f" => {"a rational univariate polynomial"},
+	    RingElement => "g" => {"a rational univariate polynomial"},
+	    Number => "a" => {"(optional) the lower bound of the interval"},
+	    Number => "b" => {"(optional) the upper bound of the interval"},
+	    },
 	Outputs => { ZZ => {"the difference between number of roots of ",TT "f"," when ",TT "g",
 		"is positive and when g is negative"}},
-	PARA {"This computes the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g"," at the values", TT "a"," and ", TT "b"},
+	PARA {"This computes the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g"," on the interval ",TEX///$(a,b]$///,"."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
-		 f = (t-2)*(t-1)*(t+3)
-		 g = t+1
+		 f = (t - 2)*(t - 1)*(t + 3)
+		 g = t + 1
 		 a = -5
 		 b = 4
 		 numSylvester(f,g,a,b)
@@ -598,14 +609,17 @@ document {
      	}
 
 document {
-	Key => {(SturmSequence, RingElement),SturmSequence},
+	Key => {SturmSequence,(SturmSequence, RingElement)},
+	Headline => "the Sturm sequence of a rational univariate polynomial",
 	Usage => "SturmSequence(f)",
-	Inputs => {"f"},
-	Outputs => { List => { "the Sturm sequence of", TT "f"}},
-	PARA {"This computes the Sturm Sequence of a univariate polynomial ", TT "f"},
+	Inputs => {
+	    RingElement => "f" => {"a rational univariate polynomial"},
+	    },
+	Outputs => { List => {"the Sturm sequence of", TT "f"}},
+	PARA {"This computes the Sturm Sequence of a univariate polynomial ", TT "f","."},
 	EXAMPLE lines ///
 	 	 R = QQ[t]
-		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
+		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
 		 roots f
 		 SturmSequence(f)
 	 	 ///,
@@ -623,27 +637,33 @@ document {
     }
 
 document {
-	Key => {(numSturm, RingElement, Number,Number), (numSturm,RingElement,Number,InfiniteNumber), (numSturm, RingElement,InfiniteNumber,Number), (numSturm, RingElement,InfiniteNumber,InfiniteNumber),(numSturm,RingElement),numSturm},
-	Usage => "numSturm(f,a,b)","numSturm(f)",
-	Inputs => {"f, a univariate polynomial", "a, a lower bound of the interval", "b, an upper bound of the interval"},
-	Outputs => { ZZ => { "the number of real roots of a univariate polynomial ", TT "f"," not counting multiplicity in the interval ", TT "(a,b]"}},
-	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified, the interval will be taken from negative infinity to infinity."},
+	Key => {numSturm,(numSturm, RingElement, Number,Number), (numSturm,RingElement,Number,InfiniteNumber), (numSturm, RingElement,InfiniteNumber,Number), (numSturm, RingElement,InfiniteNumber,InfiniteNumber),(numSturm,RingElement)},
+	Headline => "the number of real roots of a rational univariate polynomial, not counting multiplicity",
+	Usage => "numSturm(f,a,b)
+	          numSturm(f)",
+	Inputs => {
+	    RingElement => "f" => {"a rational univariate polynomial, not necessarily from a univariate polynomial ring"},
+	    Number => "a" => {"a lower bound of the interval"},
+	    Number => "b" => {"an upper bound of the interval"},
+	    },
+	Outputs => { ZZ => {"the number of real roots of ", TT "f"," not counting multiplicity in the interval ",TEX///$(a,b)$///,"."}},
+	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified, the interval will be taken from ",TEX///$\infty$///," to ",TEX///$\infty$///,"."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
-		 f = (t-5)*(t-3)^2*(t-1)*(t+1)
+		 f = (t - 5)*(t - 3)^2*(t - 1)*(t + 1)
 		 roots f
 		 numSturm(f)
 		 numSturm(f,0,5)
 		 numSturm(f,-2,2)
 		 numSturm(f,-1,5)
 	 	 ///,
-	PARA {"In the above example, multiplicity is not included so to include this we can make the multiplicity option true in the below example."},
+	PARA {"In the above example, multiplicity is not counted, so to include it we can make the multiplicity option ",TT "true"," in the example below."},
 	EXAMPLE lines ///
 		numSturm(f,Multiplicity=>true)
 		numSturm(f,0,5,Multiplicity=>true)
 		numSturm(f,0,3,Multiplicity=>true)
 		///,
-	PARA {"If ", TT "a"," is an ", TT "InfiniteNumber", ", then the lower bound will be negative infinity and if ", TT "b"," is an ", TT "InfiniteNumber", ", then the upper bound is infinity."},
+	PARA {"If ", TT "a"," is an ", TT "InfiniteNumber", ", then the lower bound will be ",TEX///$\infty$///,", and if ", TT "b"," is an ", TT "InfiniteNumber", ", then the upper bound is ",TEX///$\infty$///,"."},
 	EXAMPLE lines ///
 	    	numSturm(f,-infinity, 0)
 		numSturm(f,0,infinity)
@@ -653,11 +673,14 @@ document {
      	}
     
 document {
-    	Key => {(variations, List),variations},
+    	Key => {variations,(variations, List)},
+	Headline => "the number of sign changes of an ordered list of numbers",
 	Usage => "variations(l)",
-	Inputs => {"l"},
-	Outputs => { ZZ => { "the number of sign changes in a sequence ", TT "l" }},
-	PARA {"This computes the number of changes of sign in a sequence ", TT "l"},
+	Inputs => {
+	    List => "l" => {" of ordered numbers"},
+	    },
+	Outputs => {ZZ => { "the number of sign changes in the ordered list ", TT "l" }},
+	PARA {"This computes the number of sign changes in the ordered list ", TT "l","."},
 	EXAMPLE lines ///
 		 L = for i to 10 list random(-50,50)
 		 variations(L)
@@ -665,15 +688,20 @@ document {
      	}
     
 document {
-        Key => {(realRootIsolation, RingElement,RR),realRootIsolation},
-	Usage => "realRootIsolation(f,eps)",
-	Inputs => {"f", "eps"},
-	Outputs => { List => { "the number of real roots of a univariate polynomial", TT "f"," not counting multiplicity"}},
+        Key => {realRootIsolation,(realRootIsolation, RingElement,Number)},
+	Headline => "a list that isolates the real roots of a rational univariate polynomial",
+	Usage => "realRootIsolation(f,r)",
+	Inputs => {
+	    RingElement => "f" => {"a rational univariate polynomial"},
+	    Number => "r" => {"a positive rational number, which determines the length of the intervals where each root is isolated"},
+	    },
+	Outputs => {List => {"that isolates the real roots ",TEX///$x_{i}$///,", of ", TT "f"," to the intervals ",TEX///$(x_{i}-r,x_{i}+r)$///,"; note that ",TEX///$i=1,\dots ,n$///, " where ",TEX///$n$///," is the number 
+		of real roots of ", TT "f", " not counting multiplicity."}},
 	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of a polynomial", TT "f"," to a real univariate polynomial and it lists an interval for which each real solution is located"},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
-		 f = 45 - 39*t - 34*t^2+38*t^3-11*t^4+t^5
-		 realRootIsolation(f,0.5)
+		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
+		 realRootIsolation(f,1/2)
 	 	 ///,
 	SeeAlso => {"SturmSequence"}
      	}
@@ -711,14 +739,19 @@ document {
      	}
     
 document {
-	Key => {(traceForm, RingElement),(traceForm,RingElement,Ideal),traceForm},
-	Usage => "traceForm(f)","traceForm(f,I),",
-	Inputs => {"f"},{"f","I"},
-	Outputs => { Matrix => { "the trace quadratic form of", TT "f" }},
-	PARA {"This computes the trace quadratic form of an element ", TT "f", " in an Artinian ring"},
+	Key => {traceForm,(traceForm, RingElement),(traceForm,RingElement,Ideal)},
+	Headline => "the trace quadratic form of a rational polynomial in an Artinian ring",
+	Usage => "traceForm(f)
+	          traceForm(f,I),",
+	Inputs => {
+	    RingElement => "f" => {"a rational polynomial in an Artinian Ring"},
+	    Ideal => "I" => {"the ideal generated by ", TT "f"},
+	    },
+	Outputs => {Matrix => {"the trace quadratic form of ", TT "f" }},
+	PARA {"This computes the trace quadratic form of a polynomial ", TT "f", " in an Artinian ring."},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
-		 F = {y^2 - x^2 - 1, x-y^2+4*y-2}
+		 F = {y^2 - x^2 - 1, x - y^2 + 4*y - 2}
 		 I = ideal F
 		 S = R/I
 		 f = y^2 - x^2 - x*y + 4
@@ -884,7 +917,7 @@ TEST ///
 TEST ///
     R = QQ[t];
     f = (t-1)^2*(t+3)*(t+5)*(t-6);
-    assert(realRootIsolation(f,0.5) == {{-161/32, -299/64}, {-207/64, -23/8}, {23/32, 69/64}, {23/4, 391/64}});
+    assert(realRootIsolation(f,1/2) == {{-161/32, -299/64}, {-207/64, -23/8}, {23/32, 69/64}, {23/4, 391/64}});
     ///    
     
 TEST ///
