@@ -1004,3 +1004,10 @@ traceFormInfo (RingElement) := Sequence => f->(
 --	 	 ///,
 --	SeeAlso => {"traceForm", "numTrace"}
   --   	}
+
+--rationalUnivariateRep = method()
+--rationalUnivariateRep
+
+--must work over char R =0
+--need a couple of algorithms prior to RUR
+
