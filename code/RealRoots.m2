@@ -496,7 +496,7 @@ isHurwitzStable (RingElement) := Boolean => f->(
 beginDocumentation()
 document {
 	Key => RealRoots,
-	Headline => "Package for exploring counting and locating real solutions to polynomial systems",
+	Headline => "Package for exploring, counting and locating real solutions to polynomial systems",
 	"The purpose of this package is to provide general tools for elimination and solving.", -- with a particular emphasis
 	--on counting and isolating real zeros of ideals in ",TEX///$\mathbb{Q}[x]$///,".",
 	}
