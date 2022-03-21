@@ -341,9 +341,13 @@ numSturm (RingElement) := ZZ => opts-> f->(
 --Uses Sturm sequence and a bisection method to isolate real solutions to a real univariate polynomial within a tolerance
 realRootIsolation = method()
 realRootIsolation (RingElement,Number) := List => (f,r)->(
+    
+    if r === InexactNumber then error "Error: Expected integer or rational number";
+    if not r > 0 then error "Error: Expected positive integer or positive rational number";
+    
     R := ring f;
     if not isUnivariate(R) then error "Error: Expected univariate polynomial";
-    
+		
     f = sub(f/gcd(f,diff(R_0,f)),R);
     
     if (numSturm(f)>0) then (
