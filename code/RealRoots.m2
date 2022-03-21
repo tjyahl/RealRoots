@@ -704,7 +704,7 @@ document {
 	Usage => "realRootIsolation(f,r)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
-	    Number => "r" => {"a positive rational number, which determines the length of the intervals where each root is isolated"},
+	    Number => "r" => {"a positive integer or positive rational number, which determines the length of the intervals where each root is isolated"},
 	    },
 	Outputs => {List => {"that isolates the real roots ",TEX///$x_{i}$///,", of ", TT "f"," to the intervals ",TEX///$(x_{i}-r,x_{i}+r)$///,"; note that ",TEX///$i=1,\dots ,n$///, " where ",TEX///$n$///," is the number 
 		of real roots of ", TT "f", " not counting multiplicity."}},
