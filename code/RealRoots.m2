@@ -612,7 +612,7 @@ document {
 	Usage => "SylvesterSequence(f,g)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
-	    RingElement => "g" => {"a rational univariate polynomial"},
+	    RingElement => "g" => {"a rational univariate polynomial in the same variable as ", TT"f"},
 	    },
 	Outputs => { List => { "the Sylvester sequence of ", TT "f", " and ",TT "g"}},
 	PARA {"This computes the Sylvester sequence of two rational univariate polynomials ", TT "f", " and ", TT "g", " in the same ring."},
@@ -735,11 +735,12 @@ document {
 	Usage => "realRootIsolation(f,r)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
-	    Number => "r" => {"a positive integer or positive rational number, which determines the length of the intervals where each root is isolated"},
+	    Number => "r" => {"a positive rational number, which determines the length of the intervals where each root is isolated"},
 	    },
-	Outputs => {List => {"that isolates the real roots ",TEX///$x_{i}$///,", of ", TT "f"," to the intervals ",TEX///$(x_{i}-r,x_{i}+r)$///,"; note that ",TEX///$i=1,\dots ,n$///, " where ",TEX///$n$///," is the number 
-		of real roots of ", TT "f", " not counting multiplicity."}},
-	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of a polynomial", TT "f"," to a real univariate polynomial and it lists an interval for which each real solution is located"},
+	Outputs => {List => {"of intervals that contain all the real roots of ", TT "f", ".  Each interval has length at most ", TT "r", 
+		    " and contains a single root of ", TT "f",", not counting multiplicity."}},
+	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of a polynomial", TT "f",
+	       " to a real univariate polynomial in intervals of length at most ", TT "r"},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
