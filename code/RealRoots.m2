@@ -124,7 +124,13 @@ variable (RingElement) := RingElement => f->(
     if S === {} then (ring f)_0
     else (support f)_0
     )
-    
+
+variable (Ideal) := RingElement => I->(
+    S := support I;
+    R := ring I;
+    if S === {} then (ring I)_0
+    else (support I)_0
+    )
 
 --------------------
 --EXPORTED METHODS--
@@ -1009,9 +1015,28 @@ traceFormInfo (RingElement) := Sequence => f->(
 --	SeeAlso => {"traceForm", "numTrace"}
   --   	}
 
---rationalUnivariateRep = method()
---rationalUnivariateRep
-
+rationalUnivariateRep = method()
+rationalUnivariateRep (Ideal) := RingElement => I ->(
+    R := ring I;
+    S := R/I;
+    --if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal";
+    d := rank traceForm(1_S);
+    
+    i := 1;
+    X := flatten entries vars R;
+    n := #X;
+    while (i < n*(binomial(d,2))) do (
+    	l := sum(X,apply(n,k->i^k),(a,b)->a*b);
+	m := last regularRep(sub(l,S));
+	f := charPoly(m);
+	
+	F := f/gcd(f,diff((support f)_0,f));
+	F = sub(F,ring f);
+	print(first degree F);
+	if (first degree F === d) then return toList(F,l);
+	i = i+1
+	)
+    )
 --must work over char R =0
 --need a couple of algorithms prior to RUR
 
