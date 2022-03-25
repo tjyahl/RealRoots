@@ -477,7 +477,7 @@ HurwitzMatrix (RingElement,ZZ) := Matrix => (f,k)->(
     Z := toList apply(1..d, i -> zerocoeff(C,d+1-2*i));
     
     --here we generate the d x d matrix
-    if k == 0 then print matrix{{C#1}} else (
+    if k == 0 then print matrix{{1}} else (
     L := for j from 2 to d when j < d + 1 list toList apply(1..d, i -> zerocoeff(C,d+j-2*i));
     T := join({Z},L);
     M := matrix T; 
