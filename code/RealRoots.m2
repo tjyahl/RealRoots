@@ -465,7 +465,7 @@ rationalUnivariateRep (Ideal) := List => I ->(
 HurwitzMatrix = method()
 HurwitzMatrix (RingElement,ZZ) := Matrix => (f,k)->(
    
-    if k < 0 then error "Error: Expected non-negative integer in second input.";  
+    if k <= 0 then error "Error: Expected positive integer in second input.";  
 	
     d := (degree f)_0;
     
@@ -477,7 +477,7 @@ HurwitzMatrix (RingElement,ZZ) := Matrix => (f,k)->(
     Z := toList apply(1..d, i -> zerocoeff(C,d+1-2*i));
     
     --here we generate the d x d matrix
-    if k == 0 then print matrix{{1}} else (
+    if k == 1 then print matrix{{C#1}} else (
     L := for j from 2 to d when j < d + 1 list toList apply(1..d, i -> zerocoeff(C,d+j-2*i));
     T := join({Z},L);
     M := matrix T; 
@@ -493,7 +493,7 @@ HurwitzDeterminant (RingElement,ZZ) := RR => (f,k)->(
     R := ring f;
    
     if k < 0 then error "Error: Expected non-negative integer in second input.";  
-    if k == 0 then print 1 else (
+    if k == 0 then 1_QQ else (
 	
     d := (degree f)_0;
     x := R_0;
