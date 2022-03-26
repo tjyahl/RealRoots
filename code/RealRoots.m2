@@ -971,8 +971,6 @@ TEST ///
     assert(BudanFourierBound(g,-infinity,0) == 2);
     assert(BudanFourierBound(g,-1,infinity) == 3);
     
-    
-    
     assert(numSturm(f)== 6);
     assert(numSturm(f,-6,0) == 3);
     assert(numSturm(f,-1,10) == 3);
@@ -1028,7 +1026,7 @@ TEST ///
     ///
     
 TEST ///
-     R = QQ[x,y];
+     R = QQ[x];
      f = 3*x^4 - 7*x^3 + 5*x - 7;
      assert(HurwitzMatrix(f,4) == sub(matrix{{-7,5,0,0},{3,0,-7,0},{0,-7,5,0},{0,3,0,-7}},QQ));
      assert(HurwitzDeterminant(f,4)== -1876);
