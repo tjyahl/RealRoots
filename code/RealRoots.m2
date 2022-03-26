@@ -871,7 +871,7 @@ document {
 	    " with ",TEX///$xy$///,"."},
 	EXAMPLE lines ///
 	        S = R[y]
-		g = y^3 + 2*y + y - x + 1
+		g = y^3 + 2*y^2 + y - x + 1
 		HurwitzMatrix(g,3)
 		HurwitzMatrix(g,2)
 		HurwitzMatrix(g,1)
@@ -899,9 +899,9 @@ document {
        PARA{"We can also use mutliple variables to represent unknown coefficients. Note that we create another ring ",TT "S"," so 
        that ", TT "x", " and ", TT "y"," are not considered variables in the same ring and so confuse the monomials ",TEX///$x$///, " or ",TEX///$y$///,
        " with ",TEX///$xy$///,"."},
-	EXAMPLE lines ///
+       EXAMPLE lines ///
 	        S = R[y]
-		g = y^3 + 2*y + y - x + 1
+		g = y^3 + 2*y^2 + y - x + 1
 		HurwitzDeterminant(g,3)
 		HurwitzDeterminant(g,2)
 		HurwitzDeterminant(g,1)
