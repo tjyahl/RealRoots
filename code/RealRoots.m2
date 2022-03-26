@@ -861,12 +861,22 @@ document {
 	    The polynomial, however, is not necessarily from a univariate polynomial ring."},
 	
 	EXAMPLE lines ///
-	    	R = QQ[x,y]
+	    	R = QQ[x]
 	        f = 3*x^4 - 7*x^3 + 5*x - 7 
 		HurwitzMatrix(f,4)
 	        HurwitzMatrix(f,3)	      
 	 	 ///,
-		 
+	PARA{"We can also use mutliple variables to represent unknown coefficients. Note that we create another ring ",TT "S"," so 
+	    that ", TT "x", " and ", TT "y"," are not considered variables in the same ring and so confuse the monomials ", TEX///$x$///, " or ",TEX///$y$///,
+	    " with ",TEX///$xy$///,"."},
+	EXAMPLE lines ///
+	        S = R[y]
+		g = y^3 + 2*y + y - x + 1
+		HurwitzDeterminant(g,3)
+		HurwitzDeterminant(g,2)
+		HurwitzDeterminant(g,1)
+		HurwitzDeterminant(g,0)
+		 ///,
 	SeeAlso => {"HurwitzDeterminant","isHurwitzStable"} 
 	}   
     
@@ -882,11 +892,22 @@ document {
     	PARA{"This computes the leading principal minor of the Hurwitz matrix ",TEX///$H$///," of a rational univariate polynomial ", TT "f"," with positive leading coefficient and degree at least 1.
 	    The polynomial, however, is not necessarily from a univariate polynomial ring. Note the minor removed the last ",TEX///$n-k$///," rows and the last ",TEX///$n-k$///," columns of the Hurwitz matrix ", TEX///$H$///,"."},
 	EXAMPLE lines ///
-	    	R = QQ[x,y]
-	        f = 3*x^4 - 7*x^3 +5*x - 7 
+	    	R = QQ[x]
+	        f = 3*x^4 - 7*x^3 + 5*x - 7 
 		HurwitzDeterminant(f,4)
 	        HurwitzDeterminant(f,3)	      
 	 	 ///,
+       PARA{"We can also use mutliple variables to represent unknown coefficients. Note that we create another ring ",TT "S"," so 
+       that ", TT "x", " and ", TT "y"," are not considered variables in the same ring and so confuse the monomials ",TEX///$x$///, " or ",TEX///$y$///,
+       " with ",TEX///$xy$///,"."},
+	EXAMPLE lines ///
+	        S = R[y]
+		g = y^3 + 2*y + y - x + 1
+		HurwitzDeterminant(g,3)
+		HurwitzDeterminant(g,2)
+		HurwitzDeterminant(g,1)
+		HurwitzDeterminant(g,0)
+		 ///,
 	SeeAlso => {"HurwitzMatrix","isHurwitzStable"}
      	}
     
@@ -899,7 +920,7 @@ document {
 	PARA {"Recall that a univariate polynomial is Hurwitz stable if all its roots have negative real parts. This method determines the Hurwitz stability of a rational univariate polynomial ", TT "f", "with positive leading coefficient and degree at least 1. 
 	    The polynomial, however, is not necessarily from a univariate polynomial ring."},
 	EXAMPLE lines ///
-	    	R = QQ[x,y]
+	    	R = QQ[x]
             	f = 3*x^4 - 7*x^3 + 5*x - 7 
 		g = x^2 + 10*x + 21
 		isHurwitzStable(f)
