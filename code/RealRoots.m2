@@ -477,7 +477,7 @@ HurwitzMatrix (RingElement,ZZ) := Matrix => (f,k)->(
     Z := toList apply(1..d, i -> zerocoeff(C,d+1-2*i));
     
     --here we generate the d x d matrix
-    if k == 1 then print matrix{{C#1}} else (
+    if k == 1 then matrix{{C#1}} else (
     L := for j from 2 to d when j < d + 1 list toList apply(1..d, i -> zerocoeff(C,d+j-2*i));
     T := join({Z},L);
     M := matrix T; 
@@ -872,10 +872,9 @@ document {
 	EXAMPLE lines ///
 	        S = R[y]
 		g = y^3 + 2*y + y - x + 1
-		HurwitzDeterminant(g,3)
-		HurwitzDeterminant(g,2)
-		HurwitzDeterminant(g,1)
-		HurwitzDeterminant(g,0)
+		HurwitzMatrix(g,3)
+		HurwitzMatrix(g,2)
+		HurwitzMatrix(g,1)
 		 ///,
 	SeeAlso => {"HurwitzDeterminant","isHurwitzStable"} 
 	}   
