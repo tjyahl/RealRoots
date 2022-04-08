@@ -515,7 +515,6 @@ document {
 	    Ideal => "I" => {"a zero-dimensional ideal"}
 	    },
 	Outputs => { RingElement => {"the desired minimal polynomial. See description."},
-	{"the minimalPolynomial of", TT "f", "with respect to a polynomial ring in one variable", TT "Z"}},
 	PARA {"This computes the minimal polynomial of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the minimal polynomial of a polynomial ", TT "g", "in the Artinian ring", TT "(ring g)/I", "."},
 	EXAMPLE lines ///
 	    	R = QQ[x,y]
