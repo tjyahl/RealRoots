@@ -26,7 +26,7 @@ newPackage(
 
 export{
     --methods
-    "eliminant",
+    "minimalPolynomial",
     "regularRep",
     "characteristicPolynomial",
     "variations",
@@ -124,22 +124,22 @@ derivSequence (RingElement) := List => f->(
 --EXPORTED METHODS--
 --------------------
 
---Compute the eliminant of 'f' in the quotient ideal defined by 'I'
+--Compute the minimalPolynomial of 'f' in the quotient ideal defined by 'I'
 ----better naming for strategies?
 ----fix second option to use minimal polynomial/give better error
-eliminant = method(Options=>{Strategy=>0})
-eliminant (RingElement,Ideal) := RingElement => opts->(f,I)->(
+minimalPolynomial = method(Options=>{Strategy=>0})
+minimalPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
     R := ring f;
     if not (ring I === R) then error "Error: Expected polynomial and ideal of the same ring";
-    eliminant(sub(f,R/I))
+    minimalPolynomial(sub(f,R/I))
     )
     
-eliminant (RingElement) := RingElement => opts->f->(
+minimalPolynomial (RingElement) := RingElement => opts->f->(
     R := ring f;
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
     
     if (opts.Strategy === 0) then (
-	--This strategy computes the eliminant as the kernel of the multiplication map
+	--This strategy computes the minimalPolynomial as the kernel of the multiplication map
 	K := coefficientRing R;
     	Z := getSymbol "Z";
     	S := K(monoid [Z]);
@@ -147,7 +147,7 @@ eliminant (RingElement) := RingElement => opts->f->(
     	(ker phi)_0
         
 	) else if (opts.Strategy === 1) then (
-      	--This strategy computes the eliminant by finding a minimal linear combination in powers of f
+      	--This strategy computes the minimalPolynomial by finding a minimal linear combination in powers of f
     	B := basis R;
     	n := numgens source B;
 	
@@ -505,24 +505,28 @@ document {
 	}
 
 document {
-	Key => {eliminant,(eliminant, RingElement),(eliminant,RingElement,Ideal),[eliminant,Strategy]},
-	Headline => "the eliminant of a univariate polynomial of an Artinian ring",
-	Usage => "eliminant(f)",
+	Key => {minimalPolynomial,(minimalPolynomial, RingElement),(minimalPolynomial,RingElement,Ideal),[minimalPolynomial,Strategy]},
+	Headline => "the minimal polynomial of an element of an Artinian ring",
+	Usage => "minimalPolynomial(f)
+	          minimalPolynomial(g,I)",
 	Inputs => {
-	    RingElement => "f" => {"a univariate polynomial of an Artinian ring"},
+	    RingElement => "f" => {"an element of an Artinian ring"},
+	    RingElement => "g" => {"a polynomial"},
+	    Ideal => "I" => {"a zero-dimensional ideal"}
 	    },
-	Outputs => { RingElement => {"the eliminant of", TT "f", "with respect to a polynomial ring in one variable", TT "Z"}},
-	PARA {"This computes the eliminant of ", TT "f", " of an Artinian ring ", TT "R", " and returns a polynomial in ",TT "Z",". 
-	    When ",TT "f"," is a variable in ",TEX///$K[x]$///," this is the eliminant in ",TEX///$K[x]$///, "."},
+	Outputs => { RingElement => {"the desired minimal polynomial. See description."},
+	{"the minimalPolynomial of", TT "f", "with respect to a polynomial ring in one variable", TT "Z"}},
+	PARA {"This computes the minimal polynomial of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the minimal polynomial of a polynomial ", TT "g", "in the Artinian ring", TT "(ring g)/I", "."},
 	EXAMPLE lines ///
 	    	R = QQ[x,y]
 		F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
 		I = ideal F
 		S = R/I
-		eliminant(x)
-	       	eliminant(y)	      
+		minimalPolynomial(x)
+	       	minimalPolynomial(y)	      
 	 	 ///,
-     	}
+        PARA {"When ",TT "f=t"," is a variable in ", TT "ring f", " this is the eliminant with respect to that variable."}
+	}
 
 document {
 	Key => {regularRep,(regularRep, RingElement, Ideal), (regularRep, RingElement)},
@@ -908,9 +912,9 @@ TEST ///
     F = {y^2-x^2-1,x-y^2+4*y-2};
     I = ideal F;
     S = R/I;
-    a = eliminant(x);
+    a = minimalPolynomial(x);
     T = ring a;
-    assert(flatten entries last coefficients(eliminant(x)) == {1,-2,-9,-6,-7});
+    assert(flatten entries last coefficients(minimalPolynomial(x)) == {1,-2,-9,-6,-7});
     assert(flatten entries last regularRep(y) == {0, 0, -3, -2, 0, 0, -1, 1, 0, 1, 4, 0, 1, 0, 4, 4});
     M = last regularRep(y);
     pol = characteristicPolynomial(M);
