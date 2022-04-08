@@ -70,7 +70,6 @@ variable (RingElement) := RingElement => f->(
     )
 
 variable (Ideal) := RingElement => I->(
-    if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial";
     S := support I;
     if S === {} then (ring I)_0 else S#0
     )
@@ -150,8 +149,7 @@ eliminant (RingElement) := RingElement => opts->f->(
 	) else if (opts.Strategy === 2) then (
       	--This strategy computes the eliminant by finding a minimal linear combination in powers of f
     	B := basis R;
-    	n = numgens source B;
-    	K = coefficientRing R;
+    	n := numgens source B;
 	
     	Z = getSymbol "Z";
     	S = K(monoid [Z]);
@@ -363,6 +361,7 @@ realRootIsolation (RingElement,Number) := List => (f,r)->(
 traceForm = method()
 traceForm (RingElement,Ideal) := Matrix => (f,I)->(
     R := ring f;
+    if not (ring I === R) then error "Error: Expected RingElement and Ideal in same Ring";
     traceForm(sub(f,R/I))
     )
 
@@ -1013,6 +1012,10 @@ TEST ///
     -- ///	 
     
 end
+
+
+
+
 
 --Computes the rank and signature of the trace form of f
 ----change name
