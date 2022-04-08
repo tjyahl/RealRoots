@@ -568,6 +568,7 @@ document {
 	EXAMPLE lines ///
 	         characteristicPolynomial(M,Variable => "x")
 		 ///,
+	PARA {"We show the last two methods."},
        	EXAMPLE lines ///
 		 I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
 		 characteristicPolynomial(y,I)
