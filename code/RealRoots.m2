@@ -545,17 +545,20 @@ document {
 
 document {
 	Key => {characteristicPolynomial, (characteristicPolynomial, Matrix),(characteristicPolynomial,RingElement),(characteristicPolynomial,RingElement,Ideal),[characteristicPolynomial,Variable]},
-	Headline => "the characteristic polynomial of a matrix and the characteristic polynomial of the regular representation of a polynomial",
+	Headline => "the characteristic polynomial of a matrix or the characteristic polynomial of the regular representation of a polynomial",
 	Usage => "characteristicPolynomial(M)
 	          characteristicPolynomial(f)
-		  characteristicPolynomial(f,I)",
+		  characteristicPolynomial(g,I)",
 	Inputs => {
 	    Matrix => "M" => {"a square matrix"},
-	    RingElement => "f" => {"a polynomial"},
-	    Ideal => "I"  => {"(optional) a zero-dimensional ideal"},
+	    RingElement => "f" => {"an element of an Artinian ring"},
+	    RingElement => "g" => {"a polynomial"},
+	    Ideal => "I"  => {"a zero-dimensional ideal"},
 	    },
-	Outputs => {RingElement => {"the characteristic polynomial of ", TT "M", " and the characteristic polynomial of the regular representation of ", TT "f"}},
-	PARA {"This computes the characteristic polynomial of ", TT "M", " and the characteristic polynomial of the regular representation of ", TT "f","."},
+	Outputs => {RingElement => {"the desired characteristic polynomial. See description."}},
+	   
+	PARA  {"This computes the characteristic polynomial of the matrix ", TT "M", ", or the characteristic polynomial of the regular representation of ", TT "f"," on the Artinian ring ",TT "ring f", ", or the 
+		characteristic polynomial of the regular representation of ", TT "g"," in the Artinian ring ",TT "(ring g)/I", "." },
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 M = matrix{{2,1},{1,-1}}
@@ -573,7 +576,6 @@ document {
 		 characteristicPolynomial(N)
 		 ///,
      	}
---characteristicPolynomial change to characteristicPolynomial
 
 
  document {
