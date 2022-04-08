@@ -515,16 +515,21 @@ document {
 	    Ideal => "I" => {"a zero-dimensional ideal"}
 	    },
 	Outputs => { RingElement => {"the desired minimal polynomial. See description."}},
-	PARA {"This computes the minimal polynomial of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the minimal polynomial of a polynomial ", TT "g", "in the Artinian ring", TT "(ring g)/I", "."},
+	PARA {"This computes the minimal polynomial of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the minimal polynomial of a polynomial ", TT "g", "in the Artinian ring", TT "(ring g)/I", ".
+	    When ",TT "f=t"," is a variable in ", TT "ring f", " this is the eliminant with respect to that variable."},
 	EXAMPLE lines ///
 	    	R = QQ[x,y]
-		F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
-		I = ideal F
+		I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
+		minimalPolynomial(y,I)
 		S = R/I
-		minimalPolynomial(x)
-	       	minimalPolynomial(y)	      
-	 	 ///,
-        PARA {"When ",TT "f=t"," is a variable in ", TT "ring f", " this is the eliminant with respect to that variable."}
+		minimalPolynomial(y)
+	 	///,
+	PARA {"We provide two examples to compute minimal polynomials given by ",TT "Strategy => 0"," and ",TT "Strategy => 1", "."},
+	EXAMPLE lines ///
+	    	J = ideal(x^2 + y^2 - 4,2*x + y - 1)
+		minimalPolynomial(x,Strategy => 0)
+	    	minimalPolynomial(x,Strategy => 1)
+	        ///
 	}
 
 document {
