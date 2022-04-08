@@ -573,6 +573,8 @@ document {
 		 charPoly(N)
 		 ///,
      	}
+--charPoly change to characteristicPolynomial
+
 
  document {
 	Key => {SylvesterSequence,(SylvesterSequence, RingElement, RingElement)},
@@ -729,9 +731,9 @@ document {
 	    Number => "b" => {"(optional) the upper bound of the interval"},
 	    InfiniteNumber => "b" => {"(optional) the upper bound of the interval"},
 	    },
-	Outputs => { ZZ => { "a bound for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval ", TT "(a,b]"}},
-	PARA {"This computes a bound for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval", TT "(a,b]",
-	      ", counted with multiplicity, according to the Budan-Fourier Theorem. Note that if the interval is not specified, it 
+	Outputs => { ZZ => { "the bound for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval ", TT "(a,b]"}},
+	PARA {"This computes the bound from the Budan Fourier Theorem for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval", TT "(a,b]",
+	      ", counted with multiplicity. If the interval is not specified, it 
 	      computes such bound on ", TEX///$(-\infty, \infty)$///,". Moreover,", TT " ring f ", "is allowed to be multivariate."},
 	EXAMPLE lines ///
 	         R = QQ[t]
@@ -748,6 +750,8 @@ document {
 		 BudanFourierBound(g,-infinity,infinity)
 		 ///
      	}
+    
+    --add South Texas example on Budan Fourier
     
 document {
 	Key => {traceForm,(traceForm, RingElement),(traceForm,RingElement,Ideal)},
