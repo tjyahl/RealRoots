@@ -843,7 +843,7 @@ document {
 	    " with ",TEX///$xy$///,"."},
 	EXAMPLE lines ///
 	        S = R[y]
-		g = y^3 + 2*y^2 + y - x + 1
+		g = y^3 + 2*y^2 + y + 1
 		HurwitzMatrix(g,3)
 		HurwitzMatrix(g,2)
 		HurwitzMatrix(g,1)
