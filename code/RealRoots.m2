@@ -524,9 +524,8 @@ document {
 	 	///,
 	PARA {"We provide two examples to compute minimal polynomials given by ",TT "Strategy => 0"," and ",TT "Strategy => 1", "."},
 	EXAMPLE lines ///
-	    	J = ideal(x^2 + y^2 - 4,2*x + y - 1)
-		minimalPolynomial(x,J,Strategy => 0)
-	    	minimalPolynomial(x,J,Strategy => 1)
+		minimalPolynomial(x,Strategy => 0)
+	    	minimalPolynomial(x,Strategy => 1)
 	        ///
 	}
 
