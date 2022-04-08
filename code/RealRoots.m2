@@ -137,12 +137,13 @@ minimalPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
 minimalPolynomial (RingElement) := RingElement => opts->f->(
     R := ring f;
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
+
+    K := coefficientRing R;
+    Z := getSymbol "Z";
+    S := K(monoid [Z]);
     
     if (opts.Strategy === 0) then (
 	--This strategy computes the minimalPolynomial as the kernel of the multiplication map
-	K := coefficientRing R;
-    	Z := getSymbol "Z";
-    	S := K(monoid [Z]);
     	phi := map(R,S,{f});
     	(ker phi)_0
         
@@ -150,9 +151,6 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
       	--This strategy computes the minimalPolynomial by finding a minimal linear combination in powers of f
     	B := basis R;
     	n := numgens source B;
-	
-    	Z = getSymbol "Z";
-    	S = K(monoid [Z]);
     	
     	P := map(R^1,R^(n+1),(i,j)->f^j);
     	M := last coefficients(P, Monomials=>B);
@@ -527,8 +525,8 @@ document {
 	PARA {"We provide two examples to compute minimal polynomials given by ",TT "Strategy => 0"," and ",TT "Strategy => 1", "."},
 	EXAMPLE lines ///
 	    	J = ideal(x^2 + y^2 - 4,2*x + y - 1)
-		minimalPolynomial(x,Strategy => 0)
-	    	minimalPolynomial(x,Strategy => 1)
+		minimalPolynomial(x,J,Strategy => 0)
+	    	minimalPolynomial(x,J,Strategy => 1)
 	        ///
 	}
 
