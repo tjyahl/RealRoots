@@ -558,7 +558,7 @@ document {
 	Outputs => {RingElement => {"the desired characteristic polynomial. See description."}},
 	   
 	PARA  {"This computes the characteristic polynomial of the matrix ", TT "M", ", or the characteristic polynomial of the regular representation of ", TT "f"," on the Artinian ring ",TT "ring f", ", or the 
-		characteristic polynomial of the regular representation of ", TT "g"," in the Artinian ring ",TT "(ring g)/I", "." },
+		characteristic polynomial of the regular representation of ", TT "g"," on the Artinian ring ",TT "(ring g)/I", "." },
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 M = matrix{{2,1},{1,-1}}
@@ -569,11 +569,10 @@ document {
 	         characteristicPolynomial(M,Variable => "x")
 		 ///,
        	EXAMPLE lines ///
-		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
-		 I = ideal F
+		 I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
+		 characteristicPolynomial(y,I)
 		 S = R/I
-		 N = last regularRep(y)
-		 characteristicPolynomial(N)
+		 characteristicPolynomial(y)
 		 ///,
      	}
 
