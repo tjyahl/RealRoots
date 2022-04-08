@@ -512,7 +512,8 @@ document {
 	    RingElement => "f" => {"a univariate polynomial of an Artinian ring"},
 	    },
 	Outputs => { RingElement => {"the eliminant of", TT "f", "with respect to a polynomial ring in one variable", TT "Z"}},
-	PARA {"This computes the eliminant of ", TT "f", " of an Artinian ring ", TT "R", " and returns a polynomial in ",TT "Z","."},
+	PARA {"This computes the eliminant of ", TT "f", " of an Artinian ring ", TT "R", " and returns a polynomial in ",TT "Z",". 
+	    When ",TT "f"," is a variable in ",TEX///$K[x]$///," this is the eliminant in ",TEX///$K[x]$///, "."},
 	EXAMPLE lines ///
 	    	R = QQ[x,y]
 		F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
