@@ -138,7 +138,7 @@ eliminant (RingElement) := RingElement => opts->f->(
     R := ring f;
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
     
-    if (opts.Strategy === 1) then (
+    if (opts.Strategy === 0) then (
 	--This strategy computes the eliminant as the kernel of the multiplication map
 	K := coefficientRing R;
     	Z := getSymbol "Z";
@@ -146,7 +146,7 @@ eliminant (RingElement) := RingElement => opts->f->(
     	phi := map(R,S,{f});
     	(ker phi)_0
         
-	) else if (opts.Strategy === 2) then (
+	) else if (opts.Strategy === 1) then (
       	--This strategy computes the eliminant by finding a minimal linear combination in powers of f
     	B := basis R;
     	n := numgens source B;
