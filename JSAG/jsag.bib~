@@ -1,0 +1,132 @@
+
+@preamble{
+   "\def\cprime{$'$} "
+}
+@Misc{AmendolaRodriguez,
+  author = {Am\'endola, C. and Rodriguez, J. I.},
+  title = {Solving parameterized polynomial systems with decomposable projections},
+  year = {2016},
+  note = {{\tt arXiv:1612.08807}},
+}
+
+@article {Bernstein,
+    AUTHOR = {Bernstein, D. N.},
+     TITLE = {The number of roots of a system of equations},
+   JOURNAL = {Funkcional. Anal. i Prilo\v zen.},
+  FJOURNAL = {Akademija Nauk SSSR. Funkcional\cprime nyi Analiz i ego
+              Prilo\v zenija},
+    VOLUME = {9},
+      YEAR = {1975},
+    NUMBER = {3},
+    PAGES = {1--4}
+}
+
+@Misc{SDSS,
+  author = {Brysiewicz, T. and Rodriguez, J. I. and Sottile, F. and Yahl, T.},
+  title = {Solving Decomposable Sparse Systems},
+  year = {2020},
+  note = {{\tt arXiv:2001.04228}},
+}
+@book {Ewald,
+AUTHOR = {Ewald, G\"{u}nter},
+TITLE = {Combinatorial convexity and algebraic geometry},
+SERIES = {Graduate Texts in Mathematics},
+VOLUME = {168},
+PUBLISHER = {Springer-Verlag, New York},
+YEAR = {1996},
+PAGES = {xiv+372},
+ISBN = {0-387-94755-8},
+MRCLASS = {52B20 (14M25 52B05)},
+MRNUMBER = {1418400},
+MRREVIEWER = {P. McMullen},
+DOI = {10.1007/978-1-4612-4044-0},
+URL = {https://doi-org.ezproxy.library.wisc.edu/10.1007/978-1-4612-4044-0},
+} 
+
+@article{Esterov,
+    AUTHOR = {Esterov, A.},
+     TITLE = {Galois theory for general systems of polynomial equations},
+   JOURNAL = {Compos. Math.},
+    VOLUME = {155},
+      YEAR = {2019},
+    NUMBER = {2},
+     PAGES = {229--245},
+       DOI = {10.1112/s0010437x18007868},
+}
+
+@article {PirolaSchlesinger,
+    AUTHOR = {Pirola, G. P. and Schlesinger, E.},
+     TITLE = {Monodromy of projective curves},
+   JOURNAL = {J. Algebraic Geom.},
+  FJOURNAL = {Journal of Algebraic Geometry},
+    VOLUME = {14},
+      YEAR = {2005},
+    NUMBER = {4},
+     PAGES = {623--642}
+}
+
+
+
+@ARTICLE {V99,
+AUTHOR = "Verschelde, J." ,
+TITLE = "Algorithm 795: {PHC}pack: A general-purpose solver for
+         polynomial systems by homotopy continuation" ,
+JOURNAL = "ACM Trans. Math. Softw." ,
+VOLUME = "25" ,
+NUMBER = "2" ,
+PAGES = "251--276" ,
+YEAR = "1999" ,
+NOTE = "Available at {http://www.math.uic.edu/{\~{}}jan}." ,
+}
+
+
+@article {Polyhedra,
+    AUTHOR = {Birkner, Ren\'{e}},
+     TITLE = {Polyhedra: a package for computations with convex polyhedral
+              objects},
+   JOURNAL = {J. Softw. Algebra Geom.},
+  FJOURNAL = {The Journal of Software for Algebra and Geometry},
+    VOLUME = {1},
+      YEAR = {2009},
+     PAGES = {11--15},
+      ISSN = {1948-7916},
+   MRCLASS = {52B55 (14M25 52-04 52B20 52C07)},
+  MRNUMBER = {2878670},
+       DOI = {10.2140/jsag.2009.1.11},
+       URL = {https://doi-org.ezproxy.library.wisc.edu/10.2140/jsag.2009.1.11},
+}
+
+@article {MonodromySolver,
+    AUTHOR = {Duff, Timothy and Hill, Cvetelina and Jensen, Anders and Lee,
+              Kisun and Leykin, Anton and Sommars, Jeff},
+     TITLE = {Solving polynomial systems via homotopy continuation and
+              monodromy},
+   JOURNAL = {IMA J. Numer. Anal.},
+  FJOURNAL = {IMA Journal of Numerical Analysis},
+    VOLUME = {39},
+      YEAR = {2019},
+    NUMBER = {3},
+     PAGES = {1421--1446},
+      ISSN = {0272-4979},
+   MRCLASS = {65H20},
+  MRNUMBER = {3984062},
+MRREVIEWER = {Raffaella Pavani},
+       DOI = {10.1093/imanum/dry017},
+       URL = {https://doi-org.ezproxy.library.wisc.edu/10.1093/imanum/dry017},
+}
+@article {LSY1989,
+    AUTHOR = {Li, T. Y. and Sauer, Tim and Yorke, J. A.},
+     TITLE = {The cheater's homotopy: an efficient procedure for solving
+              systems of polynomial equations},
+   JOURNAL = {SIAM J. Numer. Anal.},
+  FJOURNAL = {SIAM Journal on Numerical Analysis},
+    VOLUME = {26},
+      YEAR = {1989},
+    NUMBER = {5},
+     PAGES = {1241--1251},
+      ISSN = {0036-1429},
+   MRCLASS = {65H10 (58C30 90C30)},
+  MRNUMBER = {1014884},
+       DOI = {10.1137/0726069},
+       URL = {https://doi-org.ezproxy.library.wisc.edu/10.1137/0726069},
+}		

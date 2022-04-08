@@ -42,11 +42,10 @@ export{
     "HurwitzMatrix",
     "HurwitzDeterminant",
     "isHurwitzStable",
-   -- "variable",
-   -- "signAt",
-   -- "derivSequence",
-   -- "sign",
-   -- "isArtinian",
+    --"variable",
+    --"signAt",
+    --"derivSequence",
+    --"sign",
     --options
     "Multiplicity"
     }
@@ -56,35 +55,39 @@ export{
 --METHODS FOR INTERNAL USE--
 ----------------------------
 
---Check that a ring is a univariate polynomial ring over a field of characteristic zero
-----worry about more interesting fields?
-----make warning optional?
-isUnivariate = method()
-isUnivariate (Ring) := Boolean => R->(
-    K := coefficientRing R;
-    if instance(K,InexactField) then print "Warning: Computations over inexact field";
-    (isPolynomialRing R) and (numgens R === 1) and (isField K) and (char K === 0)
-    )  
-
+--Check that a polynomial is univariate
 isUnivariatePolynomial = method()
 isUnivariatePolynomial (RingElement) := Boolean => f->(
-    L := toList(variable f); 
-    n := length L;
-    n === 1
+    #(support f) <= 1
     )
 
---Check that a ring is Artinian over a field of characteristic zero
-----check if warning is printed more than once
+--Determines the variable of a univariate polynomial
+variable = method()
+variable (RingElement) := RingElement => f->(
+    if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial";
+    S := support f;
+    if S === {} then (ring f)_0 else S#0
+    )
+
+variable (Ideal) := RingElement => I->(
+    if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial";
+    S := support I;
+    if S === {} then (ring I)_0 else S#0
+    )
+
+
+--Check that a ring is zero-dimensional
 isArtinian = method()
 isArtinian (Ring) := Boolean => R->(
-    K := coefficientRing R;
-    if instance(K,InexactField) then print "Warning: Computations over inexact field";
-    (isField K) and (char K===0) and (dim R===0)
+    if instance(coefficientRing R,InexactField) then print "Warning: Computations over inexact field";
+    dim R === 0
     )
+
         
 --Computes the sign of a real number
 sign = method()
-sign (Number) := ZZ => n ->(
+for A in {ZZ,QQ,RR} do
+sign (A) := ZZ => n->(
      if n < 0 then -1 
      else if n == 0 then 0
      else if n > 0 then 1
@@ -93,7 +96,8 @@ sign (Number) := ZZ => n ->(
 
 --Computes the sign of a real univariate polynomial at a given real number
 signAt = method()
-signAt (RingElement,Number) := ZZ => (f,r)->(
+for A in {ZZ,QQ,RR} do
+signAt (RingElement,A) := ZZ => (f,r)->(
     sign(substitute(f,{variable f => r}))
     )
 
@@ -105,32 +109,16 @@ signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
 	)
     )
 
+
 --Computes the sequence of derivatives of f
 derivSequence = method()
 derivSequence (RingElement) := List => f->(
-   -- if not isUnivariate(R) then error "Error: Expected univariate polynomial";
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
     if (f == 0) then error "Error: Expected nonzero polynomial";
     
-   -- t := R_0;
     t := variable f;
     d := first degree f;
     apply(d+1, i -> diff(t^i,f))
-    )
-
-variable = method()
-variable (RingElement) := RingElement => f->(
-    S := support f;
-    R := ring f;
-    if S === {} then (ring f)_0
-    else (support f)_0
-    )
-
-variable (Ideal) := RingElement => I->(
-    S := support I;
-    R := ring I;
-    if S === {} then (ring I)_0
-    else (support I)_0
     )
 
 --------------------
@@ -141,13 +129,13 @@ variable (Ideal) := RingElement => I->(
 ----better naming for strategies?
 ----fix second option to use minimal polynomial/give better error
 eliminant = method(Options=>{Strategy=>0})
-eliminant (RingElement,Ideal) := RingElement => opts-> (f,I)->(
+eliminant (RingElement,Ideal) := RingElement => opts->(f,I)->(
     R := ring f;
     if not (ring I === R) then error "Error: Expected polynomial and ideal of the same ring";
     eliminant(sub(f,R/I))
     )
     
-eliminant (RingElement) := RingElement => opts-> f->(
+eliminant (RingElement) := RingElement => opts->f->(
     R := ring f;
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
     
@@ -160,13 +148,7 @@ eliminant (RingElement) := RingElement => opts-> f->(
     	(ker phi)_0
         
 	) else if (opts.Strategy === 2) then (
-	--This strategy computes the eliminant as a characteristic polynomial when possible
-	n := numgens source basis R;
-    	g := charPoly(f);
-    	if (first degree g === n) then g else error "Error: Eliminant not computed"
-    	
-	) else (
-	--This strategy computes the eliminant by finding a minimal linear combination in powers of f
+      	--This strategy computes the eliminant by finding a minimal linear combination in powers of f
     	B := basis R;
     	n = numgens source B;
     	K = coefficientRing R;
@@ -201,26 +183,14 @@ regularRep (RingElement) := Matrix => f->(
     )
 
 
---Computes the characteristic polynomial of a matrix. Should we be concerned in what ring the characteristic polynomial ends up in?
+--Computes the characteristic polynomial of a matrix.
 charPoly = method(Options => {Variable => "Z"})
-charPoly (Matrix) := RingElement => o -> M ->(
+charPoly (Matrix) := RingElement => opts->M->(
     n := numgens source M;
     if not (numgens target M === n) then error "Error: Expected a square matrix";
     
     K := ring M; 
-
-    if not (isField K and char K === 0) then ( --error "Error: Expected a field of characteristic zero";
-    	L := substitute(M,frac(ring M));
-    	K' := ring L; 
-        if not (isField K' and char K' === 0) then error "Error: Expected a field of characteristic zero";
-          Z' := o.Variable;
-          S' := K'(monoid [Z']);
-
-          IdZ' := S'_0*id_(S'^n);
-          det(IdZ' - M)
-	);
-      
-    Z := o.Variable;
+    Z := opts.Variable;
     S := K(monoid [Z]);
 
     IdZ := S_0*id_(S^n);
@@ -228,13 +198,13 @@ charPoly (Matrix) := RingElement => o -> M ->(
     )
 
 --Computes the characteristic polynomial of the regular representation of f
-charPoly (RingElement,Ideal) := RingElement => o-> (f,I) ->(
+charPoly (RingElement,Ideal) := RingElement => opts->(f,I)->(
     R := ring f;
     if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
     charPoly(sub(f,R/I))
     )
 
-charPoly (RingElement) := RingElement => o-> f ->(
+charPoly (RingElement) := RingElement => opts->f->(
     (B,mf) := regularRep(f);
     charPoly(mf)
     )
@@ -259,7 +229,6 @@ BudanFourierBound = method()
 for A in {Number,InfiniteNumber} do 
 for B in {Number,InfiniteNumber} do
 BudanFourierBound (RingElement,A,B) := ZZ => (f,a,b)->(
-  -- if not isUnivariate(R) then error "Error: Expected univariate polynomial or expected polynomial ring with one indeterminate"; 
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
     if not (a<b) then error "Error: Expected non-empty interval";
     l := derivSequence f;
@@ -277,9 +246,11 @@ SylvesterSequence = method()
 SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     R := ring f;
     if not (ring g === R) then error "Error: Polynomials should be in the same ring";
-    if not isUnivariate(R) then error "Error: Expected univariate polynomials";
+    if not (isUnivariatePolynomial(f) and isUnivariatePolynomial(g)) then error "Error: Expected univariate polynomials";
+    if not (variable f == variable g) then error "Error: Expected polynomials in the same variable";
     
     --dividing out common factors
+    ----gcd only works over ZZ and QQ?
     h := gcd(f,g);
     f = sub(f/h,R);
     g = sub(g/h,R);
@@ -340,7 +311,7 @@ numSturm (RingElement,A,B) := ZZ => opts->(f,a,b)->(
     n
     )
 
-numSturm (RingElement) := ZZ => opts-> f->( 
+numSturm (RingElement) := ZZ => opts->f->( 
     numSturm(f,-infinity,infinity,opts)
     )
 
@@ -348,20 +319,19 @@ numSturm (RingElement) := ZZ => opts-> f->(
 --Uses Sturm sequence and a bisection method to isolate real solutions to a real univariate polynomial within a tolerance
 realRootIsolation = method()
 realRootIsolation (RingElement,Number) := List => (f,r)->(
-    
-    if r === InexactNumber then error "Error: Expected integer or rational number";
+    if instance(r,InexactNumber) then error "Error: Expected integer or rational number";
     if not r > 0 then error "Error: Expected positive integer or positive rational number";
     
+    if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial";
     R := ring f;
-    if not isUnivariate(R) then error "Error: Expected univariate polynomial";
-		
-    f = sub(f/gcd(f,diff(R_0,f)),R);
+    
+    f = sub(f/gcd(f,diff(variable f,f)),R);
     
     if (numSturm(f)>0) then (
 	l := SturmSequence(f);
 	
 	--bound for real roots
-    	C := flatten entries sub(last coefficients f, coefficientRing R);
+	C := (listForm f)/last;
     	M := (sum(C,abs))/(leadCoefficient f);
 	
 	L := {{-M,M}};
@@ -386,11 +356,10 @@ realRootIsolation (RingElement,Number) := List => (f,r)->(
 	{}
 	)
     )
-        
     
     
 --Computes the trace form of f in an Artinian ring 
-----change names? mm? tr?
+----use subrings in case of extra variables
 traceForm = method()
 traceForm (RingElement,Ideal) := Matrix => (f,I)->(
     R := ring f;
@@ -399,7 +368,7 @@ traceForm (RingElement,Ideal) := Matrix => (f,I)->(
 
 traceForm (RingElement) := Matrix => f->(
     R := ring f;
-    if not isArtinian R then error "Error: Expected Artinian ring";    
+    if not isArtinian(R) then error "Error: Expected zero-dimensional ring";
     B := basis R;
     K := coefficientRing R;
 
@@ -410,7 +379,6 @@ traceForm (RingElement) := Matrix => f->(
 
 
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
---Use numSylvester for this
 numTrace = method()
 numTrace (RingElement) := ZZ => f->(
     R := ring f;
@@ -437,9 +405,10 @@ numTrace (QuotientRing) := ZZ=> R->(
     numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true)
     )
 
+
 --Computes the Rational Univariate Representation of a zero-dimensional ideal
 rationalUnivariateRep = method()
-rationalUnivariateRep (Ideal) := List => I ->(
+rationalUnivariateRep (Ideal) := List => I->(
     R := ring I;
     S := R/I;
     if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal";
@@ -453,10 +422,10 @@ rationalUnivariateRep (Ideal) := List => I ->(
 	m := last regularRep(sub(l,S));
 	f := charPoly(m);
 	
-	F := f/gcd(f,diff((support f)_0,f));
-	F = sub(F,ring f);
-	print(first degree F);
-	if (first degree F === d) then return toList(F,l);
+	fbar := f/gcd(f,diff((support f)_0,f));
+	fbar = sub(fbar,ring f);
+	print(first degree fbar);
+	if (first degree fbar === d) then return toList(f,l);
 	i = i+1
 	)
     )
