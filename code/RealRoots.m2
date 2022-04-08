@@ -28,7 +28,7 @@ export{
     --methods
     "eliminant",
     "regularRep",
-    "charPoly",
+    "characteristicPolynomial",
     "variations",
     "SylvesterSequence",
     "numSylvester",
@@ -182,8 +182,8 @@ regularRep (RingElement) := Matrix => f->(
 
 
 --Computes the characteristic polynomial of a matrix.
-charPoly = method(Options => {Variable => "Z"})
-charPoly (Matrix) := RingElement => opts->M->(
+characteristicPolynomial = method(Options => {Variable => "Z"})
+characteristicPolynomial (Matrix) := RingElement => opts->M->(
     n := numgens source M;
     if not (numgens target M === n) then error "Error: Expected a square matrix";
     
@@ -196,15 +196,15 @@ charPoly (Matrix) := RingElement => opts->M->(
     )
 
 --Computes the characteristic polynomial of the regular representation of f
-charPoly (RingElement,Ideal) := RingElement => opts->(f,I)->(
+characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
     R := ring f;
     if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
-    charPoly(sub(f,R/I))
+    characteristicPolynomial(sub(f,R/I))
     )
 
-charPoly (RingElement) := RingElement => opts->f->(
+characteristicPolynomial (RingElement) := RingElement => opts->f->(
     (B,mf) := regularRep(f);
-    charPoly(mf)
+    characteristicPolynomial(mf)
     )
 
 
@@ -399,7 +399,7 @@ numTrace (QuotientRing) := ZZ=> R->(
     if not isArtinian R then error "Expected Artinian ring";
     K := coefficientRing R;
     
-    ch := charPoly(traceForm(1_R));
+    ch := characteristicPolynomial(traceForm(1_R));
     chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
     numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true)
     )
@@ -419,7 +419,7 @@ rationalUnivariateRep (Ideal) := List => I->(
     while (i < n*(binomial(d,2))) do (
     	l := sum(X,apply(n,k->i^k),(a,b)->a*b);
 	m := last regularRep(sub(l,S));
-	f := charPoly(m);
+	f := characteristicPolynomial(m);
 	
 	fbar := f/gcd(f,diff((support f)_0,f));
 	fbar = sub(fbar,ring f);
@@ -544,11 +544,11 @@ document {
      	}
 
 document {
-	Key => {charPoly, (charPoly, Matrix),(charPoly,RingElement),(charPoly,RingElement,Ideal),[charPoly,Variable]},
+	Key => {characteristicPolynomial, (characteristicPolynomial, Matrix),(characteristicPolynomial,RingElement),(characteristicPolynomial,RingElement,Ideal),[characteristicPolynomial,Variable]},
 	Headline => "the characteristic polynomial of a matrix and the characteristic polynomial of the regular representation of a polynomial",
-	Usage => "charPoly(M)
-	          charPoly(f)
-		  charPoly(f,I)",
+	Usage => "characteristicPolynomial(M)
+	          characteristicPolynomial(f)
+		  characteristicPolynomial(f,I)",
 	Inputs => {
 	    Matrix => "M" => {"a square matrix"},
 	    RingElement => "f" => {"a polynomial"},
@@ -559,21 +559,21 @@ document {
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 M = matrix{{2,1},{1,-1}}
-		 charPoly(M)
+		 characteristicPolynomial(M)
 		 ///,
     	PARA {"We can also change the variable name, as we show below."},
 	EXAMPLE lines ///
-	         charPoly(M,Variable => "x")
+	         characteristicPolynomial(M,Variable => "x")
 		 ///,
        	EXAMPLE lines ///
 		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
 		 I = ideal F
 		 S = R/I
 		 N = last regularRep(y)
-		 charPoly(N)
+		 characteristicPolynomial(N)
 		 ///,
      	}
---charPoly change to characteristicPolynomial
+--characteristicPolynomial change to characteristicPolynomial
 
 
  document {
@@ -910,7 +910,7 @@ TEST ///
     assert(flatten entries last coefficients(eliminant(x)) == {1,-2,-9,-6,-7});
     assert(flatten entries last regularRep(y) == {0, 0, -3, -2, 0, 0, -1, 1, 0, 1, 4, 0, 1, 0, 4, 4});
     M = last regularRep(y);
-    pol = charPoly(M);
+    pol = characteristicPolynomial(M);
     G = ring pol;
     ans = Z^4 - 8*Z^3 + 19*Z^2 - 16*Z + 5;
     assert(pol == ans); 
@@ -1035,7 +1035,7 @@ traceFormInfo (RingElement) := Sequence => f->(
     if not isArtinian R then error "Expected Artinian ring";
     
     trf := traceForm f;
-    ch := charPoly(trf);
+    ch := characteristicPolynomial(trf);
     chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
     sig := numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true);
     (rank(trf),sig)
@@ -1071,7 +1071,7 @@ rationalUnivariateRep (Ideal) := RingElement => I ->(
     while (i < n*(binomial(d,2))) do (
     	l := sum(X,apply(n,k->i^k),(a,b)->a*b);
 	m := last regularRep(sub(l,S));
-	f := charPoly(m);
+	f := characteristicPolynomial(m);
 	
 	F := f/gcd(f,diff((support f)_0,f));
 	F = sub(F,ring f);
