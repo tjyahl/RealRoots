@@ -513,7 +513,8 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"}
+	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Strategy => {"set method for computing the minimal polynomial"}
 	    },
 	Outputs => { RingElement => {"the desired minimal polynomial. See description."}},
 	PARA {"This computes the minimal polynomial of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the minimal polynomial of a polynomial ", TT "g", "in the Artinian ring", TT "(ring g)/I", ".
@@ -668,6 +669,7 @@ document {
 	    RingElement => "f" => {"a rational univariate polynomial, not necessarily from a univariate polynomial ring"},
 	    Number => "a" => {"a lower bound of the interval"},
 	    Number => "b" => {"an upper bound of the interval"},
+	    Multiplicity => {"set option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," not counting multiplicity in the interval ",TEX///$(a,b)$///,"."}},
 	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified, the interval will be taken from ",TEX///$\infty$///," to ",TEX///$\infty$///,"."},
