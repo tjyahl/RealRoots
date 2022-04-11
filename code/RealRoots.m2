@@ -526,7 +526,7 @@ document {
 		S = R/I
 		minimalPolynomial(y)
 	 	///,
-	PARA {"We provide two examples to compute minimal polynomials given by ",TT "Strategy => 0"," (computes the kernel of the multiplication matrix) and ",TT "Strategy => 1", " (a minimal linear combination of powers of the input)."},
+	PARA {"We provide two examples to compute minimal polynomials given by ",TT "Strategy => 0"," (computes the kernel of ",TEX///$k[T]\to$///,TT " ring f"," by sending ", TEX///$T$///," to ",TT "f",") and ",TT "Strategy => 1", " (a minimal linear combination of powers of the input)."},
 	EXAMPLE lines ///
 		minimalPolynomial(x,Strategy => 0)
 	    	minimalPolynomial(x,Strategy => 1)
