@@ -869,7 +869,7 @@ document {
 	    },
 	Outputs => { RR => {"the leading principal minor of the Hurwitz matrix ",TEX///$H$///," of a rational univariate polynomial ", TT "f", " of degree n, after removing the last ",TEX///$n-k$///," rows and ",TEX///$n-k$///," columns of ",TEX///$H$///}},
     	PARA{"This computes the leading principal minor of the Hurwitz matrix ",TEX///$H$///," of a rational univariate polynomial ", TT "f"," with positive leading coefficient and degree at least 1.
-	    The polynomial, however, is not necessarily from a univariate polynomial ring. Note the minor removed the last ",TEX///$n-k$///," rows and the last ",TEX///$n-k$///," columns of the Hurwitz matrix ", TEX///$H$///,"."},
+	    The polynomial, however, is not necessarily from a univariate polynomial ring. The minor removed the last ",TEX///$n-k$///," rows and the last ",TEX///$n-k$///," columns of the Hurwitz matrix ", TEX///$H$///,"."},
 	EXAMPLE lines ///
 	    	R = QQ[x]
 	        f = 3*x^4 - 7*x^3 + 5*x - 7 
