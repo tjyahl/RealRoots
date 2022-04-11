@@ -518,7 +518,7 @@ document {
 	    },
 	Outputs => { RingElement => {"the desired minimal polynomial. See description."}},
 	PARA {"This computes the minimal polynomial of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the minimal polynomial of a polynomial ", TT "g", "in the Artinian ring", TT "(ring g)/I", ".
-	    When ",TT "f=t"," is a variable in ", TT "ring f", " this is the eliminant with respect to that variable."},
+	    When ",TT "f = t"," is a variable in ", TT "ring f", ", this is the eliminant with respect to that variable."},
 	EXAMPLE lines ///
 	    	R = QQ[x,y]
 		I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
