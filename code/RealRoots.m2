@@ -27,18 +27,18 @@ newPackage(
 export{
     --methods
     "minimalPolynomial",
-    "regularRep",
+    "regularRepresentation",
     "characteristicPolynomial",
     "variations",
     "SylvesterSequence",
-    "numSylvester",
+    "SylvesterCount",
     "SturmSequence",
     "SturmCount",
     "realRootIsolation",
     "BudanFourierBound",
     "traceForm",
     "traceCount",
-    "rationalUnivariateRep",
+    "rationalUnivariateRepresentation",
     "HurwitzMatrix",
     "HurwitzDeterminant",
     "isHurwitzStable",
@@ -162,14 +162,14 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
 
 
 --Computes a matrix representation of the multiplication map determined by f
-regularRep = method()
-regularRep (RingElement,Ideal) := Matrix => (f,I)->(
+regularRepresentation = method()
+regularRepresentation (RingElement,Ideal) := Matrix => (f,I)->(
     R := ring f;
     if not (ring I === R) then error "Error: Expected polynomial ring and ideal of the same ring";
-    regularRep(sub(f,R/I))
+    regularRepresentation(sub(f,R/I))
     )
 
-regularRep (RingElement) := Matrix => f->(
+regularRepresentation (RingElement) := Matrix => f->(
     R := ring f;
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
     K := coefficientRing R;
@@ -202,7 +202,7 @@ characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
     )
 
 characteristicPolynomial (RingElement) := RingElement => opts->f->(
-    (B,mf) := regularRep(f);
+    (B,mf) := regularRepresentation(f);
     characteristicPolynomial(mf)
     )
 
@@ -268,17 +268,17 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
 
 --Computes the difference in the number of roots of f where g is positive and where g is negative
 ----letting g = 1 gives the number of real roots from the Sturm sequence
-numSylvester = method()
+SylvesterCount = method()
 for A in {ZZ,QQ,RR,InfiniteNumber} do 
 for B in {ZZ,QQ,RR,InfiniteNumber} do
-numSylvester (RingElement,RingElement,A,B) := ZZ => (f, g, a, b)->(
+SylvesterCount (RingElement,RingElement,A,B) := ZZ => (f, g, a, b)->(
     if not (a<b) then error "Error: Expected non-empty interval";
     l := SylvesterSequence(f,diff(variable f,f)*g);
     variations apply(l,h->signAt(h,a)) - variations apply(l,h->signAt(h,b))
     )
 
-numSylvester (RingElement,RingElement) := ZZ => (f,g)->(
-    numSylvester(f,g,-infinity,infinity)
+SylvesterCount (RingElement,RingElement) := ZZ => (f,g)->(
+    SylvesterCount(f,g,-infinity,infinity)
     )
 
 
@@ -298,7 +298,7 @@ SturmCount (RingElement,A,B) := ZZ => opts->(f,a,b)->(
     R := ring f;
     h := gcd(f,diff(R_0,f));
     f = sub(f/h,R);
-    n := numSylvester(f,1_R,a,b);
+    n := SylvesterCount(f,1_R,a,b);
     if (opts.Multiplicity==true) then (
 	while(first degree h > 0) do (
 	    n = n + SturmCount(h,a,b,opts);
@@ -371,7 +371,7 @@ traceForm (RingElement) := Matrix => f->(
     K := coefficientRing R;
 
     mm := sub(last coefficients(f*B**B,Monomials=>B),K);
-    tr := matrix {apply(first entries B, x -> trace last regularRep x)};
+    tr := matrix {apply(first entries B, x -> trace last regularRepresentation x)};
     adjoint(tr*mm, source tr, source tr)
     )
 
@@ -405,8 +405,8 @@ traceCount (QuotientRing) := ZZ=> R->(
 
 
 --Computes the Rational Univariate Representation of a zero-dimensional ideal
-rationalUnivariateRep = method()
-rationalUnivariateRep (Ideal) := List => I->(
+rationalUnivariateRepresentation = method()
+rationalUnivariateRepresentation (Ideal) := List => I->(
     R := ring I;
     S := R/I;
     if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal";
@@ -417,7 +417,7 @@ rationalUnivariateRep (Ideal) := List => I->(
     n := #X;
     while (i < n*(binomial(d,2))) do (
     	l := sum(X,apply(n,k->i^k),(a,b)->a*b);
-	m := last regularRep(sub(l,S));
+	m := last regularRepresentation(sub(l,S));
 	f := characteristicPolynomial(m);
 	
 	fbar := f/gcd(f,diff((support f)_0,f));
@@ -534,9 +534,9 @@ document {
 	}
 
 document {
-	Key => {regularRep,(regularRep, RingElement, Ideal), (regularRep, RingElement)},
+	Key => {regularRepresentation,(regularRepresentation, RingElement, Ideal), (regularRepresentation, RingElement)},
 	Headline => "the regular representation of a rational polynomial",
-	Usage => "regularRep(f,I)",
+	Usage => "regularRepresentation(f,I)",
 	Inputs => {
 	    RingElement => "f"=> {"a rational polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal in the same ring as ", TT "f"},
@@ -547,9 +547,9 @@ document {
 		 R = QQ[x,y]
 		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
 		 I = ideal F
-		 regularRep(y,I)
+		 regularRepresentation(y,I)
 		 S = R/I
-		 regularRep(y)
+		 regularRepresentation(y)
 	 	 ///,
      	}
 
@@ -604,14 +604,14 @@ document {
 		 g = t + 2
 		 SylvesterSequence(f,g)
 	 	 ///,
-	SeeAlso => {"numSylvester"}
+	SeeAlso => {"SylvesterCount"}
      	}
     
 document {
-	Key => {numSylvester,(numSylvester,RingElement,RingElement)}|(flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(numSylvester,RingElement,RingElement,a,b))),
+	Key => {SylvesterCount,(SylvesterCount,RingElement,RingElement)}|(flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(SylvesterCount,RingElement,RingElement,a,b))),
 	Headline => "the difference in variations of the Sylvester sequence of two rational univariate polynomials",
-	Usage => "numSylvester(f,g,a,b)
-	          numSylvester(f,g)",
+	Usage => "SylvesterCount(f,g,a,b)
+	          SylvesterCount(f,g)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
 	    RingElement => "g" => {"a rational univariate polynomial"},
@@ -627,7 +627,7 @@ document {
 		 g = t + 1
 		 a = -5
 		 b = 4
-		 numSylvester(f,g,a,b)
+		 SylvesterCount(f,g,a,b)
 	 	 ///,
 	SeeAlso => {"SylvesterSequence"}
      	}
@@ -819,9 +819,9 @@ document {
      	}
     
 document {
-        Key => {rationalUnivariateRep, (rationalUnivariateRep, Ideal)},
+        Key => {rationalUnivariateRepresentation, (rationalUnivariateRepresentation, Ideal)},
 	Headline => "the rational univariate representation of a zero-dimensional ideal",
-	Usage => "rationalUnivariateRep(I)",
+	Usage => "rationalUnivariateRepresentation(I)",
 	Inputs => {
 	    Ideal => "I" => {"a zero-dimensional ideal"},
 	    },
@@ -831,7 +831,7 @@ document {
 	EXAMPLE lines ///
 	R = QQ[x,y]
 	I = ideal(x*y - 1,2*x - y + 3)
-	rationalUnivariateRep(I)
+	rationalUnivariateRepresentation(I)
 	///
     }
     
@@ -923,8 +923,8 @@ TEST ///
     a = minimalPolynomial(x);
     T = ring a;
     assert(flatten entries last coefficients(minimalPolynomial(x)) == {1,-2,-9,-6,-7});
-    assert(flatten entries last regularRep(y) == {0, 0, -3, -2, 0, 0, -1, 1, 0, 1, 4, 0, 1, 0, 4, 4});
-    M = last regularRep(y);
+    assert(flatten entries last regularRepresentation(y) == {0, 0, -3, -2, 0, 0, -1, 1, 0, 1, 4, 0, 1, 0, 4, 4});
+    M = last regularRepresentation(y);
     pol = characteristicPolynomial(M);
     G = ring pol;
     ans = Z^4 - 8*Z^3 + 19*Z^2 - 16*Z + 5;
@@ -978,11 +978,11 @@ TEST ///
     R = QQ[t];
     f = (t-2)*(t-1)*(t+3);
     g = t+1;
-    assert(numSylvester(f,g,-5,4) == 1);
+    assert(SylvesterCount(f,g,-5,4) == 1);
     h = (t-4)*(t-1)^2*(t+1)*(t+3)*(t+5)*(t-6);
     p = t+5;
-    assert(numSylvester(h,p,-10,10) == 5);
-    assert(numSylvester(h,p,0,10) == 3);
+    assert(SylvesterCount(h,p,-10,10) == 5);
+    assert(SylvesterCount(h,p,0,10) == 3);
     ///
     
 TEST ///
@@ -1027,7 +1027,7 @@ TEST ///
   --   R = QQ[x,y];
   --   I = ideal(x*y - 1,2*x - y + 3);
     -- Z = (support I)_0; --little trick to compute Z not being symbol
-    -- assert(rationalUnivariateRep(I) == {Z^2 - (3/2)*Z - 9, x + y});
+    -- assert(rationalUnivariateRepresentationresentation(I) == {Z^2 - (3/2)*Z - 9, x + y});
     -- ///	 
     
 end
@@ -1073,8 +1073,8 @@ traceFormInfo (RingElement) := Sequence => f->(
 --	SeeAlso => {"traceForm", "traceCount"}
   --   	}
 
-rationalUnivariateRep = method()
-rationalUnivariateRep (Ideal) := RingElement => I ->(
+rationalUnivariateRepresentationresentation = method()
+rationalUnivariateRepresentationresentation (Ideal) := RingElement => I ->(
     R := ring I;
     S := R/I;
     --if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal";
@@ -1085,7 +1085,7 @@ rationalUnivariateRep (Ideal) := RingElement => I ->(
     n := #X;
     while (i < n*(binomial(d,2))) do (
     	l := sum(X,apply(n,k->i^k),(a,b)->a*b);
-	m := last regularRep(sub(l,S));
+	m := last regularRepresentation(sub(l,S));
 	f := characteristicPolynomial(m);
 	
 	F := f/gcd(f,diff((support f)_0,f));
@@ -1100,7 +1100,7 @@ rationalUnivariateRep (Ideal) := RingElement => I ->(
 characteristicPolynomial = method()
 characteristicPolynomial (RingElement) := RingElement => h ->(
     R := ring h;
-    m := regularRep(h);
+    m := regularRepresentation(h);
     d := degree h;
     
     v := matrix{flatten append({1},toList apply(1..d_0,i -> 0))};
