@@ -720,12 +720,11 @@ document {
 	Usage => "realRootIsolation(f,r)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
-	    RR => "r" => {"a positive rational number, which determines the length of the intervals where each root is isolated"},
+	    RR => "r" => {"a positive rational number"},
 	    },
-	Outputs => {List => {"of intervals that contain all the real roots of ", TT "f", ".  Each interval has length at most ", TT "r", 
-		    " and contains a single root of ", TT "f",", not counting multiplicity."}},
-	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of a polynomial", TT "f",
-	       " to a real univariate polynomial in intervals of length at most ", TT "r"},
+	Outputs => {List => {"of intervals that contain all the real roots of ", TT "f"},
+	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of ", TT "f",
+	       " in intervals of length at most ", TT "r","."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
