@@ -662,17 +662,18 @@ document {
 
 document {
 	Key => {numSturm,(numSturm, RingElement, Number,Number), (numSturm,RingElement,Number,InfiniteNumber), (numSturm, RingElement,InfiniteNumber,Number), (numSturm, RingElement,InfiniteNumber,InfiniteNumber),(numSturm,RingElement)},
-	Headline => "the number of real roots of a rational univariate polynomial, not counting multiplicity",
+	Headline => "the number of real roots of a rational univariate polynomial",
 	Usage => "numSturm(f,a,b)
 	          numSturm(f)",
 	Inputs => {
-	    RingElement => "f" => {"a rational univariate polynomial, not necessarily from a univariate polynomial ring"},
+	    RingElement => "f" => {"a rational univariate polynomial"},
 	    Number => "a" => {"a lower bound of the interval"},
 	    Number => "b" => {"an upper bound of the interval"},
-	    Multiplicity => {"set option for computing roots with multiplicity"}
+	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," not counting multiplicity in the interval ",TEX///$(a,b)$///,"."}},
-	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified, the interval will be taken from ",TEX///$\infty$///," to ",TEX///$\infty$///,"."},
+	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified,
+	     the interval will be taken from ",TEX///$-\infty$///," to ",TEX///$\infty$///,"."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = (t - 5)*(t - 3)^2*(t - 1)*(t + 1)
@@ -680,7 +681,7 @@ document {
 		 numSturm(f)
 		 numSturm(f,0,5)
 		 numSturm(f,-2,2)
-		 numSturm(f,-1,5)
+		 numSturm(f,-1,5)	       
 	 	 ///,
 	PARA {"In the above example, multiplicity is not counted, so to include it we can make the multiplicity option ",TT "true"," in the example below."},
 	EXAMPLE lines ///
@@ -688,11 +689,19 @@ document {
 		numSturm(f,0,5,Multiplicity=>true)
 		numSturm(f,0,3,Multiplicity=>true)
 		///,
-	PARA {"If ", TT "a"," is an ", TT "InfiniteNumber", ", then the lower bound will be ",TEX///$\infty$///,", and if ", TT "b"," is an ", TT "InfiniteNumber", ", then the upper bound is ",TEX///$\infty$///,"."},
+	PARA {"If ", TT "a"," is an ", TT "InfiniteNumber", ", then the lower bound will be ",TEX///$-\infty$///,", and if ", TT "b"," is an ", TT "InfiniteNumber", 
+	    ", then the upper bound is ",TEX///$\infty$///,"."},
 	EXAMPLE lines ///
 	    	numSturm(f,-infinity, 0)
 		numSturm(f,0,infinity)
 		numSturm(f,-infinity,infinity)
+		///,
+	PARA {"We also show an example where ",TT "numSturm"," does not give us a sharp bound."},
+	EXAMPLE lines ///
+	        g = t^3 - t^2 + t - 1
+		roots g
+		numSturm(g)
+		numSturm(g,Multiplicity=>true)
 		///,
 	SeeAlso => {"SturmSequence"}
      	}
