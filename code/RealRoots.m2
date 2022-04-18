@@ -615,8 +615,8 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
 	    RingElement => "g" => {"a rational univariate polynomial"},
-	    Number => "a" => {"(optional) the lower bound of the interval"},
-	    Number => "b" => {"(optional) the upper bound of the interval"},
+	    RR => "a" => {"(optional) the lower bound of the interval"},
+	    RR => "b" => {"(optional) the upper bound of the interval"},
 	    },
 	Outputs => { ZZ => {"the difference between number of roots of ",TT "f"," when ",TT "g",
 		"is positive and when g is negative"}},
@@ -667,8 +667,8 @@ document {
 	          numSturm(f)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
-	    Number => "a" => {"a lower bound of the interval"},
-	    Number => "b" => {"an upper bound of the interval"},
+	    RR => "a" => {"a lower bound of the interval"},
+	    RR => "b" => {"an upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," not counting multiplicity in the interval ",TEX///$(a,b)$///}},
@@ -741,9 +741,9 @@ document {
 	          BudanFourierBound(f)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial with rational coefficients, where", TT " ring f ", "is not necessarily univariate"},
-	    Number => "a" => {"(optional) the lower bound of the interval"},
+	    RR => "a" => {"(optional) the lower bound of the interval"},
 	    InfiniteNumber => "a" => {"(optional) the lower bound of the interval"},
-	    Number => "b" => {"(optional) the upper bound of the interval"},
+	    RR => "b" => {"(optional) the upper bound of the interval"},
 	    InfiniteNumber => "b" => {"(optional) the upper bound of the interval"},
 	    },
 	Outputs => { ZZ => { "the bound for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval ", TT "(a,b]"}},
@@ -837,7 +837,7 @@ document {
     
 document {
 	Key => {HurwitzMatrix,(HurwitzMatrix, RingElement, ZZ)},
-	Headline => "a specified principle minor of the Hurwitz matrix of a univariate polynomial",
+	Headline => "a specified principle submatrix of the Hurwitz matrix of a univariate polynomial",
 	Usage => "HurwitzMatrix(f,k)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial of degree n"},
@@ -868,7 +868,7 @@ document {
     
 document {
 	Key => {HurwitzDeterminant,(HurwitzDeterminant, RingElement, ZZ)},
-	Headline => "the leading principal minor of the ",TEX///$n\times n$///," Hurwitz matrix H of a rational univariate polynomial of degree n, after removing the last n-k rows and n-k columns of H",
+	Headline =>  "a specified principle minor of the Hurwitz matrix of a univariate polynomial",
 	Usage => "HurwitzDeterminant(f,k)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial of degree n"},
