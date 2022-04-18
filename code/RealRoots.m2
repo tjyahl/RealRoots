@@ -223,8 +223,8 @@ variations (List) := ZZ => l->(
 
 --Computes the difference in variations of the derivative sequence at specified values
 BudanFourierBound = method()
-for A in {Number,InfiniteNumber} do 
-for B in {Number,InfiniteNumber} do
+for A in {ZZ,QQ,RR,InfiniteNumber} do 
+for B in {ZZ,QQ,RR,InfiniteNumber} do
 BudanFourierBound (RingElement,A,B) := ZZ => (f,a,b)->(
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
     if not (a<b) then error "Error: Expected non-empty interval";
@@ -269,8 +269,8 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
 --Computes the difference in the number of roots of f where g is positive and where g is negative
 ----letting g = 1 gives the number of real roots from the Sturm sequence
 numSylvester = method()
-for A in {Number,InfiniteNumber} do 
-for B in {Number,InfiniteNumber} do
+for A in {ZZ,QQ,RR,InfiniteNumber} do 
+for B in {ZZ,QQ,RR,InfiniteNumber} do
 numSylvester (RingElement,RingElement,A,B) := ZZ => (f, g, a, b)->(
     if not (a<b) then error "Error: Expected non-empty interval";
     l := SylvesterSequence(f,diff(variable f,f)*g);
@@ -292,8 +292,8 @@ SturmSequence (RingElement) := List => f->(
 
 --Computes the difference in variations of the Sturm sequence at specified values
 numSturm = method(Options=>{Multiplicity=>false})
-for A in {Number,InfiniteNumber} do
-for B in {Number,InfiniteNumber} do
+for A in {ZZ,QQ,RR,InfiniteNumber} do
+for B in {ZZ,QQ,RR,InfiniteNumber} do
 numSturm (RingElement,A,B) := ZZ => opts->(f,a,b)->(
     R := ring f;
     h := gcd(f,diff(R_0,f));
@@ -608,7 +608,7 @@ document {
      	}
     
 document {
-	Key => {numSylvester,(numSylvester, RingElement, RingElement, Number,Number),(numSylvester, RingElement, RingElement, InfiniteNumber,InfiniteNumber),(numSylvester, RingElement, RingElement, InfiniteNumber,Number),(numSylvester, RingElement, RingElement, Number,InfiniteNumber),(numSylvester,RingElement,RingElement)},
+	Key => {numSylvester,(numSylvester,RingElement,RingElement)}|(flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(numSylvester,RingElement,RingElement,a,b))),
 	Headline => "the difference in variations of the Sylvester sequence of two rational univariate polynomials",
 	Usage => "numSylvester(f,g,a,b)
 	          numSylvester(f,g)",
@@ -661,7 +661,7 @@ document {
     }
 
 document {
-	Key => {numSturm,(numSturm, RingElement, Number,Number), (numSturm,RingElement,Number,InfiniteNumber), (numSturm, RingElement,InfiniteNumber,Number), (numSturm, RingElement,InfiniteNumber,InfiniteNumber),(numSturm,RingElement)},
+	Key => {numSturm,(numSturm,RingElement)}|(flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(numSturm,RingElement,a,b))),
 	Headline => "the number of real roots of a rational univariate polynomial",
 	Usage => "numSturm(f,a,b)
 	          numSturm(f)",
@@ -735,7 +735,7 @@ document {
      	}
     
 document {
-	Key => {BudanFourierBound, (BudanFourierBound, RingElement,Number,Number), (BudanFourierBound, RingElement, Number, InfiniteNumber), (BudanFourierBound, RingElement, InfiniteNumber, Number),(BudanFourierBound, RingElement, InfiniteNumber, InfiniteNumber),(BudanFourierBound,RingElement)},
+	Key => {BudanFourierBound,(BudanFourierBound,RingElement)}|(flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(BudanFourierBound,RingElement,a,b))),
 	Headline => "a bound for the number of real roots of a univariate polynomial with rational coefficients",
 	Usage => "BudanFourierBound(f, a, b)
 	          BudanFourierBound(f)",
