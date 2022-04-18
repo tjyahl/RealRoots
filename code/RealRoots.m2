@@ -540,11 +540,13 @@ document {
 	          regularRepresentation(g,I)",
 	Inputs => {
 	    RingElement => "f"=> {"an element of an Artinian ring"},
-	    RingElement => "g"=>{"a rational polynomial"},
+	    RingElement => "g"=> {"a rational polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal in the same ring as ", TT "g"},
 	    },
-	Outputs => {Matrix => {"the matrix of the linear map defined by multiplication by ", TT "f"," in ",TT "(ring f)/I"}},
-	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of the finite-dimensional vector space ", TT "(ring f)/I","."},
+	Outputs => {
+	    Matrix => {"the standard basis of ",TT "ring f", " (resp. ",TT "(ring g)/I",")"},
+	    Matrix => {"the matrix of the linear map defined by multiplication by ", TT "f"," (resp. ",TT "g",") in ",TT "ring f", " (resp. ",TT "(ring g)/I",")"}},
+	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " (resp. ",TT "g",") in terms of the standard basis of the finite-dimensional vector space ", TT "ring g"," (resp. ",TT "(ring g)/I",")."},
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
