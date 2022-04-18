@@ -317,7 +317,6 @@ SturmCount (RingElement) := ZZ => opts->f->(
 realRootIsolation = method()
 for A in {ZZ,QQ,RR} do
 realRootIsolation (RingElement,A) := List => (f,r)->(
-    if instance(r,InexactNumber) then error "Error: Expected integer or rational number";
     if not r > 0 then error "Error: Expected positive integer or positive rational number";
     
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial";
