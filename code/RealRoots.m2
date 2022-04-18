@@ -722,7 +722,7 @@ document {
 	    RingElement => "f" => {"a rational univariate polynomial"},
 	    RR => "r" => {"a positive rational number"},
 	    },
-	Outputs => {List => {"of intervals that contain all the real roots of ", TT "f"},
+	Outputs => {List => {"of intervals that contain all the real roots of ", TT "f"}},
 	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of ", TT "f",
 	       " in intervals of length at most ", TT "r","."},
 	EXAMPLE lines ///
