@@ -674,8 +674,8 @@ document {
 	    RR => "b" => {"an upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
-	Outputs => { ZZ => {"the number of real roots of ", TT "f"," not counting multiplicity in the interval ",TEX///$(a,b)$///}},
-	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified,
+	Outputs => { ZZ => {"the number of real roots of ", TT "f"," in the interval ",TEX///$(a,b]$///}},
+	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", " evaluated at ",TT"a"," and ",TT "b",". If ", TT "a", " and ", TT "b"," are not specified,
 	     the interval will be taken from ",TEX///$-\infty$///," to ",TEX///$\infty$///,". If the coefficients of ",TT "f"," are inexact, then the computations may be unreliable."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
@@ -686,7 +686,7 @@ document {
 		 SturmCount(f,-2,2)
 		 SturmCount(f,-1,5)	       
 	 	 ///,
-	PARA {"In the above example, multiplicity is not counted, so to include it we can make the multiplicity option ",TT "true"," in the example below."},
+	PARA {"In the above example, multiplicity is not counted. To include it, make the multiplicity option ",TT "true","."},
 	EXAMPLE lines ///
 		SturmCount(f,Multiplicity=>true)
 		SturmCount(f,0,5,Multiplicity=>true)
