@@ -546,7 +546,7 @@ document {
 	Outputs => {
 	    Matrix => {"the standard basis of ",TT "ring f", " (resp. ",TT "(ring g)/I",")"},
 	    Matrix => {"the matrix of the linear map defined by multiplication by ", TT "f"," (resp. ",TT "g",") in ",TT "ring f", " (resp. ",TT "(ring g)/I",")"}},
-	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " (resp. ",TT "g",") in terms of the standard basis of the finite-dimensional vector space ", TT "ring g"," (resp. ",TT "(ring g)/I",")."},
+	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " (resp. ",TT "g",") in terms of the standard basis of the finite-dimensional vector space ", TT "ring f"," (resp. ",TT "(ring g)/I",")."},
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
@@ -642,7 +642,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
 	    },
-	Outputs => { List => {"the Sturm sequence of", TT "f"}},
+	Outputs => { List => {"the Sturm sequence of ", TT "f"}},
 	PARA {"This computes the Sturm Sequence of a univariate polynomial ", TT "f","."},
 	EXAMPLE lines ///
 	 	 R = QQ[t]
