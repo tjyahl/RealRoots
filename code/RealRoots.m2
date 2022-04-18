@@ -315,7 +315,8 @@ SturmCount (RingElement) := ZZ => opts->f->(
 
 --Uses Sturm sequence and a bisection method to isolate real solutions to a real univariate polynomial within a tolerance
 realRootIsolation = method()
-realRootIsolation (RingElement,Number) := List => (f,r)->(
+for A in {ZZ,QQ,RR} do
+realRootIsolation (RingElement,A) := List => (f,r)->(
     if instance(r,InexactNumber) then error "Error: Expected integer or rational number";
     if not r > 0 then error "Error: Expected positive integer or positive rational number";
     
@@ -715,12 +716,12 @@ document {
      	}
     
 document {
-        Key => {realRootIsolation,(realRootIsolation, RingElement,Number)},
+        Key => {realRootIsolation,(realRootIsolation, RingElement,ZZ),(realRootIsolation, RingElement,QQ),(realRootIsolation, RingElement,RR)},
 	Headline => "a list that isolates the real roots of a rational univariate polynomial",
 	Usage => "realRootIsolation(f,r)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
-	    Number => "r" => {"a positive rational number, which determines the length of the intervals where each root is isolated"},
+	    RR => "r" => {"a positive rational number, which determines the length of the intervals where each root is isolated"},
 	    },
 	Outputs => {List => {"of intervals that contain all the real roots of ", TT "f", ".  Each interval has length at most ", TT "r", 
 		    " and contains a single root of ", TT "f",", not counting multiplicity."}},
