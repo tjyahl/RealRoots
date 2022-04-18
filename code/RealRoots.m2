@@ -458,13 +458,12 @@ HurwitzMatrix (RingElement,ZZ) := Matrix => (f,k)->(
 --Computes a Hurwitz matrix of order k and then computes its determinant
 HurwitzDeterminant = method()
 HurwitzDeterminant (RingElement,ZZ) := RR => (f,k)->(
-    R := ring f;
    
     if k < 0 then error "Error: Expected non-negative integer in second input.";  
     if k == 0 then 1_QQ else (
 	
     d := (degree f)_0;
-    x := R_0;
+    x := variable(f);
     C := toList reverse apply(0..d, i -> coefficient(x^i,f));
     zerocoeff := (l,a) -> (if a < 0 or d-a < 0 then 0 else l#(d-a));
     Z := toList apply(1..d, i -> zerocoeff(C,d+1-2*i));
@@ -859,7 +858,7 @@ document {
 	    " with ",TEX///$xy$///,"."},
 	EXAMPLE lines ///
 	        S = R[y]
-		g = y^3 + 2*y^2 + y + 1
+		g = y^3 + 2*y^2 + y - x + 1
 		HurwitzMatrix(g,3)
 		HurwitzMatrix(g,2)
 		HurwitzMatrix(g,1)
