@@ -731,6 +731,7 @@ document {
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
 		 realRootIsolation(f,1/2)
+		 realRootIsolation(f,.2)
 	 	 ///,
 	SeeAlso => {"SturmSequence"}
      	}
