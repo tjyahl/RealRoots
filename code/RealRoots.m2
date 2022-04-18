@@ -58,14 +58,15 @@ export{
 --Check that a polynomial is univariate
 isUnivariatePolynomial = method()
 isUnivariatePolynomial (RingElement) := Boolean => f->(
-    #(support f) <= 1
+    S := select(support f,x->index x < numgens ring f);
+    #S <= 1
     )
 
 --Determines the variable of a univariate polynomial
 variable = method()
 variable (RingElement) := RingElement => f->(
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial";
-    S := support f;
+    S := select(support f,x->index x < numgens ring f);
     if S === {} then (ring f)_0 else S#0
     )
 
