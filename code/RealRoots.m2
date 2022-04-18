@@ -643,7 +643,7 @@ document {
 	    RingElement => "f" => {"a rational univariate polynomial"},
 	    },
 	Outputs => { List => {"the Sturm sequence of ", TT "f"}},
-	PARA {"This computes the Sturm Sequence of a univariate polynomial ", TT "f","."},
+	PARA {"This computes the Sturm sequence of the square-free part of a univariate polynomial ", TT "f","."},
 	EXAMPLE lines ///
 	 	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
