@@ -673,7 +673,7 @@ document {
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," not counting multiplicity in the interval ",TEX///$(a,b)$///}},
 	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", ". If ", TT "a", " and ", TT "b"," are not specified,
-	     the interval will be taken from ",TEX///$-\infty$///," to ",TEX///$\infty$///,"."},
+	     the interval will be taken from ",TEX///$-\infty$///," to ",TEX///$\infty$///,". If the coefficients of ",TT "f"," are inexact, then the computations may be unreliable."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = (t - 5)*(t - 3)^2*(t - 1)*(t + 1)
