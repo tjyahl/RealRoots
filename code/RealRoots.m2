@@ -536,7 +536,8 @@ document {
 document {
 	Key => {regularRepresentation,(regularRepresentation, RingElement, Ideal), (regularRepresentation, RingElement)},
 	Headline => "the regular representation of a rational polynomial",
-	Usage => "regularRepresentation(f),regularRepresentation(g,I)",
+	Usage => "regularRepresentation(f)
+	          regularRepresentation(g,I)",
 	Inputs => {
 	    RingElement => "f"=> {"an element of an Artinian ring"},
 	    RingElement => "g"=>{"a rational polynomial"},
