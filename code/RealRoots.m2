@@ -33,11 +33,11 @@ export{
     "SylvesterSequence",
     "numSylvester",
     "SturmSequence",
-    "numSturm",
+    "SturmCount",
     "realRootIsolation",
     "BudanFourierBound",
     "traceForm",
-    "numTrace",
+    "traceCount",
     "rationalUnivariateRep",
     "HurwitzMatrix",
     "HurwitzDeterminant",
@@ -291,25 +291,25 @@ SturmSequence (RingElement) := List => f->(
 
 
 --Computes the difference in variations of the Sturm sequence at specified values
-numSturm = method(Options=>{Multiplicity=>false})
+SturmCount = method(Options=>{Multiplicity=>false})
 for A in {ZZ,QQ,RR,InfiniteNumber} do
 for B in {ZZ,QQ,RR,InfiniteNumber} do
-numSturm (RingElement,A,B) := ZZ => opts->(f,a,b)->(
+SturmCount (RingElement,A,B) := ZZ => opts->(f,a,b)->(
     R := ring f;
     h := gcd(f,diff(R_0,f));
     f = sub(f/h,R);
     n := numSylvester(f,1_R,a,b);
     if (opts.Multiplicity==true) then (
 	while(first degree h > 0) do (
-	    n = n + numSturm(h,a,b,opts);
+	    n = n + SturmCount(h,a,b,opts);
 	    h = gcd(h,diff(R_0,h));
 	    )
 	);
     n
     )
 
-numSturm (RingElement) := ZZ => opts->f->( 
-    numSturm(f,-infinity,infinity,opts)
+SturmCount (RingElement) := ZZ => opts->f->( 
+    SturmCount(f,-infinity,infinity,opts)
     )
 
 
@@ -324,7 +324,7 @@ realRootIsolation (RingElement,Number) := List => (f,r)->(
     
     f = sub(f/gcd(f,diff(variable f,f)),R);
     
-    if (numSturm(f)>0) then (
+    if (SturmCount(f)>0) then (
 	l := SturmSequence(f);
 	
 	--bound for real roots
@@ -377,30 +377,30 @@ traceForm (RingElement) := Matrix => f->(
 
 
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
-numTrace = method()
-numTrace (RingElement) := ZZ => f->(
+traceCount = method()
+traceCount (RingElement) := ZZ => f->(
     R := ring f;
-    numTrace(R/f)
+    traceCount(R/f)
     )
 
-numTrace (List) := ZZ => F->(
+traceCount (List) := ZZ => F->(
     I := ideal F;
     R := ring I;
-    numTrace(R/I)
+    traceCount(R/I)
     )
 
-numTrace (Ideal) := ZZ=> I->(
+traceCount (Ideal) := ZZ=> I->(
     R := ring I;
-    numTrace(R/I)
+    traceCount(R/I)
     )
 
-numTrace (QuotientRing) := ZZ=> R->(
+traceCount (QuotientRing) := ZZ=> R->(
     if not isArtinian R then error "Expected Artinian ring";
     K := coefficientRing R;
     
     ch := characteristicPolynomial(traceForm(1_R));
     chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
-    numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true)
+    SturmCount(ch,0,infinity,Multiplicity=>true) - SturmCount(chNeg,0,infinity,Multiplicity=>true)
     )
 
 
@@ -647,11 +647,11 @@ document {
 		 roots f
 		 SturmSequence(f)
 	 	 ///,
-	SeeAlso => {"numSturm"}
+	SeeAlso => {"SturmCount"}
      	}
 
 document {
-    	Key => {"Multiplicity(RealRoots)", [numSturm, Multiplicity]},
+    	Key => {"Multiplicity(RealRoots)", [SturmCount, Multiplicity]},
 	PARA {"This is an optional input for counting roots with multiplicity."}
     }
 
@@ -661,10 +661,10 @@ document {
     }
 
 document {
-	Key => {numSturm,(numSturm,RingElement)}|(flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(numSturm,RingElement,a,b))),
+	Key => {SturmCount,(SturmCount,RingElement)}|(flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(SturmCount,RingElement,a,b))),
 	Headline => "the number of real roots of a rational univariate polynomial",
-	Usage => "numSturm(f,a,b)
-	          numSturm(f)",
+	Usage => "SturmCount(f,a,b)
+	          SturmCount(f)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
 	    RR => "a" => {"a lower bound of the interval"},
@@ -678,23 +678,23 @@ document {
 	    	 R = QQ[t]
 		 f = (t - 5)*(t - 3)^2*(t - 1)*(t + 1)
 		 roots f
-		 numSturm(f)
-		 numSturm(f,0,5)
-		 numSturm(f,-2,2)
-		 numSturm(f,-1,5)	       
+		 SturmCount(f)
+		 SturmCount(f,0,5)
+		 SturmCount(f,-2,2)
+		 SturmCount(f,-1,5)	       
 	 	 ///,
 	PARA {"In the above example, multiplicity is not counted, so to include it we can make the multiplicity option ",TT "true"," in the example below."},
 	EXAMPLE lines ///
-		numSturm(f,Multiplicity=>true)
-		numSturm(f,0,5,Multiplicity=>true)
-		numSturm(f,0,3,Multiplicity=>true)
+		SturmCount(f,Multiplicity=>true)
+		SturmCount(f,0,5,Multiplicity=>true)
+		SturmCount(f,0,3,Multiplicity=>true)
 		///,
 	PARA {"If ", TT "a"," is an ", TT "InfiniteNumber", ", then the lower bound will be ",TEX///$-\infty$///,", and if ", TT "b"," is an ", TT "InfiniteNumber", 
 	    ", then the upper bound is ",TEX///$\infty$///,"."},
 	EXAMPLE lines ///
-	    	numSturm(f,-infinity, 0)
-		numSturm(f,0,infinity)
-		numSturm(f,-infinity,infinity)
+	    	SturmCount(f,-infinity, 0)
+		SturmCount(f,0,infinity)
+		SturmCount(f,-infinity,infinity)
 		///,
 	SeeAlso => {"SturmSequence"}
      	}
@@ -787,12 +787,12 @@ document {
 		 f = y^2 - x^2 - x*y + 4
 		 traceForm(f)
 	 	 ///,
-	SeeAlso => {"numTrace"}
+	SeeAlso => {"traceCount"}
      	}
     
 
 document {
-	Key => {numTrace,(numTrace, QuotientRing), (numTrace, RingElement), (numTrace, List),(numTrace,Ideal)},
+	Key => {traceCount,(traceCount, QuotientRing), (traceCount, RingElement), (traceCount, List),(traceCount,Ideal)},
         Headline => "the number of real points of the spectrum of an Artinian ring (of characteristic 0)",
 	Usage => "numRealTrace(R)",
 	Inputs => {
@@ -808,12 +808,12 @@ document {
 		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
 		 I = ideal F
 		 S = R/I
-		 numTrace(S)
+		 traceCount(S)
 		 ///,
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
-		 numTrace(I)
+		 traceCount(I)
 	 	 ///,
 	SeeAlso => {"traceForm"}
      	}
@@ -957,21 +957,21 @@ TEST ///
     assert(BudanFourierBound(g,-infinity,0) == 2);
     assert(BudanFourierBound(g,-1,infinity) == 3);
     
-    assert(numSturm(f)== 6);
-    assert(numSturm(f,-6,0) == 3);
-    assert(numSturm(f,-1,10) == 3);
-    assert(numSturm(f,Multiplicity=>true) == 7);
-    assert(numSturm(f,-10,5,Multiplicity=>true) == 6);
-    assert(numSturm(f,0,6,Multiplicity=>true) == 4);
+    assert(SturmCount(f)== 6);
+    assert(SturmCount(f,-6,0) == 3);
+    assert(SturmCount(f,-1,10) == 3);
+    assert(SturmCount(f,Multiplicity=>true) == 7);
+    assert(SturmCount(f,-10,5,Multiplicity=>true) == 6);
+    assert(SturmCount(f,0,6,Multiplicity=>true) == 4);
     
     
-    assert(numSturm(g) == 4);
-    assert(numSturm(g,-3,1) == 3);
-    assert(numSturm(g,0,10) == 2);
+    assert(SturmCount(g) == 4);
+    assert(SturmCount(g,-3,1) == 3);
+    assert(SturmCount(g,0,10) == 2);
     
-    assert(numSturm(p) == 6);
-    assert(numSturm(p,-15,0) == 3);
-    assert(numSturm(p,2,10) == 2);
+    assert(SturmCount(p) == 6);
+    assert(SturmCount(p,-15,0) == 3);
+    assert(SturmCount(p,2,10) == 2);
     ///
     
 TEST ///
@@ -1003,12 +1003,12 @@ TEST ///
 TEST ///
      R = QQ[x,y];
      I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
-     assert(numTrace(I) == 3);
+     assert(traceCount(I) == 3);
      F = {y^2-x^2-1,x-y^2+4*y-2};
-     assert(numTrace(F) == 2);
+     assert(traceCount(F) == 2);
      I = ideal F;
      S = R/I;
-     assert(numTrace(S) == 2);
+     assert(traceCount(S) == 2);
     ///
     
 TEST ///
@@ -1052,7 +1052,7 @@ traceFormInfo (RingElement) := Sequence => f->(
     trf := traceForm f;
     ch := characteristicPolynomial(trf);
     chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
-    sig := numSturm(ch,0,infinity,Multiplicity=>true) - numSturm(chNeg,0,infinity,Multiplicity=>true);
+    sig := SturmCount(ch,0,infinity,Multiplicity=>true) - SturmCount(chNeg,0,infinity,Multiplicity=>true);
     (rank(trf),sig)
     )
 
@@ -1070,7 +1070,7 @@ traceFormInfo (RingElement) := Sequence => f->(
 --		 traceFormInfo(x - 2)
 --		 traceFormInfo(x + y - 3)
 --	 	 ///,
---	SeeAlso => {"traceForm", "numTrace"}
+--	SeeAlso => {"traceForm", "traceCount"}
   --   	}
 
 rationalUnivariateRep = method()
