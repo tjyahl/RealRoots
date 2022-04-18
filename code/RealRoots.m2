@@ -1103,5 +1103,26 @@ rationalUnivariateRep (Ideal) := RingElement => I ->(
 	)
     )
 
+NewtonSum = method()
+NewtonSum (RingElement,ZZ) := RingElement => f ->(
+    R := ring f;
+    d := degree f;
+    r := --problem here
+    )
+
+characteristicPolynomial = method()
+characteristicPolynomial (RingElement) := RingElement => h ->(
+    R := ring h;
+    m := regularRep(h);
+    d := degree h;
+    
+    v := 
+    
+
+
+    )
+
+    
+
 
 
