@@ -536,17 +536,17 @@ document {
 document {
 	Key => {regularRepresentation,(regularRepresentation, RingElement, Ideal), (regularRepresentation, RingElement)},
 	Headline => "the regular representation of a rational polynomial",
-	Usage => "regularRepresentation(f,I)",
+	Usage => "regularRepresentation(f),regularRepresentation(g,I)",
 	Inputs => {
-	    RingElement => "f"=> {"a rational polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal in the same ring as ", TT "f"},
+	    RingElement => "f"=> {"an element of an Artinian ring"},
+	    RingElement => "g"=>{"a rational polynomial"},
+	    Ideal => "I" => {"a zero-dimensional ideal in the same ring as ", TT "g"},
 	    },
-	Outputs => {Matrix => {"the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of a finite-dimensional k-vector space", TT "I" }},
-	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of a finite-dimensional k-vector space ", TT "I","."},
+	Outputs => {Matrix => {"the matrix of the linear map defined by multiplication by ", TT "f"," in ",TT "(ring f)/I"}},
+	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " in terms of the standard basis of the finite-dimensional vector space ", TT "(ring f)/I","."},
 	EXAMPLE lines ///
 		 R = QQ[x,y]
-		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
-		 I = ideal F
+		 I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
 		 regularRepresentation(y,I)
 		 S = R/I
 		 regularRepresentation(y)
