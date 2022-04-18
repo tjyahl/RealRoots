@@ -696,13 +696,6 @@ document {
 		numSturm(f,0,infinity)
 		numSturm(f,-infinity,infinity)
 		///,
-	PARA {"We also show an example where ",TT "numSturm"," does not give us a sharp bound."},
-	EXAMPLE lines ///
-	        g = t^3 - t^2 + t - 1
-		roots g
-		numSturm(g)
-		numSturm(g,Multiplicity=>true)
-		///,
 	SeeAlso => {"SturmSequence"}
      	}
     
@@ -1103,12 +1096,6 @@ rationalUnivariateRep (Ideal) := RingElement => I ->(
 	)
     )
 
-NewtonSum = method()
-NewtonSum (RingElement,ZZ) := RingElement => f ->(
-    R := ring f;
-    d := degree f;
-    r := --problem here
-    )
 
 characteristicPolynomial = method()
 characteristicPolynomial (RingElement) := RingElement => h ->(
@@ -1116,7 +1103,8 @@ characteristicPolynomial (RingElement) := RingElement => h ->(
     m := regularRep(h);
     d := degree h;
     
-    v := 
+    v := matrix{flatten append({1},toList apply(1..d_0,i -> 0))};
+    
     
 
 
