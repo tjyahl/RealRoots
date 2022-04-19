@@ -621,8 +621,8 @@ document {
 	    RR => "a" => {"(optional) the lower bound of the interval"},
 	    RR => "b" => {"(optional) the upper bound of the interval"},
 	    },
-	Outputs => { ZZ => {"the difference between number of roots of ",TT "f"," when ",TT "g",
-		"is positive and when g is negative"}},
+	Outputs => { ZZ => {"the difference between the number of roots of ",TT "f"," in the interval ",TEX///$(a,b]$///," where ",TT "g",
+		" is positive and where ",TT "g"," is negative"}},
 	PARA {"This computes the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g"," on the interval ",TEX///$(a,b]$///,"."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
@@ -675,7 +675,7 @@ document {
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," in the interval ",TEX///$(a,b]$///}},
-	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f", " evaluated at ",TT"a"," and ",TT "b",". If ", TT "a", " and ", TT "b"," are not specified,
+	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f"," on the interval ",TEX///$(a,b]$///,". If ", TT "a", " and ", TT "b"," are not specified,
 	     the interval will be taken from ",TEX///$-\infty$///," to ",TEX///$\infty$///,". If the coefficients of ",TT "f"," are inexact, then the computations may be unreliable."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
@@ -1101,15 +1101,28 @@ rationalUnivariateRepresentationresentation (Ideal) := RingElement => I ->(
 
 
 characteristicPolynomial = method()
-characteristicPolynomial (RingElement) := RingElement => h ->(
-    R := ring h;
-    m := regularRepresentation(h);
-    d := degree h;
+characteristicPolynomial (RingElement) := RingElement => t ->(
+    R := ring t;
+    m := regularRepresentation(t);
+    d := degree t;
     
     v := matrix{flatten append({1},toList apply(1..d_0,i -> 0))};
+    Vtr := 
     
+    m*v
     
-
+    --Solve triangular system 
+    M := apply(0..d_0,0..d_0,(i,j) -> (d_0-i)*coefficient(x^i,t));
+    C := apply(0..d_0,i->coefficient(x^i,t));
+    
+    --maybe need a function here
+    (S,k) := apply(0..k,i->(C#i)*trace(m));
+             sum(toList(S));
+    A := apply(0..d_0,0..d_0,(i,j)-> (M#i) - (S,i));
+    I := Ideal(toList(I));
+    
+    --solution to system is characteristic polynomial
+    
 
     )
 
