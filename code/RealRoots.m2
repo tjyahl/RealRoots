@@ -1112,14 +1112,20 @@ characteristicPolynomial (RingElement) := RingElement => t ->(
     m*v
     
     --Solve triangular system 
-    M := apply(0..d_0,0..d_0,(i,j) -> (d_0-i)*coefficient(x^i,t));
-    C := apply(0..d_0,i->coefficient(x^i,t));
+    D := apply(0..d_0,i -> (d_0-i)*coefficient(x^(d_0-i),t));
     
-    --maybe need a function here
-    (S,k) := apply(0..k,i->(C#i)*trace(m));
-             sum(toList(S));
-    A := apply(0..d_0,0..d_0,(i,j)-> (M#i) - (S,i));
-    I := Ideal(toList(I));
+    series = method()
+    series (List,ZZ) := RingElement => (L,k) ->(
+	n := length(L);
+	s := take(L,k+1);
+	sum(s)
+	)
+    
+    T := apply(0..d_0,i -> coefficient(x^(d_0-i),t)*trace(regularRepresentation(t^i)));
+  --  S := sum(toList(T));
+
+    A := apply(0..d_0,0..d_0,(i,j)-> D#i - series(T,d_0-j));
+    I := Ideal(toList(A));
     
     --solution to system is characteristic polynomial
     
