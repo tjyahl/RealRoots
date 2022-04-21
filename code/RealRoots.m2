@@ -29,6 +29,7 @@ export{
     "minimalPolynomial",
     "regularRepresentation",
     "characteristicPolynomial",
+    "charpoly",
     "variations",
     "SylvesterSequence",
     "SylvesterCount",
@@ -189,9 +190,24 @@ characteristicPolynomial (Matrix) := RingElement => opts->M->(
     K := ring M; 
     Z := opts.Variable;
     S := K(monoid [Z]);
-
-    IdZ := S_0*id_(S^n);
-    det(IdZ - M)
+    
+    if (n < 30) then (
+    	--characteristic polynomial via determinants
+	IdZ := S_0*id_(S^n);
+    	det(IdZ - M)
+	
+	) else (
+	
+	--characteristic polynomial via elementary symmetric polynomials and traces
+	if not isField(K) then K = frac K;
+	A := id_(ZZ^n);
+    	traces := {n}|apply(n,k->(A = M*A; trace A));
+    	coeffs := new MutableList from {1};
+    	for k from 1 to n do (
+	    coeffs#k = -sum(k,i->coeffs#(k-i-1)*traces#(i+1))/k
+	    );
+    	sum(n+1,i->coeffs#i*S_0^(n-i))
+	)
     )
 
 --Computes the characteristic polynomial of the regular representation of f
