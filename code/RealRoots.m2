@@ -165,8 +165,9 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
 
 
 --
-univariateEliminant = method()
-univariateEliminant := minimalPolynomial
+univariateEliminant = method(Options=>{Strategy=>0})
+univariateEliminant (RingElement) := o-> f-> minimalPolynomial(f,o)
+univariateEliminant (RingElement,Ideal) := o-> (g,I)-> minimalPolynomial(g,I,o)
 
 
 --Computes a matrix representation of the multiplication map determined by f
