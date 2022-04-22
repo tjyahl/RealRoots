@@ -1,0 +1,5 @@
+Let f and g be two real polynomials and a,b be real numbers such that a<b (what happens if 'a' is a root of f? Analyze like when 'b' is a root of f). Then the difference between the number of roots of f in the interval (a,b] for which g is positive and the number of roots of f in the interval (a,b] for which g is negative is equal to v(f,g,a) - v(f,g,b) if b is not a root of f and v(f,g,a) - v(f,g,b) + 1 if b is a root of f. 
+
+or??
+
+Let f and g be two real polynomials and a,b be real numbers such that a<b (what happens if 'a' is a root of f? Analyze like when 'b' is a root of f). Then the difference between the number of roots of f in the half-open interval (a,b] for which g is positive and the number of roots of f in the open interval (a,b) for which g is negative is equal to v(f,g,a) - v(f,g,b).
