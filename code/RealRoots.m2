@@ -232,11 +232,11 @@ characteristicPoly (RingElement) := RingElement => opts->t ->(
     S := K(monoid [Z]);
     
     if not isArtinian(K) then error "Error: Expected element of Artinian ring";
-    B := basis(K);
-    D := (degree t)_0;
-    v := transpose(matrix{flatten append({1},toList apply(1..D,i -> 0))}); 
+    B := basis K;
+    D := numgens source B;
+    v := transpose(matrix{flatten append({1},toList apply(D-1,i -> 0))}); 
     
-    Vtr := matrix{toList apply(0..D, i-> trace(last regularRepresentation(B_(0,i))))};
+    Vtr := matrix{toList apply(D, i-> trace last regularRepresentation(B_(0,i)))};
     Mt := last regularRepresentation(t);
     traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)));
     coeffs := new MutableList from {1};
