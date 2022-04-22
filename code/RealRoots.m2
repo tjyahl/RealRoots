@@ -30,6 +30,7 @@ export{
     "regularRepresentation",
     "characteristicPolynomial",
     "charpoly",
+    "characteristicPoly",
     "variations",
     "SylvesterSequence",
     "SylvesterCount",
@@ -222,7 +223,30 @@ characteristicPolynomial (RingElement) := RingElement => opts->f->(
     characteristicPolynomial(mf)
     )
 
-
+--Competitor for above
+characteristicPoly = method(Options => {Variable => "Z"})
+characteristicPoly (RingElement) := RingElement => opts->t ->(
+ 
+    K := ring t; 
+    Z := opts.Variable;
+    S := K(monoid [Z]);
+    
+    if not isArtinian(K) then error "Error: Expected element of Artinian ring";
+    B := basis(K);
+    D := (degree t)_0;
+    v := transpose(matrix{flatten append({1},toList apply(1..D,i -> 0))}); 
+    
+    Vtr := matrix{toList apply(0..D, i-> trace(last regularRepresentation(B_(0,i))))};
+    Mt := last regularRepresentation(t);
+    traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)));
+    coeffs := new MutableList from {1};
+    for k from 1 to D do (
+	coeffs#k = -sum(k,i->(coeffs#(k-i-1)*traces#(i+1)))/k
+	);
+    sum(D+1,i->coeffs#i*S_0^(D-i))
+    )
+    
+    
 --Computes the number of sign changes in a list of real numbers
 variations = method()
 variations (List) := ZZ => l->(
@@ -1144,6 +1168,23 @@ characteristicPolynomial (RingElement) := RingElement => t ->(
     I := Ideal(toList(A));
     
     --solution to system is characteristic polynomial
+    
+    characteristicPolynomial = method()
+characteristicPolynomial (RingElement) := RingElement => t ->(
+ 
+    R := ring t;
+    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
+    B := basis(R);
+    D := length(B);
+    v := matrix{flatten append({1},toList apply(1..D,i -> 0))}; 
+    
+    VTr := toList apply(1..D, i-> trace(last regularRepresentation(B#i)));
+    Mt := regularRepresentation(t);
+    traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)))
+    
+
+   
+    )
     
 
     )
