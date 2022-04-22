@@ -27,6 +27,7 @@ newPackage(
 export{
     --methods
     "minimalPolynomial",
+    "univariateEliminant",
     "regularRepresentation",
     "characteristicPolynomial",
     "charpoly",
@@ -161,6 +162,11 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
     	(map(S^1,S^(n+1),(i,j)->S_0^j) * coeffs)_(0,0)
 	) 
     )
+
+
+--
+univariateEliminant = method()
+univariateEliminant := minimalPolynomial
 
 
 --Computes a matrix representation of the multiplication map determined by f
