@@ -557,7 +557,7 @@ document {
 	    Strategy => {"set method for computing the minimal polynomial"}
 	    },
 	Outputs => { RingElement => {"the desired minimal polynomial. See description"}},
-	PARA {"This computes the minimal polynomial of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the minimal polynomial of a polynomial ", TT "g", " in the Artinian ring", TT "(ring g)/I", ".
+	PARA {"This computes the minimal polynomial of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the minimal polynomial of a polynomial ", TT "g", " in the Artinian ring ", TT "(ring g)/I", ".
 	    When ",TT "f"," is a variable in ", TT "ring f", ", this is the eliminant with respect to that variable."},
 	EXAMPLE lines ///
 	    	R = QQ[x,y]
