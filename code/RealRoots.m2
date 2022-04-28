@@ -208,7 +208,6 @@ characteristicPolynomial (Matrix) := RingElement => opts->M->(
 	) else (
 	
 	--characteristic polynomial via elementary symmetric polynomials and traces
-	if not isField(K) then K = frac K;
 	A := id_(ZZ^n);
     	traces := {n}|apply(n,k->(A = M*A; trace A));
     	coeffs := new MutableList from {1};
