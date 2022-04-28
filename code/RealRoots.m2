@@ -246,7 +246,7 @@ characteristicPoly (RingElement) := RingElement => opts->t ->(
     
     Vtr := matrix{toList apply(D, i-> trace last regularRepresentation(B_(0,i)))};
     Mt := last regularRepresentation(t);
-    traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)));
+    traces := {D}|apply(D,k->(v = Mt*v;(Vtr*v)_(0,0)));
     coeffs := new MutableList from {1};
         for k from 1 to D do (
 	coeffs#k = -sum(k,i->(coeffs#(k-i-1)*traces#(i+1)))/k
