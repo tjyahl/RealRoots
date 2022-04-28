@@ -80,6 +80,7 @@ variable (Ideal) := RingElement => I->(
 
 
 --Check that a ring is zero-dimensional
+----isArtinian does NOT work over fields with parameters.
 isArtinian = method()
 isArtinian (Ring) := Boolean => R->(
     if instance(coefficientRing R,InexactField) then print "Warning: Computations over inexact field";
@@ -234,13 +235,13 @@ characteristicPolynomial (RingElement) := RingElement => opts->f->(
 characteristicPoly = method(Options => {Variable => "Z"})
 characteristicPoly (RingElement) := RingElement => opts->t ->(
  
-    K := ring t; 
+    R := ring t; 
     Z := opts.Variable;
-    K' := ultimate(coefficientRing,K);
-    S := K'(monoid [Z]);
+    K := coefficientRing R;
+    S := K(monoid [Z]);
     
-    if not isArtinian(K) then error "Error: Expected element of Artinian ring";
-    B := basis K;
+    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
+    B := basis R;
     D := numgens source B;
     v := transpose(matrix{flatten append({1},toList apply(D-1,i -> 0))}); 
     
