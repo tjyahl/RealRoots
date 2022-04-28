@@ -33,7 +33,7 @@ generateSystem (List,List) := List => o->(A,C)->(
 loadPackage("RealRoots",FileName=>"../RealRoots.m2")
 
 A = {matrix{{0,0,1,1},{0,1,0,1}},matrix{{0,0,1,1},{0,1,0,1}}}
-C = apply(2,i->apply(4,j->random(QQ)))
+C = apply(#A,i->apply(numgens source A#i,j->random(QQ)))
 F = generateSystem(A,C)
 
 R = (ring first F)/(ideal F)
