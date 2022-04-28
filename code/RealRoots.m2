@@ -236,7 +236,8 @@ characteristicPoly (RingElement) := RingElement => opts->t ->(
  
     K := ring t; 
     Z := opts.Variable;
-    S := K(monoid [Z]);
+    K' := ultimate(coefficientRing,K);
+    S := K'(monoid [Z]);
     
     if not isArtinian(K) then error "Error: Expected element of Artinian ring";
     B := basis K;
@@ -247,7 +248,7 @@ characteristicPoly (RingElement) := RingElement => opts->t ->(
     Mt := last regularRepresentation(t);
     traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)));
     coeffs := new MutableList from {1};
-    for k from 1 to D do (
+        for k from 1 to D do (
 	coeffs#k = -sum(k,i->(coeffs#(k-i-1)*traces#(i+1)))/k
 	);
     sum(D+1,i->coeffs#i*S_0^(D-i))
