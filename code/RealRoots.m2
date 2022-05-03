@@ -45,7 +45,8 @@ export{
     "HurwitzMatrix",
     "HurwitzDeterminant",
     "isHurwitzStable",
-    --"variable",
+    "variable",
+    "isArtinian",
     --"signAt",
     --"derivSequence",
     --"sign",
@@ -102,7 +103,7 @@ sign (A) := ZZ => n->(
 signAt = method()
 for A in {ZZ,QQ,RR} do
 signAt (RingElement,A) := ZZ => (f,r)->(
-    sign(substitute(f,{variable f => r}))
+    sign(sub(substitute(f,{variable f => r}), A))
     )
 
 signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
@@ -221,12 +222,14 @@ characteristicPolynomial (Matrix) := RingElement => opts->M->(
 --Computes the characteristic polynomial of the regular representation of f
 characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
     R := ring f;
+    Z := opts.Variable;
     if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
     characteristicPolynomial(sub(f,R/I))
     )
 
 characteristicPolynomial (RingElement) := RingElement => opts->f->(
     (B,mf) := regularRepresentation(f);
+    Z := opts.Variable;
     characteristicPolynomial(mf)
     )
 
@@ -267,7 +270,6 @@ variations (List) := ZZ => l->(
 	);
     n
     )
-
 
 --Computes the difference in variations of the derivative sequence at specified values
 BudanFourierBound = method()
@@ -537,7 +539,7 @@ isHurwitzStable (RingElement) := Boolean => f->(
     if d < 1 then print "Warning: polynomial must be of degree 1 or higher.";
     if leadCoefficient f <= 0 then print "Warning: leading coefficient must be positive.";
     S := for i from 2 to d when i < d + 1 list HurwitzDeterminant(f,i); 
-    T := apply(S, i -> sign(i));
+    T := apply(S, i -> sign((i,R)));
     sum T == d-1 
     )
 
@@ -1188,16 +1190,53 @@ characteristicPolynomial (RingElement) := RingElement => t ->(
     
     VTr := toList apply(1..D, i-> trace(last regularRepresentation(B#i)));
     Mt := regularRepresentation(t);
-    traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)))
-    
+    traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)))  
+    )
+    )
 
+
+HornerPolynomial = method()
+HornerPolynomial (RingElement) := RingElement => f ->(
+    d := first degree f;
+    x := variable(f);
+    a := apply(d+1,i->coefficient(x^(d-i),f));
+    H := new MutableList from {a#0};
+    for i from 1 to d-1 do (
+	H#i = x*H#(i-1) + a#i);
+    toList H
+    )
+
+
+grep = method()
+grep (RingElement) := RingElement => f ->(
+    R := ring f;
+    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
+    B := basis R;
+    D := numgens source B;
+    v := transpose(matrix{flatten append({1},toList apply(D-1,i -> 0))}); 
+    
+    Vtr := matrix{toList apply(D, i-> trace last regularRepresentation(B_(0,i)))};
+    Mt := last regularRepresentation(f);
+    
+    h := HornerPolynomial(characteristicPoly(f));
+          
+    coeffs := new MutableList from {{1}};
+       for k from 1 to D-1 do (
+       coeffs#k = drop(h,-(D-k-1))
+       );
+    --this L  needs to vary for coefficients of sum
+    L := last coefficients(f*sub(matrix{h},R),Monomials =>sub(matrix{h},R));
+    
+   -- H_i vectors are wrt fixed basis
+    L*(transpose Mt)*(transpose Vtr);
+   -- d := first degree f;
+   -- traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)))
    
-    )
+    sum(D-1,I->coeffs)
     
-
     )
 
-    
+  
 
 
 
