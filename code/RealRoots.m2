@@ -30,26 +30,19 @@ export{
     "univariateEliminant",
     "regularRepresentation",
     "characteristicPolynomial",
-    "charpoly",
-    "characteristicPoly",
     "variations",
     "SylvesterSequence",
     "SylvesterCount",
     "SturmSequence",
     "SturmCount",
     "realRootIsolation",
+    "derivSequence",
     "BudanFourierBound",
     "traceForm",
     "traceCount",
     "rationalUnivariateRepresentation",
     "HurwitzMatrix",
-    "HurwitzDeterminant",
     "isHurwitzStable",
-    "variable",
-    "isArtinian",
-    "signAt",
-    "derivSequence",
-    "sign",
     --options
     "Multiplicity"
     }
@@ -103,7 +96,7 @@ sign (A) := ZZ => n->(
 signAt = method()
 for A in {ZZ,QQ,RR} do
 signAt (RingElement,A) := ZZ => (f,r)->(
-    sign(sub(substitute(f,{variable f => r}), A))
+    sign(sub(f,{variable f => r}))
     )
 
 signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
@@ -112,6 +105,29 @@ signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
 	) else (
 	sign((if odd first degree f then -1 else 1)*(leadCoefficient f))
 	)
+    )
+
+
+--Computes the sequence of Horner polynomials associated to f
+HornerSequence = method()
+HornerSequence (RingElement) := RingElement => f ->(
+    d := first degree f;
+    x := variable(f);
+    a := apply(d+1,i->coefficient(x^(d-i),f));
+    H := new MutableList from {sub(a#0,ring f)};
+    for i from 1 to d-1 do (
+	H#i = x*H#(i-1) + a#i);
+    toList H
+    )
+
+
+--computes the signature of a matrix
+----can also use SylvesterCount(ch,variable ch,Multiplicity=>true)
+signature = method()
+signature (Matrix) := ZZ => M->(
+    ch := characteristicPolynomial M;
+    coeffs := flatten entries sub(last coefficients ch,ring M);
+    2*(variations coeffs) - rank M
     )
 
 
@@ -132,7 +148,6 @@ derivSequence (RingElement) := List => f->(
 
 --Compute the minimalPolynomial of 'f' in the quotient ideal defined by 'I'
 ----better naming for strategies?
-----fix second option to use minimal polynomial/give better error
 minimalPolynomial = method(Options=>{Strategy=>0})
 minimalPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
     R := ring f;
@@ -166,7 +181,7 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
     )
 
 
---
+--Function alias
 univariateEliminant = method(Options=>{Strategy=>0})
 univariateEliminant (RingElement) := o-> f-> minimalPolynomial(f,o)
 univariateEliminant (RingElement,Ideal) := o-> (g,I)-> minimalPolynomial(g,I,o)
@@ -219,22 +234,29 @@ characteristicPolynomial (Matrix) := RingElement => opts->M->(
 	)
     )
 
---Computes the characteristic polynomial of the regular representation of f
+
 --characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
 --    R := ring f;
---    Z := opts.Variable;
 --    if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
 --    characteristicPolynomial(sub(f,R/I))
 --    )
 
---characteristicPolynomial (RingElement) := RingElement => opts->f->(
---    (B,mf) := regularRepresentation(f);
---    Z := opts.Variable;
---    characteristicPolynomial(mf)
---    )
 
---Competitor for above, won
---characteristicPolynomial = method(Options => {Variable => "Z"})
+
+--Computes the characteristic polynomial of the regular representation of f
+characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
+    R := ring f;
+    Z := opts.Variable;
+    if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
+    characteristicPolynomial(sub(f,R/I))
+    )
+
+characteristicPolynomial (RingElement) := RingElement => opts->f->(
+    (B,mf) := regularRepresentation(f);
+    characteristicPolynomial(mf)
+    )
+
+--check this
 characteristicPolynomial (RingElement) := RingElement => opts->t ->(
  
     R := ring t; 
@@ -255,13 +277,6 @@ characteristicPolynomial (RingElement) := RingElement => opts->t ->(
 	coeffs#k = -sum(k,i->(coeffs#(k-i-1)*traces#(i+1)))/k
 	);
     sum(D+1,i->coeffs#i*S_0^(D-i))
-    )
-
-characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
-    R := ring f;
-    Z := opts.Variable;
-    if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
-    characteristicPolynomial(sub(f,R/I))
     )
     
     
@@ -298,26 +313,24 @@ BudanFourierBound (RingElement) := ZZ => f->(
 ----This isn't actually the Sylvester sequence since we divide by gcd(f,g)
 SylvesterSequence = method()
 SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
+    if (f==0 or g==0) then error "Error: Expected nonzero polynomials";
+    if not (isUnivariatePolynomial(f)) then error "Error: Expected univariate polynomials";
     R := ring f;
+    if not isField coefficientRing R then error "Error: Expected polynomials over a field";
     if not (ring g === R) then error "Error: Polynomials should be in the same ring";
-    if not (isUnivariatePolynomial(f) and isUnivariatePolynomial(g)) then error "Error: Expected univariate polynomials";
-    if not (variable f == variable g) then error "Error: Expected polynomials in the same variable";
     
     --dividing out common factors
-    ----gcd only works over ZZ and QQ?
     h := gcd(f,g);
     f = sub(f/h,R);
     g = sub(g/h,R);
-        
-    --'d' is a bound for the length of the Sylvester sequence:
-    m := if f == 0 then 0 else first degree f;
-    n := if g == 0 then 0 else first degree g;
-    d := 2 + min {m,n};
+
+    Syl := new MutableList from {f,g};
     
-    Syl := new MutableList from toList(0..d);
-    Syl#0 = f;
-    Syl#1 = g;
-    scan(2..d, i -> Syl#i = -Syl#(i-2) % Syl#(i-1));
+    i := 1;
+    while (Syl#i != 0) do (
+	i = i+1;
+	Syl#i = -Syl#(i-2) % Syl#(i-1)
+    );
     	    
     toList Syl
     )
@@ -325,13 +338,21 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
 
 --Computes the difference in the number of roots of f where g is positive and where g is negative
 ----letting g = 1 gives the number of real roots from the Sturm sequence
-SylvesterCount = method()
+SylvesterCount = method(Options=>{Multiplicity=>true})
 for A in {ZZ,QQ,RR,InfiniteNumber} do 
 for B in {ZZ,QQ,RR,InfiniteNumber} do
-SylvesterCount (RingElement,RingElement,A,B) := ZZ => (f, g, a, b)->(
+SylvesterCount (RingElement,RingElement,A,B) := ZZ => opts->(f, g, a, b)->(
     if not (a<b) then error "Error: Expected non-empty interval";
     l := SylvesterSequence(f,diff(variable f,f)*g);
-    variations apply(l,h->signAt(h,a)) - variations apply(l,h->signAt(h,b))
+    n := variations apply(l,h->signAt(h,a)) - variations apply(l,h->signAt(h,b));
+    if opts.Multiplicity then (
+	h := gcd(f,diff(variable f,f));
+	while (first degree h > 0) do (
+	    n = n + SylvesterCount(h,g,a,b);
+	    h = gcd(h,diff(variable h,h))
+	    )
+	);
+    n
     )
 
 SylvesterCount (RingElement,RingElement) := ZZ => (f,g)->(
@@ -353,16 +374,7 @@ for A in {ZZ,QQ,RR,InfiniteNumber} do
 for B in {ZZ,QQ,RR,InfiniteNumber} do
 SturmCount (RingElement,A,B) := ZZ => opts->(f,a,b)->(
     R := ring f;
-    h := gcd(f,diff(R_0,f));
-    f = sub(f/h,R);
-    n := SylvesterCount(f,1_R,a,b);
-    if (opts.Multiplicity==true) then (
-	while(first degree h > 0) do (
-	    n = n + SturmCount(h,a,b,opts);
-	    h = gcd(h,diff(R_0,h));
-	    )
-	);
-    n
+    SylvesterCount(f,1_R,a,b,opts)
     )
 
 SturmCount (RingElement) := ZZ => opts->f->( 
@@ -413,7 +425,6 @@ realRootIsolation (RingElement,A) := List => (f,r)->(
     
     
 --Computes the trace form of f in an Artinian ring 
-----use subrings in case of extra variables
 traceForm = method()
 traceForm (RingElement,Ideal) := Matrix => (f,I)->(
     R := ring f;
@@ -452,18 +463,17 @@ traceCount (Ideal) := ZZ=> I->(
     )
 
 traceCount (QuotientRing) := ZZ=> R->(
-    if not isArtinian R then error "Expected Artinian ring";
-    K := coefficientRing R;
-    
-    ch := characteristicPolynomial(traceForm(1_R));
-    chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
-    SturmCount(ch,0,infinity,Multiplicity=>true) - SturmCount(chNeg,0,infinity,Multiplicity=>true)
+    signature(traceForm(1_R))
     )
 
 
 --Computes the Rational Univariate Representation of a zero-dimensional ideal
+----output is:
+------a linear functional l that separates the points of I
+------a polynomial ch defining the image of the points of V(I) under the map defined by l
+------a list of rational polynomials that consitite a rational inverse (on V(I)) of the map defined by l
 rationalUnivariateRepresentation = method()
-rationalUnivariateRepresentation (Ideal) := List => I->(
+rationalUnivariateRepresentation (Ideal) := Sequence => I->(
     R := ring I;
     S := R/I;
     if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal";
@@ -474,80 +484,57 @@ rationalUnivariateRepresentation (Ideal) := List => I->(
     n := #X;
     while (i < n*(binomial(d,2))) do (
     	l := sum(X,apply(n,k->i^k),(a,b)->a*b);
-	m := last regularRepresentation(sub(l,S));
-	f := characteristicPolynomial(m);
+	(B,m) := regularRepresentation(sub(l,S));
+	ch := characteristicPolynomial(m);
 	
-	fbar := f/gcd(f,diff((support f)_0,f));
-	fbar = sub(fbar,ring f);
-	print(first degree fbar);
-	if (first degree fbar === d) then return toList(f,l);
+	chbar := ch/gcd(ch,diff((support ch)_0,ch));
+	chbar = sub(chbar,ring ch);
+	print(first degree chbar);
+	if (first degree chbar === d) then break;
 	i = i+1
-	)
+	);
+    
+    T := ring ch;
+    phi := map(S,T,{l});
+    H := phi matrix{HornerSequence(chbar)};
+    M := sub(matrix {gens R},S);        
+    tr := matrix{apply(first entries B,x-> trace last regularRepresentation x)};
+
+    gvCoeffs := sub(adjoint(tr*(last coefficients(M**H,Monomials=>B)),source M,source H),coefficientRing R);
+    g1 := sub(diff(variable ch,ch)/gcd(diff(variable ch,ch),ch),ring ch);
+    Z := matrix {apply(d,i->(ring ch)_0^(d-1-i))};
+    gv := first entries ((1/g1)*sub(Z*gvCoeffs,frac ring ch));
+        
+    return(l,ch,gv)
     )
 
---Computes a Hurwitz matrix of order k
-----zerocoeff shouldn't be in the code.
+
+--Computes the Hurwitz matrix of f (of order k)
 HurwitzMatrix = method()
-HurwitzMatrix (RingElement,ZZ) := Matrix => (f,k)->(
-   
-    if k <= 0 then error "Error: Expected positive integer in second input.";  
-	
-    d := (degree f)_0;
-    
-    if k > d then error "Error: k is at most d.";
+HurwitzMatrix (RingElement) := Matrix => f->(
+    d := first degree f;
+    if not (d>0) then error "Error: Expected polynomial of positive degree";
     
     x := variable f;
-    C := toList reverse apply(0..d, i -> coefficient(x^i,f));
-    zerocoeff := (l,a) -> (if a < 0 or d-a < 0 then 0 else l#(d-a));
-    Z := toList apply(1..d, i -> zerocoeff(C,d+1-2*i));
+    a := apply(d+1,i->coefficient(x^i,f));
     
-    --here we generate the d x d matrix
-    if k == 1 then matrix{{C#1}} else (
-    L := for j from 2 to d when j < d + 1 list toList apply(1..d, i -> zerocoeff(C,d+j-2*i));
-    T := join({Z},L);
-    M := matrix T; 
-    
-    --now we find the submatrices of the d x x matrix
-    I := submatrix'(M,{k..d},{k..d})
-    )
+    M := matrix table(d,d,(i,j)->if (0 <= d-1+i-2*j and d-1+i-2*j <= d) then a#(d-1+i-2*j) else 0);
+    M
     )
 
---Computes a Hurwitz matrix of order k and then computes its determinant
-HurwitzDeterminant = method()
-HurwitzDeterminant (RingElement,ZZ) := RR => (f,k)->(
-   
-    if k < 0 then error "Error: Expected non-negative integer in second input.";  
-    if k == 0 then 1_QQ else (
-	
-    d := (degree f)_0;
-    x := variable(f);
-    C := toList reverse apply(0..d, i -> coefficient(x^i,f));
-    zerocoeff := (l,a) -> (if a < 0 or d-a < 0 then 0 else l#(d-a));
-    Z := toList apply(1..d, i -> zerocoeff(C,d+1-2*i));
-    
-    --here we generate the d x d matrix
-    L := for j from 2 to d when j < d + 1 list toList apply(1..d, i -> zerocoeff(C,d+j-2*i));
-    T := join({Z},L);
-    M := matrix T; 
-    
-    --now we find the minors
-    I := minors(k,M);
-    I_0
-    )
+HurwitzMatrix (RingElement,ZZ) := Matrix => (f,k)->(
+    M := HurwitzMatrix f;
+    if (k==0) then matrix{{1}} else submatrix(M,toList(0..k-1),toList(0..k-1))
     )
 
---Determines whether or not a univariate polynomial of degree >=1 and leading coefficient > 0
-----check for coefficient field to be rational.
+
+--Determines whether or not a univariate polynomial of degree >=1 is Hurwitz stable.
+----criterion requires lead coefficient of f to be positive
 isHurwitzStable = method()
 isHurwitzStable (RingElement) := Boolean => f->(
-    R := ring f;
-    if not (coefficientRing R === QQ) then error "Error: Expected polynomial over rational numbers";
-    d := (degree f)_0;
-    if d < 1 then print "Warning: polynomial must be of degree 1 or higher.";
-    if leadCoefficient f <= 0 then print "Warning: leading coefficient must be positive.";
-    S := for i from 2 to d when i < d + 1 list HurwitzDeterminant(f,i); 
-    T := apply(S, i -> sign(i));
-    sum T == d-1 
+    if (leadCoefficient f < 0) then f = -f;
+    d := first degree f;
+    all(d+1,k->det HurwitzMatrix(f,k) > 0)
     )
 
 --------------------
@@ -826,7 +813,6 @@ document {
 		 ///
      	}
     
-    --add South Texas example on Budan Fourier
     
 document {
 	Key => {traceForm,(traceForm, RingElement),(traceForm,RingElement,Ideal)},
@@ -923,39 +909,8 @@ document {
 		HurwitzMatrix(g,2)
 		HurwitzMatrix(g,1)
 		 ///,
-	SeeAlso => {"HurwitzDeterminant","isHurwitzStable"} 
+	SeeAlso => {"isHurwitzStable"} 
 	}   
-    
-document {
-	Key => {HurwitzDeterminant,(HurwitzDeterminant, RingElement, ZZ)},
-	Headline =>  "a specified principle minor of the Hurwitz matrix of a univariate polynomial",
-	Usage => "HurwitzDeterminant(f,k)",
-	Inputs => {
-	    RingElement => "f" => {"a rational univariate polynomial of degree n"},
-	    ZZ => "k" => {"a nonnegative integer that determines the dimensions of a square submatrix of the ",TEX///$n\times n$///," Hurwitz matrix of ",TT "f","."},
-	    },
-	Outputs => { RR => {"the leading principal minor of the Hurwitz matrix ",TEX///$H$///," of a rational univariate polynomial ", TT "f", " of degree n, after removing the last ",TEX///$n-k$///," rows and ",TEX///$n-k$///," columns of ",TEX///$H$///}},
-    	PARA{"This computes the leading principal minor of the Hurwitz matrix ",TEX///$H$///," of a rational univariate polynomial ", TT "f"," with positive leading coefficient and degree at least 1.
-	    The polynomial, however, is not necessarily from a univariate polynomial ring. The minor removed the last ",TEX///$n-k$///," rows and the last ",TEX///$n-k$///," columns of the Hurwitz matrix ", TEX///$H$///,"."},
-	EXAMPLE lines ///
-	    	R = QQ[x]
-	        f = 3*x^4 - 7*x^3 + 5*x - 7 
-		HurwitzDeterminant(f,4)
-	        HurwitzDeterminant(f,3)	      
-	 	 ///,
-       PARA{"We can also use mutliple variables to represent unknown coefficients. Note that we create another ring ",TT "S"," so 
-       that ", TT "x", " and ", TT "y"," are not considered variables in the same ring and so confuse the monomials ",TEX///$x$///, " or ",TEX///$y$///,
-       " with ",TEX///$xy$///,"."},
-       EXAMPLE lines ///
-	        S = R[y]
-		g = y^3 + 2*y^2 + y - x + 1
-		HurwitzDeterminant(g,3)
-		HurwitzDeterminant(g,2)
-		HurwitzDeterminant(g,1)
-		HurwitzDeterminant(g,0)
-		 ///,
-	SeeAlso => {"HurwitzMatrix","isHurwitzStable"}
-     	}
     
 document {
 	Key => {isHurwitzStable,(isHurwitzStable, RingElement)},
@@ -972,7 +927,7 @@ document {
 		isHurwitzStable(f)
 		isHurwitzStable(g)	      
 	 	 ///,
-	SeeAlso => {"HurwitzMatrix","HurwitzDeterminant"}	 
+	SeeAlso => {"HurwitzMatrix"}	 
      	}
 
 TEST ///
@@ -1075,9 +1030,7 @@ TEST ///
      R = QQ[x];
      f = 3*x^4 - 7*x^3 + 5*x - 7;
      assert(HurwitzMatrix(f,4) == sub(matrix{{-7,5,0,0},{3,0,-7,0},{0,-7,5,0},{0,3,0,-7}},QQ));
-     assert(HurwitzDeterminant(f,4)== -1876);
      assert(HurwitzMatrix(f,3) == sub( matrix{{-7,5,0},{3,0,-7},{0,-7,5}},QQ));
-     assert(HurwitzDeterminant(f,3) == 268);
      assert(isHurwitzStable(f) == false);
      g = x^2 + 10*x + 21;
      assert(isHurwitzStable(g) == true);
@@ -1095,158 +1048,5 @@ end
 
 
 
-
---Computes the rank and signature of the trace form of f
-----change name
-----change output
-traceFormInfo = method()
-traceFormInfo (RingElement,Ideal) := Sequence => (f,I)->(
-    R := ring f;
-    traceFormInfo(sub(f,R/I))
-    )
-
-traceFormInfo (RingElement) := Sequence => f->(
-    R := ring f;
-    if not isArtinian R then error "Expected Artinian ring";
-    
-    trf := traceForm f;
-    ch := characteristicPolynomial(trf);
-    chNeg := sub(ch,(ring ch)_0=>-(ring ch)_0);
-    sig := SturmCount(ch,0,infinity,Multiplicity=>true) - SturmCount(chNeg,0,infinity,Multiplicity=>true);
-    (rank(trf),sig)
-    )
-
---document {
---	Key => {(traceFormInfo, RingElement),traceFormInfo},
---	Usage => "traceFormInfo(f)",
---	Inputs => {"f"},
---	Outputs => { Sequence => { "the rank and signature of the trace quadratic form of", TT "f" }},
---	PARA {"This computes the rank and signature of the trace quadratic form of an element ", TT "f", " in an Artinian ring of characteristic zero"},
---	EXAMPLE lines ///
---	         R = QQ[x,y]
---		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
---		 A = R/I
---		 traceFormInfo(x*y)
---		 traceFormInfo(x - 2)
---		 traceFormInfo(x + y - 3)
---	 	 ///,
---	SeeAlso => {"traceForm", "traceCount"}
-  --   	}
-
-rationalUnivariateRepresentationresentation = method()
-rationalUnivariateRepresentationresentation (Ideal) := RingElement => I ->(
-    R := ring I;
-    S := R/I;
-    --if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal";
-    d := rank traceForm(1_S);
-    
-    i := 1;
-    X := gens R;
-    n := #X;
-    while (i < n*(binomial(d,2))) do (
-    	l := sum(X,apply(n,k->i^k),(a,b)->a*b);
-	m := last regularRepresentation(sub(l,S));
-	f := characteristicPolynomial(m);
-	
-	F := f/gcd(f,diff((support f)_0,f));
-	F = sub(F,ring f);
-	print(first degree F);
-	if (first degree F === d) then return toList(F,l);
-	i = i+1
-	)
-    )
-
-
-characteristicPolynomial = method()
-characteristicPolynomial (RingElement) := RingElement => t ->(
-    R := ring t;
-    m := regularRepresentation(t);
-    d := degree t;
-    
-    v := matrix{flatten append({1},toList apply(1..d_0,i -> 0))};
-    Vtr := 
-    
-    m*v
-    
-    --Solve triangular system 
-    D := apply(0..d_0,i -> (d_0-i)*coefficient(x^(d_0-i),t));
-    
-    series = method()
-    series (List,ZZ) := RingElement => (L,k) ->(
-	n := length(L);
-	s := take(L,k+1);
-	sum(s)
-	)
-    
-    T := apply(0..d_0,i -> coefficient(x^(d_0-i),t)*trace(regularRepresentation(t^i)));
-  --  S := sum(toList(T));
-
-    A := apply(0..d_0,0..d_0,(i,j)-> D#i - series(T,d_0-j));
-    I := Ideal(toList(A));
-    
-    --solution to system is characteristic polynomial   
-    characteristicPolynomial = method()
-    characteristicPolynomial (RingElement) := RingElement => t ->(
- 
-    R := ring t;
-    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
-    B := basis(R);
-    D := length(B);
-    v := matrix{flatten append({1},toList apply(1..D,i -> 0))}; 
-    
-    VTr := toList apply(1..D, i-> trace(last regularRepresentation(B#i)));
-    Mt := regularRepresentation(t);
-    traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)))  
-    )
-    )
-
-
-HornerPolynomial = method()
-HornerPolynomial (RingElement) := RingElement => f ->(
-    d := first degree f;
-    x := variable(f);
-    a := apply(d+1,i->coefficient(x^(d-i),f));
-    H := new MutableList from {a#0};
-    for i from 1 to d-1 do (
-	H#i = x*H#(i-1) + a#i);
-    toList H
-    )
-
-
-grep = method()
-grep (RingElement) := RingElement => f ->(
-    R := ring f;
-    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
-    B := basis R;
-    D := numgens source B;
-    v := transpose(matrix{flatten append({1},toList apply(D-1,i -> 0))}); 
-    
-    Vtr := matrix{toList apply(D, i-> trace last regularRepresentation(B_(0,i)))};
-    Mt := last regularRepresentation(f);
-    
-    h := HornerPolynomial(characteristicPoly(f));
-          
-    coeffs := new MutableList from {{1}};
-       for k from 1 to D-1 do (
-       coeffs#k = drop(h,-(D-k-1))
-       );
-    --this L  needs to vary for coefficients of sum
-    L := last coefficients(f*sub(matrix{h},R),Monomials =>sub(matrix{h},R));
-    
-   -- H_i vectors are wrt fixed basis hmmmmmm
-    L*(transpose Mt)*(transpose Vtr);
-   -- d := first degree f;
-   -- traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)))
-   
-    sum(D-1,I->coeffs)
-    
-    )
-gRep(RingElement,RingElement) := RingElement => opts->(t,v)->(
-    R := ring t;
-    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
-    B := basis R;
-    D := numgens source B;
-    Z := opts.Variable;
-  )
 
 
