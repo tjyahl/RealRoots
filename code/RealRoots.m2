@@ -47,9 +47,9 @@ export{
     "isHurwitzStable",
     "variable",
     "isArtinian",
-    --"signAt",
-    --"derivSequence",
-    --"sign",
+    "signAt",
+    "derivSequence",
+    "sign",
     --options
     "Multiplicity"
     }
@@ -220,22 +220,22 @@ characteristicPolynomial (Matrix) := RingElement => opts->M->(
     )
 
 --Computes the characteristic polynomial of the regular representation of f
-characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
-    R := ring f;
-    Z := opts.Variable;
-    if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
-    characteristicPolynomial(sub(f,R/I))
-    )
+--characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
+--    R := ring f;
+--    Z := opts.Variable;
+--    if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
+--    characteristicPolynomial(sub(f,R/I))
+--    )
 
-characteristicPolynomial (RingElement) := RingElement => opts->f->(
-    (B,mf) := regularRepresentation(f);
-    Z := opts.Variable;
-    characteristicPolynomial(mf)
-    )
+--characteristicPolynomial (RingElement) := RingElement => opts->f->(
+--    (B,mf) := regularRepresentation(f);
+--    Z := opts.Variable;
+--    characteristicPolynomial(mf)
+--    )
 
---Competitor for above
-characteristicPoly = method(Options => {Variable => "Z"})
-characteristicPoly (RingElement) := RingElement => opts->t ->(
+--Competitor for above, won
+--characteristicPolynomial = method(Options => {Variable => "Z"})
+characteristicPolynomial (RingElement) := RingElement => opts->t ->(
  
     R := ring t; 
     Z := opts.Variable;
@@ -255,6 +255,13 @@ characteristicPoly (RingElement) := RingElement => opts->t ->(
 	coeffs#k = -sum(k,i->(coeffs#(k-i-1)*traces#(i+1)))/k
 	);
     sum(D+1,i->coeffs#i*S_0^(D-i))
+    )
+
+characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
+    R := ring f;
+    Z := opts.Variable;
+    if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
+    characteristicPolynomial(sub(f,R/I))
     )
     
     
@@ -539,7 +546,7 @@ isHurwitzStable (RingElement) := Boolean => f->(
     if d < 1 then print "Warning: polynomial must be of degree 1 or higher.";
     if leadCoefficient f <= 0 then print "Warning: leading coefficient must be positive.";
     S := for i from 2 to d when i < d + 1 list HurwitzDeterminant(f,i); 
-    T := apply(S, i -> sign((i,R)));
+    T := apply(S, i -> sign(i));
     sum T == d-1 
     )
 
@@ -1177,10 +1184,9 @@ characteristicPolynomial (RingElement) := RingElement => t ->(
     A := apply(0..d_0,0..d_0,(i,j)-> D#i - series(T,d_0-j));
     I := Ideal(toList(A));
     
-    --solution to system is characteristic polynomial
-    
+    --solution to system is characteristic polynomial   
     characteristicPolynomial = method()
-characteristicPolynomial (RingElement) := RingElement => t ->(
+    characteristicPolynomial (RingElement) := RingElement => t ->(
  
     R := ring t;
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
@@ -1227,7 +1233,7 @@ grep (RingElement) := RingElement => f ->(
     --this L  needs to vary for coefficients of sum
     L := last coefficients(f*sub(matrix{h},R),Monomials =>sub(matrix{h},R));
     
-   -- H_i vectors are wrt fixed basis
+   -- H_i vectors are wrt fixed basis hmmmmmm
     L*(transpose Mt)*(transpose Vtr);
    -- d := first degree f;
    -- traces := {D}|apply(D,k->(v = Mt*v;(v*Vtr)_(0,0)))
@@ -1235,8 +1241,12 @@ grep (RingElement) := RingElement => f ->(
     sum(D-1,I->coeffs)
     
     )
-
-  
-
+gRep(RingElement,RingElement) := RingElement => opts->(t,v)->(
+    R := ring t;
+    if not isArtinian(R) then error "Error: Expected element of Artinian ring";
+    B := basis R;
+    D := numgens source B;
+    Z := opts.Variable;
+  )
 
 
