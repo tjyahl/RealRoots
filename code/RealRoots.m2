@@ -355,7 +355,7 @@ SylvesterCount (RingElement,RingElement,A,B) := ZZ => opts->(f, g, a, b)->(
     n
     )
 
-SylvesterCount (RingElement,RingElement) := ZZ => (f,g)->(
+SylvesterCount (RingElement,RingElement) := ZZ => opts->(f,g)->(
     SylvesterCount(f,g,-infinity,infinity)
     )
 
