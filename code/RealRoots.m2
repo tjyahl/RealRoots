@@ -996,8 +996,8 @@ TEST ///
     assert(SylvesterCount(f,g,-5,4) == 1);
     h = (t-4)*(t-1)^2*(t+1)*(t+3)*(t+5)*(t-6);
     p = t+5;
-    assert(SylvesterCount(h,p,-10,10) == 5);
-    assert(SylvesterCount(h,p,0,10) == 3);
+    assert(SylvesterCount(h,p,-10,10) == 6);
+    assert(SylvesterCount(h,p,0,10) == 4);
     ///
     
 TEST ///
