@@ -576,6 +576,35 @@ document {
 	    	minimalPolynomial(x,Strategy => 1)
 	        ///
 	}
+    
+document {
+        Key => {univariateEliminant,(univariateEliminant,RingElement),(univariateEliminant,RingElement,Ideal),[univariateEliminant,Strategy]},
+        Headline => "the univariate eliminant of an element of an Artinian ring",
+	Usage => "univariateEliminant(f)
+	          univariateEliminant(g,I)",
+	Inputs => {
+	    RingElement => "f" => {"an element of an Artinian ring"},
+	    RingElement => "g" => {"a polynomial"},
+	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Strategy => {"set method for computing the univariate eliminant"}
+	    },
+	Outputs => { RingElement => {"the desired univariate polynomial. See description"}},
+	PARA {"This computes the univariate eliminant of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the univariate eliminant of a polynomial ", TT "g", " in the Artinian ring ", TT "(ring g)/I", ".
+	    When ",TT "f"," is a variable in ", TT "ring f", ", this is the eliminant with respect to that variable. This is computed by finding the minimal polynomial of the corresponding multiplication matrix."},
+	EXAMPLE lines ///
+	    	R = QQ[x,y]
+		I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
+		univariateEliminant(y,I)
+		S = R/I
+		univariateEliminant(y)
+	 	///,
+	PARA {"We provide two examples to compute minimal polynomials given by ",TT "Strategy => 0"," (computes the kernel of ",TEX///$k[T]\to$///,TT " ring f"," by sending ", TEX///$T$///," to ",TT "f",") and ",TT "Strategy => 1", " (a minimal linear combination of powers of the input)."},
+	EXAMPLE lines ///
+		univariateEliminant(x,Strategy => 0)
+	    	univariateEliminant(x,Strategy => 1)
+	        ///,
+	SeeAlso => {"minimalPolynomial"}
+	}
 
 document {
 	Key => {regularRepresentation,(regularRepresentation, RingElement, Ideal), (regularRepresentation, RingElement)},
@@ -998,8 +1027,8 @@ TEST ///
     assert(SylvesterCount(f,g,-5,4) == 1);
     h = (t-4)*(t-1)^2*(t+1)*(t+3)*(t+5)*(t-6);
     p = t+5;
-    assert(SylvesterCount(h,p,-10,10) == 6);
-    assert(SylvesterCount(h,p,0,10) == 4);
+    assert(SylvesterCount(h,p,-10,10,Multiplicity=>true) == 6);
+    assert(SylvesterCount(h,p,0,10) == 3);
     ///
     
 TEST ///
