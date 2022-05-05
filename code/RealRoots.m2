@@ -338,7 +338,7 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
 
 --Computes the difference in the number of roots of f where g is positive and where g is negative
 ----letting g = 1 gives the number of real roots from the Sturm sequence
-SylvesterCount = method(Options=>{Multiplicity=>true})
+SylvesterCount = method(Options=>{Multiplicity=>false})
 for A in {ZZ,QQ,RR,InfiniteNumber} do 
 for B in {ZZ,QQ,RR,InfiniteNumber} do
 SylvesterCount (RingElement,RingElement,A,B) := ZZ => opts->(f, g, a, b)->(

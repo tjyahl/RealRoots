@@ -1,7 +1,5 @@
 --
 
-restart
-
 monomialMapEvaluation = method()
 --Evaluates the monomial map corresponding to the matrix A at the point v. 
 monomialMapEvaluation (List,Matrix) := List => (v,A)->(
@@ -24,27 +22,7 @@ generateSystem (List,List) := List => o->(A,C)->(
 	A = apply(A,M->matrix apply(entries M,v->apply(v,z->z-min v)));
 	);    
     x := symbol x;
-    R := QQ[x_1..x_n];
-    F := apply(#A,i->sum(C#i,monomialMapEvaluation(gens R,A#i),(c,m)->c*m));
+    R := CC[x_1..x_n];
+    F := apply(#A,i->sum(C#i,monomialMapEvaluation(gens R,A#i),(c,m)->sub(c,CC)*m));
     F
     )
-
-
-loadPackage("RealRoots",FileName=>"../RealRoots.m2")
-
-A = {matrix{{0,0,1,1},{0,1,0,1}},matrix{{0,0,1,1},{0,1,0,1}}}
-A = {matrix{{0,0,2,2},{0,2,0,2}},matrix{{0,0,2,2},{0,2,0,2}}}
-
-A = apply(2,i->matrix{{0},{0}}|random(ZZ^2,ZZ^3))
-C = apply(#A,i->apply(numgens source A#i,j->random(QQ)-random(QQ)))
-F = generateSystem(A,C)
-
-R = (ring first F)/(ideal F)
-
-elapsedTime f = characteristicPolynomial R_0;
-elapsedTime g = characteristicPoly R_0;
-f == sub(g,ring f)
-first degree f
-
-
-
