@@ -36,7 +36,7 @@ export{
     "SturmSequence",
     "SturmCount",
     "realRootIsolation",
-    "derivSequence",
+  --  "derivSequence",
     "BudanFourierBound",
     "traceForm",
     "traceCount",
@@ -664,6 +664,7 @@ document {
 	    RingElement => "g" => {"a rational univariate polynomial"},
 	    RR => "a" => {"(optional) the lower bound of the interval"},
 	    RR => "b" => {"(optional) the upper bound of the interval"},
+	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the difference between the number of roots of ",TT "f"," in the interval ",TEX///$(a,b]$///," where ",TT "g",
 		" is positive and where ",TT "g"," is negative"}},
@@ -698,7 +699,7 @@ document {
      	}
 
 document {
-    	Key => {"Multiplicity(RealRoots)", [SturmCount, Multiplicity]},
+    	Key => {"Multiplicity(RealRoots)", [SylvesterCount, Multiplicity], [SturmCount, Multiplicity]},
 	PARA {"This is an optional input for counting roots with multiplicity."}
     }
 
@@ -882,7 +883,7 @@ document {
     }
     
 document {
-	Key => {HurwitzMatrix,(HurwitzMatrix, RingElement, ZZ)},
+	Key => {HurwitzMatrix,(HurwitzMatrix,RingElement),(HurwitzMatrix, RingElement, ZZ)},
 	Headline => "a specified principle submatrix of the Hurwitz matrix of a univariate polynomial",
 	Usage => "HurwitzMatrix(f,k)",
 	Inputs => {
@@ -895,7 +896,8 @@ document {
 	
 	EXAMPLE lines ///
 	    	R = QQ[x]
-	        f = 3*x^4 - 7*x^3 + 5*x - 7 
+	        f = 3*x^4 - 7*x^3 + 5*x - 7
+		HurwitzMatrix(f) 
 		HurwitzMatrix(f,4)
 	        HurwitzMatrix(f,3)	      
 	 	 ///,
