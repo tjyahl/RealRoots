@@ -183,8 +183,11 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
 
 --Function alias
 univariateEliminant = method(Options=>{Strategy=>0})
-univariateEliminant (RingElement) := o-> f-> minimalPolynomial(f,o)
-univariateEliminant (RingElement,Ideal) := o-> (g,I)-> minimalPolynomial(g,I,o)
+univariateEliminant (RingElement,Ideal) := o-> (g,I)-> (
+    f := minimalPolynomial(g,I,o);
+    phi := map(ring g,ring f,{g});
+    phi(f)
+    )
 
 
 --Computes a matrix representation of the multiplication map determined by f
@@ -577,7 +580,7 @@ document {
 	}
 --get rid of univariateEliminant(f)    
 document {
-        Key => {univariateEliminant,(univariateEliminant,RingElement),(univariateEliminant,RingElement,Ideal),[univariateEliminant,Strategy]},
+        Key => {univariateEliminant,(univariateEliminant,RingElement,Ideal),[univariateEliminant,Strategy]},
         Headline => "the univariate eliminant of an element of an Artinian ring",
 	Usage => "univariateEliminant(f)
 	          univariateEliminant(g,I)",
