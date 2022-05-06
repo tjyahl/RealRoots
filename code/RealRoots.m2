@@ -18,6 +18,7 @@ newPackage(
 	 HomePage=>"https://www.github.com/tjyahl"}
 	},
     Headline=>"Package for symbolically exploring, counting, and locating real solutions to general polynomial systems",
+    Keywords=>{"Real Algebraic Geometry"},
     PackageImports=>{},
     PackageExports=>{},
     DebuggingMode=>true
@@ -36,7 +37,6 @@ export{
     "SturmSequence",
     "SturmCount",
     "realRootIsolation",
-  --  "derivSequence",
     "BudanFourierBound",
     "traceForm",
     "traceCount",
@@ -545,8 +545,7 @@ beginDocumentation()
 document {
 	Key => RealRoots,
 	Headline => "Package for exploring, counting and locating real solutions to polynomial systems",
-	"The purpose of this package is to provide general tools for elimination and solving systems of polynomial equations.", -- with a particular emphasis
-	--on counting and isolating real zeros of ideals in ",TEX///$\mathbb{Q}[x]$///,".",
+	"The purpose of this package is to provide general tools for elimination and solving systems of polynomial equations."
 	}
 
 document {
