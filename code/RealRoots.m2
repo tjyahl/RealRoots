@@ -950,9 +950,9 @@ document {
 	Key => {isHurwitzStable,(isHurwitzStable, RingElement)},
 	Headline => "determines whether or not a rational univariate polynomial is Hurwitz stable",
 	Usage => "isHurwitzStable(f)",
-	Inputs => {RingElement => "f" => {"a rational univariate polynomial"}},
+	Inputs => {RingElement => "f" => {"a real univariate polynomial"}},
 	Outputs => { Boolean => { "the Hurwitz stability of a rational univariate polynomial ", TT "f"}},
-	PARA {"Recall that a univariate polynomial is Hurwitz stable if all its roots have negative real parts. This method determines the Hurwitz stability of a rational univariate polynomial ", TT "f", " with positive leading coefficient and degree at least 1. 
+	PARA {"A real univariate polynomial is Hurwitz stable if all its roots have negative real parts. This method determines the Hurwitz stability of a rational univariate polynomial ", TT "f", " with positive leading coefficient and degree at least 1. 
 	    The polynomial, however, is not necessarily from a univariate polynomial ring."},
 	EXAMPLE lines ///
 	    	R = QQ[x]
