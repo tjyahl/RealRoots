@@ -790,7 +790,7 @@ document {
 		 variations(L)
 	 	 ///,
      	}
-    
+    --each subinterval contains at least one real root, multivariate system implementation?
 document {
         Key => {realRootIsolation,(realRootIsolation, RingElement,ZZ),(realRootIsolation, RingElement,QQ),(realRootIsolation, RingElement,RR)},
 	Headline => "a list that isolates the real roots of a rational univariate polynomial",
@@ -867,7 +867,7 @@ document {
 	SeeAlso => {"traceCount"}
      	}
     
---fix this, need g here..maybe not?
+--fix this, need g here..maybe not? optional output for when a polynomial is nonzero, signature data in literature? traceSignature??? point out it's "multivariate version of Sylvester's theorem"
 document {
 	Key => {traceCount,(traceCount, QuotientRing), (traceCount, RingElement), (traceCount, Ideal),(traceCount, List)},
         Headline => "the number of real points of the spectrum of an Artinian ring (of characteristic 0), not counting multiplicity",
