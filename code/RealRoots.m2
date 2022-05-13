@@ -790,7 +790,7 @@ document {
 		 variations(L)
 	 	 ///,
      	}
-    
+    --each subinterval contains at least one real root, multivariate system implementation? RUR?
 document {
         Key => {realRootIsolation,(realRootIsolation, RingElement,ZZ),(realRootIsolation, RingElement,QQ),(realRootIsolation, RingElement,RR)},
 	Headline => "a list that isolates the real roots of a rational univariate polynomial",
@@ -867,19 +867,19 @@ document {
 	SeeAlso => {"traceCount"}
      	}
     
---fix this, need g here..maybe not?
+--fix this, need g here..maybe not? optional output for when a polynomial is nonzero, signature data in literature? traceSignature??? point out it's "multivariate version of Sylvester's theorem"
 document {
 	Key => {traceCount,(traceCount, QuotientRing), (traceCount, RingElement), (traceCount, Ideal),(traceCount, List)},
         Headline => "the number of real points of the spectrum of an Artinian ring (of characteristic 0), not counting multiplicity",
-	Usage => "numRealTrace(R)",
+	Usage => "traceCount(R)",
 	Inputs => {
-	    QuotientRing => "R" => {"an Artinian ring"},
+	    QuotientRing => "S" => {"an Artinian ring"},
 	    RingElement => "f" => {"a real polynomial"},
 	    Ideal => "I" => {"an ideal"},
 	    List => "l" => {"a system of real polynomials"},
 	    },
-	Outputs => { ZZ => {"the number of distinct real points of Spec", TT "R",", not counting multiplicity"}},
-	PARA {"This computes the number of distinct real points of Spec", TT "R", ", not counting multiplicity, and where ", TT "R", " is an Artinian ring of characteristic 0. 
+	Outputs => { ZZ => {"the number of distinct real points of Spec ", TT "R",", not counting multiplicity"}},
+	PARA {"This computes the number of distinct real points of Spec ", TT "R", ", not counting multiplicity, and where ", TT "R", " is an Artinian ring of characteristic 0. 
 	       If ", TT "f", " is a real polynomial (resp., if ",TT "I"," is an ideal), this computes the number of real points of ",TT "R/(f)", " (resp., ",TT "R/I",").
 	       Moreover, if ", TT "l", " is a system of real polynomials, then this computes its number of solutions."},
 	EXAMPLE lines ///
