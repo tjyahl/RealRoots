@@ -1,0 +1,6 @@
+#Extensions for Github to ignore
+*~
+*.aux
+*.log
+*.bbl
+*.blg

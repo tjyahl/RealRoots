@@ -41,6 +41,13 @@ F = generateSystem(A,C)
 
 R = (ring first F)/(ideal F)
 
+elapsedTime f = minimalPolynomial((gens R)_0,Strategy=>0);
+elapsedTime g = minimalPolynomial((gens R)_0,Strategy=>1);
+factor f
+factor g
+first degree f
+
+
 elapsedTime f = characteristicPolynomial R_0;
 elapsedTime g = characteristicPoly R_0;
 f == sub(g,ring f)
