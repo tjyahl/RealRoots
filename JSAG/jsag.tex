@@ -11,6 +11,7 @@
 \usepackage{ulem}  % strike out text
 \usepackage{graphicx}
 \usepackage{tikz,verbatim}
+\usepackage{caption}
 %\pdfoutput=1
 
 \usepackage{framed}
@@ -76,6 +77,7 @@
 \newcommand{\CC}{\mathbb{C}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
 
 \newcommand{\defcolor}[1]{{\color{RoyalBlue}#1}}
 \newcommand{\demph}[1]{\defcolor{{\sl #1}}}
@@ -110,23 +112,64 @@ The Macualay2 package \texttt{RealRoots} contains methods for studying real root
 %%%%%%%%%%%%%%%%
 \section*{Introduction}
 
+Since the 19th century, understanding the number of real roots of a polynomial system is ubiquitious in the study of real algebraic geometry. We developed a package in the software system \textit{Macaulay2} called \texttt{RealRoots} that implements algorithms to symbollically explore real roots of polynomial systems.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Real Univariate Systems}
+
+Our story begins with a real univariate polynomial $f$ of the form $$c_{0}x^{a_{0}} + c_{1}x^{a_{1}} + \cdots + c_{m}x^{a_{m}},$$ where $m\in \NN\cup\{0\}, i\in\{0,1,\dots, m\}$, $c_{i} \neq 0$ are real numbers, and $a_{0} < a_{1} < \cdots < a_{m}$ are integers. Descartes' Rule of Signs [\textbf{reference here}] gives us an upper bound for the number of positive real roots of $f$.
+
+%Descartes section
+\begin{theorem}[Descartes' Rule of Signs]Let $r$ be the number of positive real roots of $f$, counting multiplicity. Then $r\leq \#\{i:1\leq i\leq m, c_{i-1}c_{i}<0\}.$ Moreover, the difference bewteen the terms above is even.\end{theorem}
+
+By including the case when we replace $x$ by $-x$ in $f$, we can generalize Descartes' theorem to provide an upper bound for the total number of real roots of $f$.
+
+\begin{corollary}[Descartes' Bound]The real polynomial $f$ has at most $m$ positive roots, $2m$ nonzero roots, and $2m + 1$ real roots.\end{corollary}
+
+Although Descartes' bound is sharp and realized by $x(x^{2}-1)(x^{2}-2)\cdots(x^{2}-m)$, in many cases, such bound is too large to the actual number of real roots of a polynomial, for example, $x^{3} - x^{2} + x - 1$ only has one real root, but its Descartes' bound is 9. 
+
+The \textit{\textcolor{red}{variation}} of a finite sequence of numbers $c$, denoted by $\textcolor{red}{var(c)}$, is the number of times its consecutive elements have opposite sign, after removing any zero terms. Now, if $F=(f_{0},f_{1},\dots,f_{k})$ is a finite sequence of real univariate polynomials, and $a\in \RR$, we define \textcolor{red}{$var(F,a)$} to be the variation of the sequence $(f_{0}(a),f_{1}(a),\dots,f_{k}(a))$. If $a=\pm\infty$, then \textcolor{red}{$var(F,\infty)$} is the variation of the leading coefficients of the polynomials $f_{i}(t)$, and \textcolor{red}{$var(F,-\infty)$} is the variation of the leading coefficients of the $f_{i}(-t)$.
+
+
+If $g$ is a univariate polynomial of degree $l$, we denote by \textcolor{red}{$\delta g$} its sequence of derivatives: $$\delta g = \left(g(x),g'(x),g''(x),\dots,g^{(l)}(x)\right).$$ Let $a,b\in \RR\cup\{\pm \infty\}$ such that $a<b$, and denote by $\textcolor{red}{r(f,a,b)}$ the number of real roots of $f$ in the interval $(a,b]$. Budan and Fourier [\textbf{reference here}] developed a generalization of Descartes' Theorem.
+
 %Budan Fourier theorem (reference, vague statement)
-\theorem[Budan-Fourier]
-Let $f\in \mathbb{R}[t]$ be a univariate polynomial and $a<b$ two numbers in $\mathbb{R}\cup\{\pm\infty\}$. Then 
-\begin{align*}
-\text{var}(\delta f,a) - \text{var}(\delta f,b) \geq r(f,a,b),
-\end{align*}
-and the difference is even. 
+\begin{theorem}[Budan-Fourier] The real polynomial $f$ satisfies $$var(\delta f,a) - var(\delta f,b) \geq r(f,a,b),$$ and the difference is even.\end{theorem}
+%\begin{align*}\text{var}(\delta f,a) - \text{var}(\delta f,b) \geq r(f,a,b),\end{align*}
+
+The \textcolor{red}{Sylvester sequence} of two real univariate polynomials $f$ and $g$, denoted by \textcolor{red}{$Syl(f,g)$}, is the sequence $\left(f_{0},f_{1},\dots,f_{k}\right)$, where $f_{0} := f, f_{1} := g, f_{k} := \gcd(f,g)$, and $$-f_{i+1} = \text{remainder}(f_{i-1},f_{i}).$$
 
 %Sylvester's theorem (reference ?, nice picture, proof outline)
 \theorem[Sylvester]
-Let $f,g\in\mathbb{R}[t]$ and $\text{Syl}(f,f'g)$ denote the Sylvester Sequence of $f$ and $f'g$. The number of roots of $f$ in $(a,b\hspace{.05cm}]$ where $g$ is positive minus the number of roots of $f$ in $[a,b)$ where $g$ is negative is counted by the difference in variation
-\begin{align*}
-\text{var}(\text{Syl}(f,f'g),a) - \text{var}(\text{Syl}(f,f'g),b).
-\end{align*}
+The difference between the number of roots of $f$ in $(a,b\hspace{.05cm}]$ where $g$ is positive and the number of roots of $f$ in $[a,b)$ where $g$ is negative is counted by the difference in variation $$\text{var}(\text{Syl}(f,f'g),a) - \text{var}(\text{Syl}(f,f'g),b).$$
+
+\begin{proof} By definition, we note that $Syl(f,f'g) = (f_{0},f_{1},\dots, f_{k})$ is the same as the sequence given by the Euclidean algorithm (up to signs). Next, for $i\in\{0,\dots,k\}$ set $g_{i} := f_{i}/\gcd(f,f'g)$. By construction, $g_{i}$ and $g_{i+1}$ are relatively prime. If $c$ is not a root of $f$, then $$var\left((f_{0},f_{1}),c\right) = var\left((g_{0},g_{1}),c\right),$$ because the denominators of $g_{0}$ and $g_{1}$ are the same. Similarly, for $i\in\{1,\dots,k\}$, we have $var\left((f_{i-1},f_{i},f_{i+1}),c\right) = var\left((g_{i-1},g_{i},g_{i+1}),c\right)$. Now, consider the case when $x$ passes through a root $c$ of $f$:
+
+\begin{table}[h]
+\begin{tabular}{c|ccc}
+  &   & $c$ &   \\
+  \hline
+$f$ & $-$ & $0$ & $+$ \\
+$f'g$ & $+$ & $0$ & $+$ \\
+\end{tabular}
+\vspace{0.3cm}
+\caption*{$\textcolor{red}{g(c)>0},\textcolor{red}{f'(c_{-}>0)},\textcolor{red}{f'(c_{+}>0)}$}
+
+\begin{tabular}{c|ccc}
+  &   & $c$ &   \\
+  \hline
+$f$ & $-$ & $0$ & $+$ \\
+$f'g$ & $-$ & $0$ & $-$ \\
+\end{tabular}
+\vspace{0.3cm}
+\caption*{$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-}<0)},\textcolor{red}{f'(c_{+}>0)}$}
+\end{table}
+
+We note that as $x$ passes through $c$, $var(\left(f_{0},f_{1}),x\right)$ increases by 1 if $g(c)>0$, and decreases by 1 if $g(c)<0$.
+
+
+\end{proof}
 
 %Sturm's theorem
 \theorem[Sturm]
