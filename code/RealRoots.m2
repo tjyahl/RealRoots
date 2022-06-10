@@ -892,7 +892,7 @@ document {
 	    RingElement => "g" => {"a real polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal"}
         },
-    	Outputs => {ZZ => {"Computes the number of real points of Spec ", TT "(ring g)"," where ", TT "g"," is positive minus the number of real points of Spec ",TT "R"," where ",TT "g"," is negative"}},
+    	Outputs => {ZZ => {"Computes the number of real points of Spec ", TT "(ring g)"," where ", TT "g"," is positive minus the number of real points of Spec ",TT "(ring g)"," where ",TT "g"," is negative"}},
 	EXAMPLE lines ///
 	    	  R = QQ[x,y]
 		  I = ideal {y^2-x^2-1,x-y^2+4*y-2}
