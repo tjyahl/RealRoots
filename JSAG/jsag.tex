@@ -12,6 +12,9 @@
 \usepackage{graphicx}
 \usepackage{tikz,verbatim}
 \usepackage{caption}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{subcaption}
 %\pdfoutput=1
 
 \usepackage{framed}
@@ -44,12 +47,12 @@
 \author[K.~Maluccio]{Kelly Maluccio} 
 \address{K.~Maluccio\\ 
          Department of Mathematics\\ 
-         Texas A\&M University\\ 
-         College Station\\ 
-         Texas \ 77843\\ 
+         Austin Community College\\ 
+         Austin\\ 
+         Texas \ 78752\\ 
          USA} 
-\email{kmaluccio@tamu.edu}
-\urladdr{https://www.math.tamu.edu/~kmaluccio/}
+\email{kmaluccio@gmail.com}
+\urladdr{https://github.com/kmaluccio}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \author[F.~Sottile]{Frank Sottile} 
 \address{F.~Sottile\\ 
@@ -58,8 +61,8 @@
          College Station\\ 
          Texas \ 77843\\ 
          USA} 
-\email{sottile@math.tamu.edu} 
-\urladdr{http://www.math.tamu.edu/~sottile} 
+\email{sottile@tamu.edu} 
+\urladdr{https://www.math.tamu.edu/~sottile} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \author[T.~Yahl]{Thomas Yahl} 
 \address{T.~Yahl\\ 
@@ -68,8 +71,8 @@
          College Station\\ 
          Texas \ 77843\\ 
          USA} 
-\email{thomasjyahl@math.tamu.edu} 
-\urladdr{http://www.math.tamu.edu/~thomasjyahl} 
+\email{thomasjyahl@tamu.edu} 
+\urladdr{https://tjyahl.github.io/} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \thanks{grants?}
 
@@ -100,7 +103,10 @@
 %%Abstract%%
 %%%%%%%%%%%%
 \begin{abstract}
-The Macualay2 package \texttt{RealRoots} contains methods for studying real roots of univariate polynomials and real solutions of multivariate systems as well as @@@@@. It updates and expands the capabilities of the package ``RealRoots'' given by @@@@@. For univariate polynomials, counting roots in intervals, isolating roots symbolically, and stability. For multivariate systems there are general methods of elimination for zero dimensional systems or univariate eliminant of zero-dimensional systems, this includes the rational univariate representative. For real multivariate, we have the trace form. 
+
+The \textit{Macaulay2} package \texttt{RealRoots} contains methods to study real roots of univariate polynomials and real solutions of multivariate systems. It updates and expands the capabilities of the package under the same name, written by Frank Sottile and Dan Grayson. For univariate polynomials, the package provides tools to count and isolate their real roots, as well as to determine when a polynomial is \textit{Hurwitz stable}. For multivariate systems, it provides general methods of elimination to solve zero-dimensional systems, which include the \textit{rational univariate representation} of their roots. In particular, for real multivariate systems, \texttt{RealRoots} contains the \textit{trace form} method, which counts the number of their real solutions without multiplicity. We provide the algebraic geometry background behind the methods, emphasizing examples and computations.
+
+%The Macualay2 package \texttt{RealRoots} contains methods for studying real roots of univariate polynomials and real solutions of multivariate systems as well as @@@@@. It updates and expands the capabilities of the package ``RealRoots'' given by @@@@@. For univariate polynomials, counting roots in intervals, isolating roots symbolically, and stability. For multivariate systems there are general methods of elimination for zero dimensional systems or univariate eliminant of zero-dimensional systems, this includes the rational univariate representative. For real multivariate, we have the trace form. 
 \end{abstract}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -116,29 +122,29 @@ Since the 19th century, understanding the number of real roots of a polynomial s
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Real Univariate Systems}
+\section{Real Univariate Polynomials}
 
-Our story begins with a real univariate polynomial $f$ of the form $$c_{0}x^{a_{0}} + c_{1}x^{a_{1}} + \cdots + c_{m}x^{a_{m}},$$ where $m\in \NN\cup\{0\}, i\in\{0,1,\dots, m\}$, $c_{i} \neq 0$ are real numbers, and $a_{0} < a_{1} < \cdots < a_{m}$ are integers. Descartes' Rule of Signs [\textbf{reference here}] gives us an upper bound for the number of positive real roots of $f$.
+Our story begins with a real univariate polynomial $f$ of the form $$c_{0}x^{a_{0}} + c_{1}x^{a_{1}} + \cdots + c_{m}x^{a_{m}},$$ where $m\in \NN\cup\{0\}, i=0,1,\dots, m$, $c_{i} \neq 0$ are real numbers, and $a_{0} < a_{1} < \cdots < a_{m}$ are integers. Descartes' Rule of Signs \cite{MR2830310} gives us an upper bound for the number of positive real roots of $f$.
 
 %Descartes section
-\begin{theorem}[Descartes' Rule of Signs]Let $r$ be the number of positive real roots of $f$, counting multiplicity. Then $r\leq \#\{i:1\leq i\leq m, c_{i-1}c_{i}<0\}.$ Moreover, the difference bewteen the terms above is even.\end{theorem}
+\begin{theorem}[Descartes' Rule of Signs]Let $r$ be the number of positive real roots of $f$, counting multiplicity. Then $r\leq \#\{i\mid1\leq i\leq m, c_{i-1}c_{i}<0\}.$ Moreover, the difference bewteen the terms above is even.\end{theorem}
 
-By including the case when we replace $x$ by $-x$ in $f$, we can generalize Descartes' theorem to provide an upper bound for the total number of real roots of $f$.
+%By including the case when we replace $x$ by $-x$ in $f$, we can generalize Descartes' theorem to provide an upper bound for the total number of real roots of $f$.
 
-\begin{corollary}[Descartes' Bound]The real polynomial $f$ has at most $m$ positive roots, $2m$ nonzero roots, and $2m + 1$ real roots.\end{corollary}
+%\begin{corollary}[Descartes' Bound]The real polynomial $f$ has at most $m$ positive roots, $2m$ nonzero roots, and $2m + 1$ real roots.\end{corollary}
 
-Although Descartes' bound is sharp and realized by $x(x^{2}-1)(x^{2}-2)\cdots(x^{2}-m)$, in many cases, such bound is too large to the actual number of real roots of a polynomial, for example, $x^{3} - x^{2} + x - 1$ only has one real root, but its Descartes' bound is 9. 
+%In many cases, such bound is too large to the actual number of positive real roots of a polynomial, for example, $x^{3} - x^{2} + x - 1$ only has one positive real root, but it was 3 sign changes. 
 
-The \textit{\textcolor{red}{variation}} of a finite sequence of numbers $c$, denoted by $\textcolor{red}{var(c)}$, is the number of times its consecutive elements have opposite sign, after removing any zero terms. Now, if $F=(f_{0},f_{1},\dots,f_{k})$ is a finite sequence of real univariate polynomials, and $a\in \RR$, we define \textcolor{red}{$var(F,a)$} to be the variation of the sequence $(f_{0}(a),f_{1}(a),\dots,f_{k}(a))$. If $a=\pm\infty$, then \textcolor{red}{$var(F,\infty)$} is the variation of the leading coefficients of the polynomials $f_{i}(t)$, and \textcolor{red}{$var(F,-\infty)$} is the variation of the leading coefficients of the $f_{i}(-t)$.
+The \textit{\textcolor{Maroon}{variation}} of a finite sequence of numbers $c$, denoted by $\textcolor{Maroon}{var(c)}$, is the number of times its consecutive elements have opposite sign, after removing any zero terms. If $F=(f_{0},f_{1},\dots,f_{k})$ is a finite sequence of real univariate polynomials, and $a\in \RR$, we define \textcolor{Maroon}{$var(F,a)$} to be the variation of the sequence $(f_{0}(a),f_{1}(a),\dots,f_{k}(a))$. If $a=\pm\infty$, then \textcolor{Maroon}{$var(F,\infty)$} is the variation of the leading coefficients of the polynomials $f_{i}(t)$, and \textcolor{Maroon}{$var(F,-\infty)$} is the variation of the leading coefficients of the $f_{i}(-t)$.
 
 
-If $g$ is a univariate polynomial of degree $l$, we denote by \textcolor{red}{$\delta g$} its sequence of derivatives: $$\delta g = \left(g(x),g'(x),g''(x),\dots,g^{(l)}(x)\right).$$ Let $a,b\in \RR\cup\{\pm \infty\}$ such that $a<b$, and denote by $\textcolor{red}{r(f,a,b)}$ the number of real roots of $f$ in the interval $(a,b]$. Budan and Fourier [\textbf{reference here}] developed a generalization of Descartes' Theorem.
+If $g$ is a univariate polynomial of degree $l$, we denote by \textcolor{Maroon}{$\delta g$} its sequence of derivatives: $$\delta g = \left(g(x),g'(x),g''(x),\dots,g^{(l)}(x)\right).$$ Let $a,b\in \RR\cup\{\pm \infty\}$ such that $a<b$, and denote by $\textcolor{Maroon}{r(f,a,b)}$ the number of real roots of $f$ in the interval $(a,b]$. Budan and Fourier \cite{MR2830310} developed a generalization of Descartes' Theorem.
 
 %Budan Fourier theorem (reference, vague statement)
 \begin{theorem}[Budan-Fourier] The real polynomial $f$ satisfies $$var(\delta f,a) - var(\delta f,b) \geq r(f,a,b),$$ and the difference is even.\end{theorem}
 %\begin{align*}\text{var}(\delta f,a) - \text{var}(\delta f,b) \geq r(f,a,b),\end{align*}
 
-The \textcolor{red}{Sylvester sequence} of two real univariate polynomials $f$ and $g$, denoted by \textcolor{red}{$Syl(f,g)$}, is the sequence $\left(f_{0},f_{1},\dots,f_{k}\right)$, where $f_{0} := f, f_{1} := g, f_{k} := \gcd(f,g)$, and $$-f_{i+1} = \text{remainder}(f_{i-1},f_{i}).$$
+The \textcolor{Maroon}{Sylvester sequence} of two real univariate polynomials $f$ and $g$, denoted by \textcolor{Maroon}{$Syl(f,g)$}, is the sequence $\left(f_{0},f_{1},\dots,f_{k}\right)$, where $f_{0} := f, f_{1} := g, f_{k} := \gcd(f,g)$, and $$-f_{i+1} = \text{remainder}(f_{i-1},f_{i}).$$
 
 %Sylvester's theorem (reference ?, nice picture, proof outline)
 \theorem[Sylvester]
@@ -146,25 +152,54 @@ The difference between the number of roots of $f$ in $(a,b\hspace{.05cm}]$ where
 
 \begin{proof} By definition, we note that $Syl(f,f'g) = (f_{0},f_{1},\dots, f_{k})$ is the same as the sequence given by the Euclidean algorithm (up to signs). Next, for $i\in\{0,\dots,k\}$ set $g_{i} := f_{i}/\gcd(f,f'g)$. By construction, $g_{i}$ and $g_{i+1}$ are relatively prime. If $c$ is not a root of $f$, then $$var\left((f_{0},f_{1}),c\right) = var\left((g_{0},g_{1}),c\right),$$ because the denominators of $g_{0}$ and $g_{1}$ are the same. Similarly, for $i\in\{1,\dots,k\}$, we have $var\left((f_{i-1},f_{i},f_{i+1}),c\right) = var\left((g_{i-1},g_{i},g_{i+1}),c\right)$. Now, consider the case when $x$ passes through a root $c$ of $f$:
 
+%first row
 \begin{table}[h]
+\begin{subtable}{.3\linewidth}\centering{
 \begin{tabular}{c|ccc}
   &   & $c$ &   \\
   \hline
 $f$ & $-$ & $0$ & $+$ \\
-$f'g$ & $+$ & $0$ & $+$ \\
+$f'g$ & $+$ &  & $+$ \\
 \end{tabular}
 \vspace{0.3cm}
-\caption*{$\textcolor{red}{g(c)>0},\textcolor{red}{f'(c_{-}>0)},\textcolor{red}{f'(c_{+}>0)}$}
-
+\caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{red}{f'(c_{-})>0},\textcolor{red}{f'(c_{+})>0}$}}
+\end{subtable}%
+\begin{subtable}{.3\linewidth}\centering{
 \begin{tabular}{c|ccc}
   &   & $c$ &   \\
   \hline
 $f$ & $-$ & $0$ & $+$ \\
-$f'g$ & $-$ & $0$ & $-$ \\
+$f'g$ & $-$ &  & $-$ \\
 \end{tabular}
 \vspace{0.3cm}
-\caption*{$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-}<0)},\textcolor{red}{f'(c_{+}>0)}$}
+\caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-})<0},\textcolor{red}{f'(c_{+})>0}$}}
+\end{subtable}
 \end{table}
+
+%second row
+\begin{table}[h]
+\begin{subtable}{.3\linewidth}\centering{
+\begin{tabular}{c|ccc}
+  &   & $c$ &   \\
+  \hline
+$f$ & $-$ & $0$ & $+$ \\
+$f'g$ & $+$ &  & $+$ \\
+\end{tabular}
+\vspace{0.3cm}
+\caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-})<0},\textcolor{blue}{f'(c_{+})<0}$}}
+\end{subtable}%
+\begin{subtable}{.3\linewidth}\centering{
+\begin{tabular}{c|ccc}
+  &   & $c$ &   \\
+  \hline
+$f$ & $-$ & $0$ & $+$ \\
+$f'g$ & $-$ &  & $-$ \\
+\end{tabular}
+\vspace{0.3cm}
+\caption*{\tiny$\textcolor{blue}{g(c)<0},\textcolor{blue}{f'(c_{-})<0},\textcolor{blue}{f'(c_{+})<0}$}}
+\end{subtable}
+\end{table}
+
 
 We note that as $x$ passes through $c$, $var(\left(f_{0},f_{1}),x\right)$ increases by 1 if $g(c)>0$, and decreases by 1 if $g(c)<0$.
 
