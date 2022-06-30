@@ -32,7 +32,7 @@
 \newtheorem{remark}[theorem]{Remark}
 
 
-\title{real roots}
+\title{using Macaulay2 in real algebraic geometry}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \author[J.~Lopez Garcia]{Jordy Lopez Garcia} 
 \address{J.~Lopez Garcia\\ 
@@ -104,7 +104,8 @@
 %%%%%%%%%%%%
 \begin{abstract}
 
-The \textit{Macaulay2} package \texttt{RealRoots} contains methods to study real roots of univariate polynomials and real solutions of multivariate systems. It updates and expands the capabilities of the package under the same name, written by Frank Sottile and Dan Grayson. For univariate polynomials, the package provides tools to count and isolate their real roots, as well as to determine when a polynomial is \textit{Hurwitz stable}. For multivariate systems, it provides general methods of elimination to solve zero-dimensional systems, which include the \textit{rational univariate representation} of their roots. In particular, for real multivariate systems, \texttt{RealRoots} contains the \textit{trace form} method, which counts the number of their real solutions without multiplicity. We provide the algebraic geometry background behind the methods, emphasizing examples and computations.
+%explain what is a method?
+The \textit{Macaulay2} package \texttt{RealRoots} contains methods to study real roots of univariate polynomials and real solutions of multivariate systems. For univariate polynomials, the package provides tools to count and isolate their real roots, as well as to determine when a polynomial is \textit{Hurwitz stable}. For multivariate systems, it provides general methods of elimination to solve zero-dimensional systems, which include the \textit{rational univariate representation} of their roots. In particular, for real multivariate systems, it contains the \textit{trace form} method, which counts the number of real solutions without multiplicity. We provide the algebraic geometry background behind the methods, illustrating them with examples and computations.
 
 %The Macualay2 package \texttt{RealRoots} contains methods for studying real roots of univariate polynomials and real solutions of multivariate systems as well as @@@@@. It updates and expands the capabilities of the package ``RealRoots'' given by @@@@@. For univariate polynomials, counting roots in intervals, isolating roots symbolically, and stability. For multivariate systems there are general methods of elimination for zero dimensional systems or univariate eliminant of zero-dimensional systems, this includes the rational univariate representative. For real multivariate, we have the trace form. 
 \end{abstract}
@@ -118,8 +119,14 @@ The \textit{Macaulay2} package \texttt{RealRoots} contains methods to study real
 %%%%%%%%%%%%%%%%
 \section*{Introduction}
 
-Since the 19th century, understanding the number of real roots of a polynomial system is ubiquitious in the study of real algebraic geometry. We developed a package in the software system \textit{Macaulay2} called \texttt{RealRoots} that implements algorithms to symbollically explore real roots of polynomial systems.
+%historical background/motivation
+%Since the 19th century, understanding the number of real roots of a polynomial system is ubiquitious in the study of real algebraic geometry.implemented algorithms in \textit{Macaulay2} to symbollically explore real solutions of polynomial systems. 
 
+%discussion of prior results, contribution and why it's important/interesting/novel
+
+Grayson and Sottile \cite{MR1949550} developed the \textit{Macaulay2} package \texttt{RealRoots} to investigate enumerative problems in real algebraic geometry. We update and expand their package to include a variety of methods to count real solutions of polynomial systems. 
+
+The paper is divided into three sections. Section 1 is devoted to real univariate polynomials and their root-counting methods. Section 2 covers elimination methods to count real solutions of multivariate systems. Section 3 focuses on methods to count real solutions of real multivariate systems.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Real Univariate Polynomials}
