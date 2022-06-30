@@ -154,22 +154,42 @@ If $g$ is a univariate polynomial of degree $l$, we denote by \textcolor{Maroon}
 
 %We obtain Descartes' Rule of Signs using the variations $var(\delta f,0) = var\left((c_{0},c_{1},\dots,c_{m})\right)$ and $var(\delta f,\infty) = 0$. 
 
-The previous theorems gave a bound to the number of real roots of $f$. We now describe methods to find the \textit{actual} number of its real roots. The \textcolor{Maroon}{Sylvester sequence} of two real univariate polynomials $f$ and $g$, denoted by \textcolor{Maroon}{$Syl(f,g)$}, is the sequence $\left(f_{0},f_{1},\dots,f_{k}\right)$, where $f_{0} := f, f_{1} := g, f_{k} := \gcd(f,g)$, and $$-f_{i+1} = \text{remainder}(f_{i-1},f_{i}).$$
+The previous theorems bound the number of real roots of $f$. We now describe methods to find the \textit{actual} number of its real roots. The \textcolor{Maroon}{Sylvester sequence} of two real univariate polynomials $f$ and $g$, denoted by \textcolor{Maroon}{$Syl(f,g)$}, is the sequence $\left(f_{0},f_{1},\dots,f_{k}\right)$, where $f_{0} := f, f_{1} := g, f_{k} := \gcd(f,g)$, and $$-f_{i+1} = \text{remainder}(f_{i-1},f_{i}).$$
 
 %Sylvester's theorem (reference ?, nice picture, proof outline)
 \theorem[Sylvester]
 The difference between the number of roots of $f$ in $(a,b\hspace{.05cm}]$ where $g$ is positive and the number of roots of $f$ in $[a,b)$ where $g$ is negative is counted by the difference in variation $$\text{var}(\text{Syl}(f,f'g),a) - \text{var}(\text{Syl}(f,f'g),b).$$
 
-\begin{proof} 
+\begin{proof} The proof when the roots of $f$ are in $(a,b)$ is found in \cite{MR1659509}. It is left to consider when $a$ or $b$ are roots of $f$. Let $c_{-}$ denote a number immediately to the left of $c$ (avoiding any zeros), and $c_{+}$ a number immediately to its right. We obtain the following four cases.
 
-
-By definition, we note that $Syl(f,f'g) = (f_{0},f_{1},\dots, f_{k})$ is the same as the sequence given by the Euclidean algorithm (up to signs). Next, for $i\in\{0,\dots,k\}$ set $g_{i} := f_{i}/\gcd(f,f'g)$. By construction, $g_{i}$ and $g_{i+1}$ are relatively prime. If $c$ is not a root of $f$, then $$var\left((f_{0},f_{1}),c\right) = var\left((g_{0},g_{1}),c\right),$$ because the denominators of $g_{0}$ and $g_{1}$ are the same. Similarly, for $i\in\{1,\dots,k\}$, we have $var\left((f_{i-1},f_{i},f_{i+1}),c\right) = var\left((g_{i-1},g_{i},g_{i+1}),c\right)$. Now, consider the case when $x$ passes through a root $c$ of $f$:
+% \begin{table}[h]
+% \begin{subtable}{.3\linewidth}\centering{
+% \begin{tabular}{c|ccc}
+%   &   & $c$ &   \\
+%   \hline
+% $f$ & $-$ & $0$ & $+$ \\
+% $f'g$ & $-$ &  & $-$ \\
+% \end{tabular}
+% \vspace{0.3cm}
+% \caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-})<0},\textcolor{red}{f'(c_{+})>0}$}}
+% \end{subtable}%
+% \begin{subtable}{.3\linewidth}\centering{
+% \begin{tabular}{c|ccc}
+%   &   & $c$ &   \\
+%   \hline
+% $f$ & $-$ & $0$ & $+$ \\
+% $f'g$ & $-$ &  & $-$ \\
+% \end{tabular}
+% \vspace{0.3cm}
+% \caption*{\tiny$\textcolor{blue}{g(c)<0},\textcolor{blue}{f'(c_{-})<0},\textcolor{blue}{f'(c_{+})<0}$}}
+% \end{subtable}
+% \end{table}
 
 %first row
 \begin{table}[h]
 \begin{subtable}{.3\linewidth}\centering{
 \begin{tabular}{c|ccc}
-  &   & $c$ &   \\
+  &   & $c=b$ &   \\
   \hline
 $f$ & $-$ & $0$ & $+$ \\
 $f'g$ & $+$ &  & $+$ \\
@@ -179,7 +199,7 @@ $f'g$ & $+$ &  & $+$ \\
 \end{subtable}%
 \begin{subtable}{.3\linewidth}\centering{
 \begin{tabular}{c|ccc}
-  &   & $c$ &   \\
+  &   & $c=a$ &   \\
   \hline
 $f$ & $-$ & $0$ & $+$ \\
 $f'g$ & $-$ &  & $-$ \\
@@ -193,7 +213,7 @@ $f'g$ & $-$ &  & $-$ \\
 \begin{table}[h]
 \begin{subtable}{.3\linewidth}\centering{
 \begin{tabular}{c|ccc}
-  &   & $c$ &   \\
+  &   & $c=b$ &   \\
   \hline
 $f$ & $-$ & $0$ & $+$ \\
 $f'g$ & $+$ &  & $+$ \\
@@ -203,7 +223,7 @@ $f'g$ & $+$ &  & $+$ \\
 \end{subtable}%
 \begin{subtable}{.3\linewidth}\centering{
 \begin{tabular}{c|ccc}
-  &   & $c$ &   \\
+  &   & $c=a$ &   \\
   \hline
 $f$ & $-$ & $0$ & $+$ \\
 $f'g$ & $-$ &  & $-$ \\
@@ -213,11 +233,14 @@ $f'g$ & $-$ &  & $-$ \\
 \end{subtable}
 \end{table}
 
+As $x$ reaches $b$, $var((f_{0},f_{1}),x)$ decreases by $1$, and as $x$ leaves $a$, $var((f_{0},f_{1}),x)$ increases by $1$. If $c$ is a root of $g_{i}$, then $c$ is not a root of $g_{i-1}$ nor $g_{i+1}$. Hence $g_{i-1}(c)g_{i+1}(c)<0$ and therefore the variation of $(f_{i-1}(x),f_{i}(x),f_{i+1}(x))$ remains unchanged, for $i=1,\dots,k$.
 
-We note that as $x$ passes through $c$, $var(\left(f_{0},f_{1}),x\right)$ increases by 1 if $g(c)>0$, and decreases by 1 if $g(c)<0$.
+%As $x$ passes through $c$, $var(\left(f_{0},f_{1}),x\right)$ increases by 1 if $g(c)>0$, and decreases by 1 if $g(c)<0$.
 
 
 \end{proof}
+
+%By definition, we note that $Syl(f,f'g) = (f_{0},f_{1},\dots, f_{k})$ is the same as the sequence given by the Euclidean algorithm (up to signs). Next, for $i\in\{0,\dots,k\}$ set $g_{i} := f_{i}/\gcd(f,f'g)$. By construction, $g_{i}$ and $g_{i+1}$ are relatively prime. If $c$ is not a root of $f$, then $$var\left((f_{0},f_{1}),c\right) = var\left((g_{0},g_{1}),c\right),$$ because the denominators of $g_{0}$ and $g_{1}$ are the same. Similarly, for $i\in\{1,\dots,k\}$, we have $var\left((f_{i-1},f_{i},f_{i+1}),c\right) = var\left((g_{i-1},g_{i},g_{i+1}),c\right)$. 
 
 %Sturm's theorem
 \theorem[Sturm]
