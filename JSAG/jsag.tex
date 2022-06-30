@@ -160,7 +160,10 @@ The previous theorems gave a bound to the number of real roots of $f$. We now de
 \theorem[Sylvester]
 The difference between the number of roots of $f$ in $(a,b\hspace{.05cm}]$ where $g$ is positive and the number of roots of $f$ in $[a,b)$ where $g$ is negative is counted by the difference in variation $$\text{var}(\text{Syl}(f,f'g),a) - \text{var}(\text{Syl}(f,f'g),b).$$
 
-\begin{proof} By definition, we note that $Syl(f,f'g) = (f_{0},f_{1},\dots, f_{k})$ is the same as the sequence given by the Euclidean algorithm (up to signs). Next, for $i\in\{0,\dots,k\}$ set $g_{i} := f_{i}/\gcd(f,f'g)$. By construction, $g_{i}$ and $g_{i+1}$ are relatively prime. If $c$ is not a root of $f$, then $$var\left((f_{0},f_{1}),c\right) = var\left((g_{0},g_{1}),c\right),$$ because the denominators of $g_{0}$ and $g_{1}$ are the same. Similarly, for $i\in\{1,\dots,k\}$, we have $var\left((f_{i-1},f_{i},f_{i+1}),c\right) = var\left((g_{i-1},g_{i},g_{i+1}),c\right)$. Now, consider the case when $x$ passes through a root $c$ of $f$:
+\begin{proof} 
+
+
+By definition, we note that $Syl(f,f'g) = (f_{0},f_{1},\dots, f_{k})$ is the same as the sequence given by the Euclidean algorithm (up to signs). Next, for $i\in\{0,\dots,k\}$ set $g_{i} := f_{i}/\gcd(f,f'g)$. By construction, $g_{i}$ and $g_{i+1}$ are relatively prime. If $c$ is not a root of $f$, then $$var\left((f_{0},f_{1}),c\right) = var\left((g_{0},g_{1}),c\right),$$ because the denominators of $g_{0}$ and $g_{1}$ are the same. Similarly, for $i\in\{1,\dots,k\}$, we have $var\left((f_{i-1},f_{i},f_{i+1}),c\right) = var\left((g_{i-1},g_{i},g_{i+1}),c\right)$. Now, consider the case when $x$ passes through a root $c$ of $f$:
 
 %first row
 \begin{table}[h]
