@@ -32,7 +32,7 @@
 \newtheorem{remark}[theorem]{Remark}
 
 
-\title{using Macaulay2 in real algebraic geometry}
+\title{real solutions of polynomial systems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \author[J.~Lopez Garcia]{Jordy Lopez Garcia} 
 \address{J.~Lopez Garcia\\ 
@@ -74,7 +74,10 @@
 \email{thomasjyahl@tamu.edu} 
 \urladdr{https://tjyahl.github.io/} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\thanks{grants?}
+\thanks{grants?\\
+\textit{MSC2020}:\\ 
+\textit{Keywords}:\\
+\texttt{RealRoots} version 0.1}
 
 %Macros
 \newcommand{\CC}{\mathbb{C}}
@@ -104,10 +107,9 @@
 %%%%%%%%%%%%
 \begin{abstract}
 
-%explain what is a method?
-The \textit{Macaulay2} package \texttt{RealRoots} contains methods to study real roots of univariate polynomials and real solutions of multivariate systems. For univariate polynomials, the package provides tools to count and isolate their real roots, as well as to determine when a polynomial is \textit{Hurwitz stable}. For multivariate systems, it provides general methods of elimination to solve zero-dimensional systems, which include the \textit{rational univariate representation} of their roots. In particular, for real multivariate systems, it contains the \textit{trace form} method, which counts the number of real solutions without multiplicity. We provide the algebraic geometry background behind the methods, illustrating them with examples and computations.
+The \textit{Macaulay2} package \texttt{RealRoots} contains methods to symbolically explore real roots of univariate polynomials and real solutions of multivariate systems. It updates and expands the package under the same name, developed by Frank Sottile and Dan Grayson. For univariate polynomials, the package provides tools to count and isolate real roots, as well as to determine when a polynomial is \textit{Hurwitz stable}. For multivariate polynomial systems, it provides general methods of elimination to solve zero-dimensional systems, which include the \textit{rational univariate representation} of a zero-dimensional ideal. In particular, for zero-dimensional real multivariate systems, it contains the \textit{trace form} method, which counts the number of real solutions without multiplicity. We provide the algebraic geometry background behind the methods, illustrating them with examples and computations. Among the theorems implemented, we prove a general version of \textit{Sylvester's Theorem}.
 
-%The Macualay2 package \texttt{RealRoots} contains methods for studying real roots of univariate polynomials and real solutions of multivariate systems as well as @@@@@. It updates and expands the capabilities of the package ``RealRoots'' given by @@@@@. For univariate polynomials, counting roots in intervals, isolating roots symbolically, and stability. For multivariate systems there are general methods of elimination for zero dimensional systems or univariate eliminant of zero-dimensional systems, this includes the rational univariate representative. For real multivariate, we have the trace form. 
+%ORIGINAL:The Macualay2 package \texttt{RealRoots} contains methods for studying real roots of univariate polynomials and real solutions of multivariate systems as well as @@@@@. It updates and expands the capabilities of the package ``RealRoots'' given by @@@@@. For univariate polynomials, counting roots in intervals, isolating roots symbolically, and stability. For multivariate systems there are general methods of elimination for zero dimensional systems or univariate eliminant of zero-dimensional systems, this includes the rational univariate representative. For real multivariate, we have the trace form. 
 \end{abstract}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -119,14 +121,11 @@ The \textit{Macaulay2} package \texttt{RealRoots} contains methods to study real
 %%%%%%%%%%%%%%%%
 \section*{Introduction}
 
-%historical background/motivation
-%Since the 19th century, understanding the number of real roots of a polynomial system is ubiquitious in the study of real algebraic geometry.implemented algorithms in \textit{Macaulay2} to symbollically explore real solutions of polynomial systems. 
+%historical background/motivation, discussion of prior results, contribution and why it's important/interesting/novel
 
-%discussion of prior results, contribution and why it's important/interesting/novel
+Since the 19th century, understanding the number of real solutions of polynomial systems is ubiquitious in the study of real algebraic geometry. Grayson and Sottile \cite{MR1949550} developed the \textit{Macaulay2} package \texttt{RealRoots} to study enumerative aspects of real algebraic geometry. We build upon their work and implement tools to symbolically explore real solutions of polynomial systems.
 
-Grayson and Sottile \cite{MR1949550} developed the \textit{Macaulay2} package \texttt{RealRoots} to investigate enumerative problems in real algebraic geometry. We update and expand their package to include a variety of methods to count real solutions of polynomial systems. 
-
-The paper is divided into three sections. Section 1 is devoted to real univariate polynomials and their root-counting methods. Section 2 covers elimination methods to count real solutions of multivariate systems. Section 3 focuses on methods to count real solutions of real multivariate systems.
+The paper is divided into three sections. Section 1 is devoted to algorithms on  univariate polynomials. Among its methods are \texttt{BudanFourierBound} that gives a bound to the number of real roots of a univariate polynomial in an interval $(a,b]$, and \texttt{realRootIsolation} which isolates its real roots. The original package contained methods to count real roots of univariate polynomials by means of \textit{Sturm's Theorem}. We implement a general version of Sturm's theorem, called \textit{Sylvester's Theorem}, and provide a proof that, to the best of our knowledge, did not previously exist in literature. We also define \textit{Hurwitz stability}, and present algorithms to determine the Hurwitz stability of a univariate polynomial. Section 2 covers elimination methods to solve zero-dimensional systems. In particular, we expand the \texttt{eliminant} method by dividing it into the methods \texttt{univariateEliminant} and \texttt{minimalPolynomial}. We also implement algorithms to compute the \textit{rational univariate representation} of a zero-dimensional ideal \cite{cite-key}. Section 3 focuses on methods to count real solutions of zero-dimensional, real multivariate systems. In particular, we implement a multivariate version of Sylvester's theorem, called \texttt{traceSignature}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Real Univariate Polynomials}
@@ -160,7 +159,9 @@ The previous theorems bound the number of real roots of $f$. We now describe met
 \theorem[Sylvester]
 The difference between the number of roots of $f$ in $(a,b\hspace{.05cm}]$ where $g$ is positive and the number of roots of $f$ in $[a,b)$ where $g$ is negative is counted by the difference in variation $$\text{var}(\text{Syl}(f,f'g),a) - \text{var}(\text{Syl}(f,f'g),b).$$
 
-\begin{proof} The proof when the roots of $f$ are in $(a,b)$ is found in \cite{MR1659509}. It is left to consider when $a$ or $b$ are roots of $f$. Let $c_{-}$ denote a number immediately to the left of $c$ (avoiding any zeros), and $c_{+}$ a number immediately to its right. We obtain the following four cases.
+\begin{proof} The proof when all the roots of $f$ are in $(a,b)$ is found in \cite{MR1659509}, where in their notation, a \textit{Sturm sequence} refers to our definition of a \textit{Sylvester sequence}. It is left to consider when $a$ or $b$ are roots of $f$. Set $g_{i} := f_{i}/f_{k}$, for $i=0,\dots, k$. By construction, $var((f_{0}(x),f_{1}(x)))$ (resp. $var((f_{i-1}(x),f_{i}(x),f_{i+1}(x)))$) and $var((g_{0},g_{1}))$ (resp. $var((g_{i-1}(x),g_{i}(x),g_{i+1}(x)))$) are the same when $x$ is not a root of $f$. The roots of $g_{0} = f/f_{k}$ is the number of roots of $f$ which are not roots of $g$. Moreover, $g_{i}$ and $g_{i+1}$ are relatively prime.\\
+
+\noindent Let $c$ be a root of $g_{i}$, and denote by $c_{-}$ a number immediately to the left of $c$ (avoiding any zeros), and $c_{+}$ a number immediately to its right. If $c$ is a root of $g_{0}$, then $c$ is not a root of $g_{1}$. We obtain the following cases.
 
 % \begin{table}[h]
 % \begin{subtable}{.3\linewidth}\centering{
@@ -186,70 +187,68 @@ The difference between the number of roots of $f$ in $(a,b\hspace{.05cm}]$ where
 % \end{table}
 
 %first row
-\begin{table}[h]
-\begin{subtable}{.3\linewidth}\centering{
-\begin{tabular}{c|ccc}
-  &   & $c=b$ &   \\
-  \hline
-$f$ & $-$ & $0$ & $+$ \\
-$f'g$ & $+$ &  & $+$ \\
-\end{tabular}
-\vspace{0.3cm}
-\caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{red}{f'(c_{-})>0},\textcolor{red}{f'(c_{+})>0}$}}
-\end{subtable}%
+\begin{table}[H]
 \begin{subtable}{.3\linewidth}\centering{
 \begin{tabular}{c|ccc}
   &   & $c=a$ &   \\
   \hline
-$f$ & $-$ & $0$ & $+$ \\
-$f'g$ & $-$ &  & $-$ \\
+$f$ &  & $0$ & $+$ \\
+$f'g$ &  &  & $-$ \\
 \end{tabular}
 \vspace{0.3cm}
 \caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-})<0},\textcolor{red}{f'(c_{+})>0}$}}
+\end{subtable}%
+\begin{subtable}{.3\linewidth}\centering{
+\begin{tabular}{c|ccc}
+  &   & $c=b$ &   \\
+  \hline
+$f$ & $-$ & $0$ &  \\
+$f'g$ & $+$ &  &  \\
+\end{tabular}
+\vspace{0.3cm}
+\caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{red}{f'(c_{-})>0},\textcolor{red}{f'(c_{+})>0}$}}
 \end{subtable}
 \end{table}
-
 %second row
 \begin{table}[h]
 \begin{subtable}{.3\linewidth}\centering{
 \begin{tabular}{c|ccc}
-  &   & $c=b$ &   \\
-  \hline
-$f$ & $-$ & $0$ & $+$ \\
-$f'g$ & $+$ &  & $+$ \\
-\end{tabular}
-\vspace{0.3cm}
-\caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-})<0},\textcolor{blue}{f'(c_{+})<0}$}}
-\end{subtable}%
-\begin{subtable}{.3\linewidth}\centering{
-\begin{tabular}{c|ccc}
   &   & $c=a$ &   \\
   \hline
-$f$ & $-$ & $0$ & $+$ \\
-$f'g$ & $-$ &  & $-$ \\
+$f$ &  & $0$ & $+$ \\
+$f'g$ &  &  & $-$ \\
 \end{tabular}
 \vspace{0.3cm}
 \caption*{\tiny$\textcolor{blue}{g(c)<0},\textcolor{blue}{f'(c_{-})<0},\textcolor{blue}{f'(c_{+})<0}$}}
+\end{subtable}%
+\begin{subtable}{.3\linewidth}\centering{
+\begin{tabular}{c|ccc}
+  &   & $c=b$ &   \\
+  \hline
+$f$ & $-$ & $0$ &  \\
+$f'g$ & $+$ &  &  \\
+\end{tabular}
+\vspace{0.3cm}
+\caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-})<0},\textcolor{blue}{f'(c_{+})<0}$}}
 \end{subtable}
 \end{table}
 
-As $x$ reaches $b$, $var((f_{0},f_{1}),x)$ decreases by $1$, and as $x$ leaves $a$, $var((f_{0},f_{1}),x)$ increases by $1$. If $c$ is a root of $g_{i}$, then $c$ is not a root of $g_{i-1}$ nor $g_{i+1}$. Hence $g_{i-1}(c)g_{i+1}(c)<0$ and therefore the variation of $(f_{i-1}(x),f_{i}(x),f_{i+1}(x))$ remains unchanged, for $i=1,\dots,k$.
+As $x$ leaves $a$, $var((f_{0},f_{1}),x)$ increases by $1$, and as $x$ reaches $b$, $var((f_{0},f_{1}),x)$ decreases by $1$. If $c$ is a root of $g_{i}$, for $i\geq 1$, then $c$ is not a root of $g_{i-1}$ nor $g_{i+1}$. Hence $g_{i-1}(c)g_{i+1}(c)<0$. Hence, the variation of $(f_{i-1}(x),f_{i}(x),f_{i+1}(x))$, which is the same as $var((g_{i-1}(x),g_{i}(x),g_{i+1}(x)))$, remains unchanged. \end{proof}
 
 %As $x$ passes through $c$, $var(\left(f_{0},f_{1}),x\right)$ increases by 1 if $g(c)>0$, and decreases by 1 if $g(c)<0$.
-
-
-\end{proof}
 
 %By definition, we note that $Syl(f,f'g) = (f_{0},f_{1},\dots, f_{k})$ is the same as the sequence given by the Euclidean algorithm (up to signs). Next, for $i\in\{0,\dots,k\}$ set $g_{i} := f_{i}/\gcd(f,f'g)$. By construction, $g_{i}$ and $g_{i+1}$ are relatively prime. If $c$ is not a root of $f$, then $$var\left((f_{0},f_{1}),c\right) = var\left((g_{0},g_{1}),c\right),$$ because the denominators of $g_{0}$ and $g_{1}$ are the same. Similarly, for $i\in\{1,\dots,k\}$, we have $var\left((f_{i-1},f_{i},f_{i+1}),c\right) = var\left((g_{i-1},g_{i},g_{i+1}),c\right)$. 
 
 %Sturm's theorem
-\theorem[Sturm]
-Let $f$ be a univariate polynomial and $a,b\in \mathbb{R}\cup\{\pm\infty\}$ with $a<b$ and $f(a),f(b)\neq 0$. Then the number of zeroes of $f$ in the interval $(a,b]$ is the difference 
+\corollary[Sturm's Theorem]
+Let $f$ be a univariate polynomial and $a,b\in \mathbb{R}\cup\{\pm\infty\}$ with $a<b$ and $f(a),f(b)\neq 0$. Then the number of zeros of $f$ in the interval $(a,b]$ is the difference 
 \begin{align*}
 \text{var}(F,a) - \text{var}(F,b),
 \end{align*}
 where $F$ is the Sturm sequence of $f$.
+
 %Real root isolation
+
 
 %Hurwitz stability
 \theorem
