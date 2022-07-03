@@ -6,7 +6,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[12pt]{amsart}
 \usepackage[margin = 1in]{geometry}
-\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{ulem}  % strike out text
 \usepackage{graphicx}
@@ -30,6 +30,19 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
 \newtheorem{remark}[theorem]{Remark}
+
+
+%Macros
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+
+\DeclareMathOperator{\var}{{\rm var}}
+\DeclareMathOperator{\Syl}{{\rm Syl}}
+
+\newcommand{\defcolor}[1]{{\color{Maroon}#1}}
+\newcommand{\demph}[1]{\defcolor{{\sl #1}}}
 
 
 \title{real solutions of polynomial systems}
@@ -73,97 +86,157 @@
          USA} 
 \email{thomasjyahl@tamu.edu} 
 \urladdr{https://tjyahl.github.io/} 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\thanks{grants?\\
-\textit{MSC2020}:\\ 
-\textit{Keywords}:\\
-\texttt{RealRoots} version 0.1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thanks{Research supported in part by Simons Collaboration Grant for Mathematicians 636314.}
+\subjclass[2010]{}
+%
+%
+%
+\keywords{Sturm Theorem, Budan-Fourier Theorem, trace form}
+\thanks{\texttt{RealRoots} version 0.1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Macros
-\newcommand{\CC}{\mathbb{C}}
-\newcommand{\RR}{\mathbb{R}}
-\newcommand{\ZZ}{\mathbb{Z}}
-\newcommand{\NN}{\mathbb{N}}
 
-\newcommand{\defcolor}[1]{{\color{RoyalBlue}#1}}
-\newcommand{\demph}[1]{\defcolor{{\sl #1}}}
-
-%%%%%%%%%%%%%
-%%Beginning%%
-%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Beginning
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-%Content
-%
-%MinPoly/RUR
-%Sturm
-%Isolation
-%Budan-Fourier
-%TraceForm
-%
 
-%%%%%%%%%%%%
-%%Abstract%%
-%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   Abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-
-The \textit{Macaulay2} package \texttt{RealRoots} contains methods to symbolically explore real roots of univariate polynomials and real solutions of multivariate systems. It updates and expands the package under the same name, developed by Frank Sottile and Dan Grayson. For univariate polynomials, the package provides tools to count and isolate real roots, as well as to determine when a polynomial is \textit{Hurwitz stable}. For multivariate polynomial systems, it provides general methods of elimination to solve zero-dimensional systems, which include the \textit{rational univariate representation} of a zero-dimensional ideal. In particular, for zero-dimensional real multivariate systems, it contains the \textit{trace form} method, which counts the number of real solutions without multiplicity. We provide the algebraic geometry background behind the methods, illustrating them with examples and computations. Among the theorems implemented, we prove a general version of \textit{Sylvester's Theorem}.
-
-%ORIGINAL:The Macualay2 package \texttt{RealRoots} contains methods for studying real roots of univariate polynomials and real solutions of multivariate systems as well as @@@@@. It updates and expands the capabilities of the package ``RealRoots'' given by @@@@@. For univariate polynomials, counting roots in intervals, isolating roots symbolically, and stability. For multivariate systems there are general methods of elimination for zero dimensional systems or univariate eliminant of zero-dimensional systems, this includes the rational univariate representative. For real multivariate, we have the trace form. 
+ The \textit{Macaulay2} package \texttt{RealRoots} provides symbolic methods to study real solutions to systems of polynomial equations.
+ It updates and expands an earlier package developed by Sottile and Grayson in 1999.
+ We provide some mathematical background and descriptions of the  \texttt{RealRoots} package, giving examples which illustrate some of its
+ implemented methods.
+ We also prove a general version of Sylvester's Theorem.
 \end{abstract}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \maketitle
 
 
-%%%%%%%%%%%%%%%%
-%%Introduction%%
-%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Introduction  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Introduction}
 
 %historical background/motivation, discussion of prior results, contribution and why it's important/interesting/novel
 
-Since the 19th century, understanding the number of real solutions of polynomial systems is ubiquitious in the study of real algebraic geometry. Grayson and Sottile \cite{MR1949550} developed the \textit{Macaulay2} package \texttt{RealRoots} to study enumerative aspects of real algebraic geometry. We build upon their work and implement tools to symbolically explore real solutions of polynomial systems.
+Understanding the number of real solutions to systems of polynomials is a fundamental for real algebraic geometry and applications of
+algebraic geometry.
+In 1999, Grayson and Sottile \cite{So_M2} developed the \textit{Macaulay2} package \texttt{realroots} for this purpose.
+That package had limited functionality and not all of its implemented methods remain compatible with modern releases of \textit{Macaulay2}.
 
-The paper is divided into three sections. Section 1 is devoted to algorithms on  univariate polynomials. Among its methods are \texttt{BudanFourierBound} that gives a bound to the number of real roots of a univariate polynomial in an interval $(a,b]$, and \texttt{realRootIsolation} which isolates its real roots. The original package contained methods to count real roots of univariate polynomials by means of \textit{Sturm's Theorem}. We implement a general version of Sturm's theorem, called \textit{Sylvester's Theorem}, and provide a proof that, to the best of our knowledge, did not previously exist in literature. We also define \textit{Hurwitz stability}, and present algorithms to determine the Hurwitz stability of a univariate polynomial. 
+The \textit{Macaulay2} package \texttt{RealRoots} expands and modernizes \texttt{realroots}, superseding it.
+\texttt{RealRoots} implements symbolic methods for studying real solutions of polynomial systems.
+This note provides some descriptions of the mathematical background, and examples of methods from the package.
+It is organized into three sections, each describing related methods.
 
-Section 2 covers elimination methods to solve zero-dimensional systems. In particular, we expand the \texttt{eliminant} method by dividing it into the methods \texttt{univariateEliminant} and \texttt{minimalPolynomial}. We also implement algorithms to compute the \textit{rational univariate representation} of a zero-dimensional ideal \cite{cite-key}. 
+Section 1 describes methods for counting and isolating real roots of univariate polynomials, as well as methods for determining if a
+polynomial is Hurwitz stable.
+We could not find a proof of Sylvester's Theorem~\ref{Th:Sylvester} in complete generality in the literature, and have included a sketch for
+completeness. 
 
-Section 3 focuses on methods to count real solutions of zero-dimensional, real multivariate systems. In particular, we implement a multivariate version of Sylvester's theorem, called \texttt{traceSignature}.
+Section 2 describes methods involving elimination that reduce a zero-dimensional system of multivariate polynomials to a univariate
+polynomial for solving, studying the number of real solutions, or addressing other arithmetic questions, such as Galois groups.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Real Univariate Polynomials}
+Section 3 describes a further method for studying zero-dimensional systems, based on the trace form.
 
-Our story begins with a real univariate polynomial $f$ of the form $$c_{0}x^{a_{0}} + c_{1}x^{a_{1}} + \cdots + c_{m}x^{a_{m}},$$ where $i=0,1,\dots, m$, where $c_{i} \neq 0$ are real numbers, and where $a_{0} < a_{1} < \cdots < a_{m}$ are nonnegative integers. Descartes' Rule of Signs \cite{MR2830310} gives us an upper bound for the number of positive real roots of $f$.
 
-%Descartes section
-\begin{theorem}[Descartes' Rule of Signs]Let $r$ be the number of positive real roots of $f$, counting multiplicity, and let $v$ be the cardinality of the set $\{i\mid1\leq i\leq m, c_{i-1}c_{i}<0\}$. Then $r\leq v$ and $v-r\equiv 0 \mod 2$. \end{theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Real roots of univariate polynomials}
 
-%By including the case when we replace $x$ by $-x$ in $f$, we can generalize Descartes' theorem to provide an upper bound for the total number of real roots of $f$.
+Let $f\in\RR[x]$ be a polynomial.
+It has the form
+%
+ \[
+   f\ =\ c_{0}x^{a_{0}} + c_{1}x^{a_{1}} + \cdots + c_{m}x^{a_{m}}\,,
+ \]
+%
+$a_{0} < a_{1} < \cdots < a_{m}$ are nonnegative integers and for $0\leq i \leq m$, $c_{i}$ is a nonzero real number.
+Let $\defcolor{\var(c_0,\dotsc,c_m)}\vcentcolon=\#\{1\leq i\leq m\mid c_{i-1}c_i<0\}$ be the number of sign variations in the coefficients
+of $f$.
+Descartes' Rule of Signs \cite{So_Book} gives an upper bound for the number of positive real roots of $f$.
 
-%\begin{corollary}[Descartes' Bound]The real polynomial $f$ has at most $m$ positive roots, $2m$ nonzero roots, and $2m + 1$ real roots.\end{corollary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{theorem}[Descartes' Rule of Signs]
+  The number of positive real roots of $f$, counted with multiplicity is at most $\var(c_0,\dotsc,c_m)$ and it has the same parity
+  as $\var(c_0,\dotsc,c_m)$.
+\end{theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%In many cases, such bound is too large to the actual number of positive real roots of a polynomial, for example, $x^{3} - x^{2} + x - 1$ only has one positive real root, but it was 3 sign changes. 
+More generally, given any sequence $c=(c_0,\dotsc,c_m)$, we compute the \demph{variation} of $c$, $\var(c)$, by counting the number of
+variations in sign after removing all zero terms.
+%
+\begin{leftbar}
+\verbatiminput{examples/variations.txt}
+\end{leftbar}
+%
+For sequence of polynomials  $F=(f_0,\dotsc,f_k)$ in $\RR[x]$ and $a\in\RR$, \defcolor{$\var(F,a)$} is the variation in the sequence
+$(f_0(a),\dotsc,f_{k}(a))$. 
+We extend this to $a=\pm\infty$, by taking $f(\infty)$ to be the leading coefficient of $f(x)$ and $f(-\infty)$ to be the leading
+coefficient of $f(-x)$.
 
-Equivalently, we find $v$ by counting the number of sign changes between consecutive elements of the sequence $(c_{0},c_{1},\dots,c_{m})$. The \textit{\textcolor{Maroon}{variation}} of a finite sequence of numbers $c$, denoted by $\textcolor{Maroon}{var(c)}$, is the number of times its consecutive elements have opposite sign, after removing any zero terms. Hence $v = var\left((c_{0},c_{1},\dots,c_{m})\right)$.
+Given a polynomial $f\in\RR[x]$ of degree $\ell$, consider its sequence of derivatives,
+%
+ \[
+   \defcolor{\delta f}\ \vcentcolon= \left(f(x),d'(x),d''(x),\dots,d^{(l)}(x)\right)\,.
+ \]
+%
+For $a,b\in \RR\cup\{\pm \infty\}$ with $a<b$, let \defcolor{$r(f,a,b)$} be the number of roots of $f$ in the interval $(a,b]$, counted
+with multiplcity.
+Budan and Fourier~\cite[Ch.\ 2]{So_Book} generalized Descartes' Rule.
 
-If $F=(f_{0},f_{1},\dots,f_{k})$ is a finite sequence of real univariate polynomials, and $a\in \RR$, we define \textcolor{Maroon}{$var(F,a)$} to be the variation of the sequence $(f_{0}(a),f_{1}(a),\dots,f_{k}(a))$. If $a=\pm\infty$, then, for $j=0,\dots, k$, \textcolor{Maroon}{$var(F,\infty)$} is the variation of the leading coefficients of the polynomials $f_{j}(t)$, and \textcolor{Maroon}{$var(F,-\infty)$} is the variation of the leading coefficients of the polynomials $f_{j}(-t)$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{theorem}[Budan-Fourier]
+  We have that $r(f,a,b)\leq \var(\delta f,a) -\var(\delta f,b)$, and the difference
+  $\var(\delta f,a) -\var(\delta f,b)-r(f,a,b)$ is even. 
+\end{theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-If $g$ is a univariate polynomial of degree $l$, we denote by \textcolor{Maroon}{$\delta g$} its sequence of derivatives: $$\delta g = \left(g(x),g'(x),g''(x),\dots,g^{(l)}(x)\right).$$ Let $a,b\in \RR\cup\{\pm \infty\}$ such that $a<b$, and denote by $\textcolor{Maroon}{r(f,a,b)}$ the number of real roots of $f$ in the interval $(a,b]$. Budan and Fourier \cite{MR2830310} generalized Descartes' Rule of Signs.
+Descartes' Rule is when $a=0$ and $b=\infty$.
+Let us consider an example.
+%
+\begin{leftbar}
+\verbatiminput{examples/BudanFourierBound.txt}
+\end{leftbar}
+%
+When called on a polynomial, \texttt{BudanFourierBound} assumes that $a=-\infty$ and $b=\infty$, giving a bound for all real roots.
+Note that $r(f,0,\infty)=4$ and $r(f,-\infty,\infty)=7$.
 
-%Budan Fourier theorem (reference, vague statement)
-\begin{theorem}[Budan-Fourier] Let $v_{a}$ denote $var(\delta f,a)$ and $v_{b}$ denote $var(\delta f,b)$. The real polynomial $f$ satisfies $$v_{a} - v_{b} \geq r(f,a,b),$$ and $v_{a} - v_{b} - r(f,a,b) \equiv 0 \mod 2$.\end{theorem}
-%\begin{align*}\text{var}(\delta f,a) - \text{var}(\delta f,b) \geq r(f,a,b),\end{align*}
+In contrast to these bounds, 
+Sylvester's Theorem determines the actual number of real roots, and more.
+The \demph{Sylvester sequence}, \defcolor{$\Syl(f,g)$} of polynomials $f,g\in\RR[x]$ is the sequence
+$\left(f_0,f_1,\dotsc,f_k\right)$ of nonzero polynomials, where $f_0\vcentcolon= f, f_1 \vcentcolon= f'\cdot g$,
+and for $i\geq 1$, 
+%
+  \[
+    f_{i+1}\ \vcentcolon=\ -\mbox{remainder}(f_{i-1},f_i)\,,
+  \]
+%
+the negative remainder term in the division of $f_{i-1}$ by $f_i$.
+Then $f_k = \gcd(f,f'g)$.
 
-%We obtain Descartes' Rule of Signs using the variations $var(\delta f,0) = var\left((c_{0},c_{1},\dots,c_{m})\right)$ and $var(\delta f,\infty) = 0$. 
 
-The previous theorems bound the number of real roots of $f$. We now describe methods to find the \textit{actual} number of its real roots. The \textcolor{Maroon}{Sylvester sequence} of two real univariate polynomials $f$ and $g$, denoted by \textcolor{Maroon}{$Syl(f,g)$}, is the sequence $\left(f_{0},f_{1},\dots,f_{k}\right)$, where $f_{0} := f, f_{1} := g, f_{k} := \gcd(f,g)$, and $$-f_{i+1} = \text{remainder}(f_{i-1},f_{i}).$$
-
-%Sylvester's theorem (reference ?, nice picture, proof outline)
-\theorem[Sylvester]
-The difference between the number of roots of $f$ in $(a,b\hspace{.05cm}]$ where $g$ is positive and the number of roots of $f$ in $[a,b)$ where $g$ is negative is counted by the difference in variation $$\text{var}(\text{Syl}(f,f'g),a) - \text{var}(\text{Syl}(f,f'g),b).$$
-
-\begin{proof} The proof when all the roots of $f$ are in $(a,b)$ is found in \cite{MR1659509}, where in their notation, a \textit{Sturm sequence} refers to our definition of a \textit{Sylvester sequence}. It is left to consider when $a$ or $b$ are roots of $f$. Set $g_{i} := f_{i}/f_{k}$, for $i=0,\dots, k$. By construction, $var((f_{0}(x),f_{1}(x)))$ (resp. $var((f_{i-1}(x),f_{i}(x),f_{i+1}(x)))$) and $var((g_{0},g_{1}))$ (resp. $var((g_{i-1}(x),g_{i}(x),g_{i+1}(x)))$) are the same when $x$ is not a root of $f$. The roots of $g_{0} = f/f_{k}$ is the number of roots of $f$ which are not roots of $g$. Moreover, $g_{i}$ and $g_{i+1}$ are relatively prime.\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{theorem}[Sylvester]
+  \label{Th:Sylvester}
+  Let $a<b$ be numbers in $\RR\cup\{\pm\infty\}$ and $f,g\in\RR[x]$.
+  Then $\var(\Syl(f,g), a)-\var(\Syl(f,g), b)$ is 
+  the difference between the number of roots of $f$ in $(a,b\hspace{.05cm}]$ where $g$ is positive and the number of roots of $f$ in $[a,b)$
+  where $g$ is negative.
+\end{theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{proof}
+  In~\cite{BCR}\footnote{Give a more precise reference}, this is stated and proven when $f$ does not vanish at $a$ or at $b$.
+  The proof considers $\var(\Syl(f,g), a)-\var(\Syl(f,g), c)$ for $c\in(a,b\hspace{.05cm}]$, noting that this quantity may only change when
+  $c$ passes a root of some member of the Sylvester sequence $\Syl(f,g)$.
+  The arguments in~\cite{BCR} cover the a case when the root lies in $(a,b)$, which leaves us to consider the case when $a$ or $b$ are roots
+  of $f$.
+  Set $g_{i} := f_{i}/f_{k}$, for $i=0,\dots, k$. By construction, $var((f_{0}(x),f_{1}(x)))$ (resp. $var((f_{i-1}(x),f_{i}(x),f_{i+1}(x)))$) and $var((g_{0},g_{1}))$ (resp. $var((g_{i-1}(x),g_{i}(x),g_{i+1}(x)))$) are the same when $x$ is not a root of $f$. The roots of $g_{0} = f/f_{k}$ is the number of roots of $f$ which are not roots of $g$. Moreover, $g_{i}$ and $g_{i+1}$ are relatively prime.\\
 
 \noindent Let $c$ be a root of $g_{i}$, and denote by $c_{-}$ a number immediately to the left of $c$ (avoiding any zeros), and $c_{+}$ a number immediately to its right. If $c$ is a root of $g_{0}$, then $c$ is not a root of $g_{1}$. We obtain the following cases.
 
