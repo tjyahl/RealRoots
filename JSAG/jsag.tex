@@ -43,6 +43,7 @@
 
 \newcommand{\defcolor}[1]{{\color{Maroon}#1}}
 \newcommand{\demph}[1]{\defcolor{{\sl #1}}}
+\newcommand{\note}[1]{{\color{red}(#1)}}
 
 
 \title{real solutions of polynomial systems}
@@ -175,7 +176,7 @@ variations in sign after removing all zero terms.
 \verbatiminput{examples/variations.txt}
 \end{leftbar}
 %
-For sequence of polynomials  $F=(f_0,\dotsc,f_k)$ in $\RR[x]$ and $a\in\RR$, \defcolor{$\var(F,a)$} is the variation in the sequence
+For sequence of polynomials  $F=(f_0,\dotsc,f_k)$ \note{Change $F$ to $f_\bullet$ or something similar} in $\RR[x]$ and $a\in\RR$, \defcolor{$\var(F,a)$} is the variation in the sequence
 $(f_0(a),\dotsc,f_{k}(a))$. 
 We extend this to $a=\pm\infty$, by taking $f(\infty)$ to be the leading coefficient of $f(x)$ and $f(-\infty)$ to be the leading
 coefficient of $f(-x)$.
