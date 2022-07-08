@@ -76,7 +76,7 @@
          Texas \ 77843\\ 
          USA} 
 \email{sottile@tamu.edu} 
-\urladdr{https://www.math.tamu.edu/~sottile} 
+\urladdr{https://www.math.tamu.edu/\~{}sottile} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \author[T.~Yahl]{Thomas Yahl} 
 \address{T.~Yahl\\ 
@@ -176,7 +176,8 @@ variations in sign after removing all zero terms.
 \verbatiminput{examples/variations.txt}
 \end{leftbar}
 %
-For sequence of polynomials  $F=(f_0,\dotsc,f_k)$ \note{Change $F$ to $f_\bullet$ or something similar} in $\RR[x]$ and $a\in\RR$, \defcolor{$\var(F,a)$} is the variation in the sequence
+For sequence of polynomials  $\defcolor{f_\bullet}=(f_0,\dotsc,f_k)$ in $\RR[x]$ and $a\in\RR$, \defcolor{$\var(f_\bullet,a)$} is the
+variation in the sequence 
 $(f_0(a),\dotsc,f_{k}(a))$. 
 We extend this to $a=\pm\infty$, by taking $f(\infty)$ to be the leading coefficient of $f(x)$ and $f(-\infty)$ to be the leading
 coefficient of $f(-x)$.
@@ -187,7 +188,7 @@ Given a polynomial $f\in\RR[x]$ of degree $\ell$, consider its sequence of deriv
    \defcolor{\delta f}\ \vcentcolon= \left(f(x),d'(x),d''(x),\dots,d^{(l)}(x)\right)\,.
  \]
 %
-For $a,b\in \RR\cup\{\pm \infty\}$ with $a<b$, let \defcolor{$r(f,a,b)$} be the number of roots of $f$ in the interval $(a,b]$, counted
+For $a,b\in \RR\cup\{\pm \infty\}$ with $a<b$, let \defcolor{$r(f,a,b)$} be the number of roots of $f$ in the interval $(a,b\hspace{.05cm}]$, counted
 with multiplcity.
 Budan and Fourier~\cite[Ch.\ 2]{So_Book} generalized Descartes' Rule.
 
@@ -215,7 +216,7 @@ $\left(f_0,f_1,\dotsc,f_k\right)$ of nonzero polynomials, where $f_0\vcentcolon=
 and for $i\geq 1$, 
 %
   \[
-    -f_{i+1}\ \vcentcolon=\ \mbox{remainder}(f_{i-1},f_i)\,,
+    f_{i+1}\ \vcentcolon=\ -1\cdot \mbox{remainder}(f_{i-1},f_i)\,,
   \]
 %
 the negative remainder term in the division of $f_{i-1}$ by $f_i$.
@@ -224,125 +225,52 @@ Note that we have $f_k = \gcd(f,f'g)$ and for each $i=0,\dotsc,k$ there exists $
  \begin{equation}\label{Eq:divisionAlgorithm}
     f_{i-1}\ =\ q_i(x)f_i(x)-f_{i+1}(x)\,.
  \end{equation}
-
-
-
- {\color{Red}This Theorem has a problem when $f$ and $g$ share a root at $a$ or $b$.  I'll abandon trying to prove it.}
+%
+The \demph{reduced Sylvester sequence} is obtained by dividing each term each term in the Sylvester sequence by $f_k$.
+Note that the elements $(g_1,\dotsc,g_k)$ of the reduced sequence satisfy~\eqref{Eq:divisionAlgorithm} with $f_j$ replacing $g_j$, and also
+that $g_k=1$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{theorem}[Sylvester]
   \label{Th:Sylvester}
-  Let $a<b$ be numbers in $\RR\cup\{\pm\infty\}$ and $f,g\in\RR[x]$.
-  Then $\var(\Syl(f,g), a)-\var(\Syl(f,g), b)$ is 
-  the difference between the number of roots of $f$ in $(a,b\hspace{.05cm}]$ where $g$ is positive and the number of roots of $f$ in $[a,b)$
-  where $g$ is negative.
+  Let $f,g\in\RR[x]$ and suppose that $g_\bullet$ is the reduced Sylvester sequence of $f$ and $f'g$.
+  For $a<b$ in $\RR\cup\{\pm\infty\}$ we have,
+  %
+  \begin{multline*}
+    \qquad\var(g_\bullet,a)-\var(g_\bullet,b)\ =\
+    \#\{\zeta\in(a,b\hspace{.05cm}]\mid f(\zeta)=0\mbox{ and } g(\zeta)>0\}\\
+      \ -\
+    \#\{\zeta\in[a,b)\mid f(\zeta)=0\mbox{ and } g(\zeta)<0\}\,.\qquad
+  \end{multline*}
 \end{theorem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{proof}
-  In~\cite{BCR}\footnote{Give a more precise reference}, this is stated and proven when $f$ does not vanish at $a$ or at $b$.
-  The proof considers the change in variation $\var(\Syl(f,g), t)$ as $t$ inc reases fron $a$ to $b$, noting that this quantity may only
+  In~\cite{BCR}\footnote{Give a more precise reference}, this is stated and provenin the case when $f$ does not vanish at $a$ or at $b$,
+  and for the Sylvester sequence $\Syl(f,f'g)$, not the reduced Syvester sequence.
+  The proof proceeds by studying the variation $\var(\Syl(f,g), t)$ as $t$ increases fron $a$ to $b$, noting that this quantity may only
   change when $t$ passes a root of some member of the Sylvester sequence $\Syl(f,g)$.
-  
-  Suppose first that $f_k$ is a constant, so that no two consecutive elements of the Sylvester sequence have a common root.
-  Let $c$ be a root of some $f_i$ and suppose that $c_-<c<c_+$ are numbers with $c$ the only root of any $f_i$ in $[c_-,c_+]$.
-  If $i>0$, then arguments in~\cite{BCR} shaw that there is no change in  $\var(\Syl(f,g), t)$ fopr $t\in[c_-,c_+]$.
+  Since multiplying a sequence by a nonzero number $f_K(t)$ does not change its variation, the proof in~\cite{BCR} establishes the theorem
+  when $f$ does not vanish at $a$ or at $b$.
+
+  The variation $\var(g_\bullet,t)$ can only change when $t$ passes a root $\zeta$ of some polynomial $g_i$ in the reduced Sylvester
+  sequence $g_\bullet$, or possibly when the
+  root $\zeta$ is an   endpoint of $[a,b\hspace{.05cm}]$.
+  Observe that $\zeta$ cannot be a root of two consecutive elements of $g_\bullet$.
+  If it were, then by~\eqref{Eq:divisionAlgorithm} and an induction, it is a root of all elements of $g_\bullet$, and thus of $g_k=1$, which is a
+  contradiction.
+  Suppose that $g_i(\zeta)=0$ for some $i\geq 1$.
+  By~\eqref{Eq:divisionAlgorithm} again $g_{i-1}(\zeta)$ and $g_{i+1}(\zeta)$ have opposite signs in a neighborhood of $\zeta$ and thus
+  $g_{i-1},g_i,g_{i+1}$ do not contribute to any change in $\var(G,t)$ for $t$ in a neighborhood of $\zeta$.
+  This in particular remains true if $\zeta=a$ and $t$ increases from $a$ or if $\zeta=b$ and $t$ approaches $b$.
 
 
-The arguments in~\cite{BCR} cover the a case when the root lies in $(a,b)$, which leaves us to consider the case when $a$ or $b$ are roots
-  of $f$.
+ \end{proof}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  
-  Divide each element of the Sylvester sequence by $f_k$, obtaining $g_i\vcentcolon= f_i/f_k$ for  $i=0,\dotsc, k$.
-  Then no two consecutive elements of the sequence $g_0,\dotsc,g_k$ have a common root and the relation~\eqref{Eq:divisionAlgorithm} holds
-  with $g_j$ substituted for $f_j$, but the same $q_i$.
-  Most importantly, this does 
-
-
-  
-  
-  Set $g_{i} := f_{i}/f_{k}$, for $i=0,\dots, k$. By construction, $var((f_{0}(x),f_{1}(x)))$ (resp. $var((f_{i-1}(x),f_{i}(x),f_{i+1}(x)))$) and $var((g_{0},g_{1}))$ (resp. $var((g_{i-1}(x),g_{i}(x),g_{i+1}(x)))$) are the same when $x$ is not a root of $f$. The roots of $g_{0} = f/f_{k}$ is the number of roots of $f$ which are not roots of $g$. Moreover, $g_{i}$ and $g_{i+1}$ are relatively prime.\\
-
-\noindent Let $c$ be a root of $g_{i}$, and denote by $c_{-}$ a number immediately to the left of $c$ (avoiding any zeros), and $c_{+}$ a number immediately to its right. If $c$ is a root of $g_{0}$, then $c$ is not a root of $g_{1}$. We obtain the following cases.
-
-% \begin{table}[h]
-% \begin{subtable}{.3\linewidth}\centering{
-% \begin{tabular}{c|ccc}
-%   &   & $c$ &   \\
-%   \hline
-% $f$ & $-$ & $0$ & $+$ \\
-% $f'g$ & $-$ &  & $-$ \\
-% \end{tabular}
-% \vspace{0.3cm}
-% \caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-})<0},\textcolor{red}{f'(c_{+})>0}$}}
-% \end{subtable}%
-% \begin{subtable}{.3\linewidth}\centering{
-% \begin{tabular}{c|ccc}
-%   &   & $c$ &   \\
-%   \hline
-% $f$ & $-$ & $0$ & $+$ \\
-% $f'g$ & $-$ &  & $-$ \\
-% \end{tabular}
-% \vspace{0.3cm}
-% \caption*{\tiny$\textcolor{blue}{g(c)<0},\textcolor{blue}{f'(c_{-})<0},\textcolor{blue}{f'(c_{+})<0}$}}
-% \end{subtable}
-% \end{table}
-
-%first row
-\begin{table}[H]
-\begin{subtable}{.3\linewidth}\centering{
-\begin{tabular}{c|ccc}
-  &   & $c=a$ &   \\
-  \hline
-$f$ &  & $0$ & $+$ \\
-$f'g$ &  &  & $-$ \\
-\end{tabular}
-\vspace{0.3cm}
-\caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-})<0},\textcolor{red}{f'(c_{+})>0}$}}
-\end{subtable}%
-\begin{subtable}{.3\linewidth}\centering{
-\begin{tabular}{c|ccc}
-  &   & $c=b$ &   \\
-  \hline
-$f$ & $-$ & $0$ &  \\
-$f'g$ & $+$ &  &  \\
-\end{tabular}
-\vspace{0.3cm}
-\caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{red}{f'(c_{-})>0},\textcolor{red}{f'(c_{+})>0}$}}
-\end{subtable}
-\end{table}
-%second row
-\begin{table}[h]
-\begin{subtable}{.3\linewidth}\centering{
-\begin{tabular}{c|ccc}
-  &   & $c=a$ &   \\
-  \hline
-$f$ &  & $0$ & $+$ \\
-$f'g$ &  &  & $-$ \\
-\end{tabular}
-\vspace{0.3cm}
-\caption*{\tiny$\textcolor{blue}{g(c)<0},\textcolor{blue}{f'(c_{-})<0},\textcolor{blue}{f'(c_{+})<0}$}}
-\end{subtable}%
-\begin{subtable}{.3\linewidth}\centering{
-\begin{tabular}{c|ccc}
-  &   & $c=b$ &   \\
-  \hline
-$f$ & $-$ & $0$ &  \\
-$f'g$ & $+$ &  &  \\
-\end{tabular}
-\vspace{0.3cm}
-\caption*{\tiny$\textcolor{red}{g(c)>0},\textcolor{blue}{f'(c_{-})<0},\textcolor{blue}{f'(c_{+})<0}$}}
-\end{subtable}
-\end{table}
-
-As $x$ leaves $a$, $var((f_{0},f_{1}),x)$ increases by $1$, and as $x$ reaches $b$, $var((f_{0},f_{1}),x)$ decreases by $1$. If $c$ is a root of $g_{i}$, for $i\geq 1$, then $c$ is not a root of $g_{i-1}$ nor $g_{i+1}$. Hence $g_{i-1}(c)g_{i+1}(c)<0$. Hence, the variation of $(f_{i-1}(x),f_{i}(x),f_{i+1}(x))$, which is the same as $var((g_{i-1}(x),g_{i}(x),g_{i+1}(x)))$, remains unchanged. \end{proof}
-
-%As $x$ passes through $c$, $var(\left(f_{0},f_{1}),x\right)$ increases by 1 if $g(c)>0$, and decreases by 1 if $g(c)<0$.
-
-%By definition, we note that $Syl(f,f'g) = (f_{0},f_{1},\dots, f_{k})$ is the same as the sequence given by the Euclidean algorithm (up to signs). Next, for $i\in\{0,\dots,k\}$ set $g_{i} := f_{i}/\gcd(f,f'g)$. By construction, $g_{i}$ and $g_{i+1}$ are relatively prime. If $c$ is not a root of $f$, then $$var\left((f_{0},f_{1}),c\right) = var\left((g_{0},g_{1}),c\right),$$ because the denominators of $g_{0}$ and $g_{1}$ are the same. Similarly, for $i\in\{1,\dots,k\}$, we have $var\left((f_{i-1},f_{i},f_{i+1}),c\right) = var\left((g_{i-1},g_{i},g_{i+1}),c\right)$. 
 
 %Sturm's theorem
 \corollary[Sturm's Theorem]
-Let $f$ be a univariate polynomial and $a,b\in \mathbb{R}\cup\{\pm\infty\}$ with $a<b$ and $f(a),f(b)\neq 0$. Then the number of zeros of $f$ in the interval $(a,b]$ is the difference 
+Let $f$ be a univariate polynomial and $a,b\in \mathbb{R}\cup\{\pm\infty\}$ with $a<b$ and $f(a),f(b)\neq 0$. Then the number of zeros of $f$ in the interval $(a,b\hspace{.05cm}]$ is the difference 
 \begin{align*}
 \text{var}(F,a) - \text{var}(F,b),
 \end{align*}
@@ -374,6 +302,38 @@ I think we should do a Galois computation of 27 lines on a symmetric cubic surfa
 \section{Real root location}
 %trace form
 %
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{thebibliography}{1}
+
+\bibitem{BCR}
+J.~Bochnak, M.~Coste, and M.-F. Roy.
+\newblock {\em Real algebraic geometry}, volume~36 of {\em Ergebnisse der
+  Mathematik und ihrer Grenzgebiete (3)}.
+\newblock Springer-Verlag, Berlin, 1998.
+
+\bibitem{So_M2}
+F.~Sottile.
+\newblock From enumerative geometry to solving systems of polynomials
+  equations.
+\newblock In {\em Computations in algebraic geometry with {M}acaulay 2},
+  volume~8 of {\em Algorithms Comput. Math.}, pages 101--129. Springer, Berlin,
+  2002.
+
+\bibitem{So_Book}
+F.~Sottile.
+\newblock {\em Real solutions to equations from geometry}, volume~57 of {\em
+  University Lecture Series}.
+\newblock American Mathematical Society, Providence, RI, 2011.
+
+\end{thebibliography}
+
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \bibliographystyle{abbrv}
