@@ -1,16 +1,16 @@
 i1 : R = QQ[x];
 
-i2 : f = (2*x^2-3)*(x^3-2)^2*(x^6-1)*x
+i2 : f = (2*x-3)*(x^4-2)^2*x
 
-       15     13     12      10     9     7     6      4     3
-o2 = 2x   - 3x   - 8x   + 12x   + 6x  - 9x  + 8x  - 12x  - 8x  + 12x
+       10     9     6      5     2
+o2 = 2x   - 3x  - 8x  + 12x  + 8x  - 12x
 
 o2 : R
 
 i3 : BudanFourierBound(f, 0, infinity)
 
-o3 = 6
+o3 = 3
 
 i4 : BudanFourierBound(f)
 
-o4 = 15
+o4 = 10

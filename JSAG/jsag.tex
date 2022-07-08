@@ -10,11 +10,11 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage{ulem}  % strike out text
 \usepackage{graphicx}
-\usepackage{tikz,verbatim}
-\usepackage{caption}
-\usepackage{float}
-\usepackage{booktabs}
-\usepackage{subcaption}
+\usepackage{verbatim}
+%\usepackage{caption}
+%\usepackage{float}
+%\usepackage{booktabs}
+%\usepackage{subcaption}
 %\pdfoutput=1
 
 \usepackage{framed}
@@ -44,9 +44,9 @@
 \newcommand{\defcolor}[1]{{\color{Maroon}#1}}
 \newcommand{\demph}[1]{\defcolor{{\sl #1}}}
 \newcommand{\note}[1]{{\color{red}(#1)}}
+ 
 
-
-\title{real solutions of polynomial systems}
+\title{Real solutions of polynomial systems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \author[J.~Lopez Garcia]{Jordy Lopez Garcia} 
 \address{J.~Lopez Garcia\\ 
@@ -110,7 +110,7 @@
 \begin{abstract}
  The \textit{Macaulay2} package \texttt{RealRoots} provides symbolic methods to study real solutions to systems of polynomial equations.
  It updates and expands an earlier package developed by Sottile and Grayson in 1999.
- We provide some mathematical background and descriptions of the  \texttt{RealRoots} package, giving examples which illustrate some of its
+ We provide mathematical background and descriptions of the  \texttt{RealRoots} package, giving examples which illustrate some of its
  implemented methods.
  We also prove a general version of Sylvester's Theorem.
 \end{abstract}
@@ -126,15 +126,15 @@
 
 %historical background/motivation, discussion of prior results, contribution and why it's important/interesting/novel
 
-Understanding the number of real solutions to systems of polynomials is a fundamental for real algebraic geometry and applications of
+Understanding the number of real solutions to systems of polynomials is fundamental for real algebraic geometry and for applications of
 algebraic geometry.
 In 1999, Grayson and Sottile \cite{So_M2} developed the \textit{Macaulay2} package \texttt{realroots} for this purpose.
 That package had limited functionality and not all of its implemented methods remain compatible with modern releases of \textit{Macaulay2}.
 
 The \textit{Macaulay2} package \texttt{RealRoots} expands and modernizes \texttt{realroots}, superseding it.
 \texttt{RealRoots} implements symbolic methods for studying real solutions of polynomial systems.
-This note provides some descriptions of the mathematical background, and examples of methods from the package.
-It is organized into three sections, each describing related methods.
+This note provides some descriptions of the mathematical background and examples of methods from the package.
+Its  three sections each describe related methods.
 
 Section 1 describes methods for counting and isolating real roots of univariate polynomials, as well as methods for determining if a
 polynomial is Hurwitz stable.
@@ -144,7 +144,7 @@ completeness.
 Section 2 describes methods involving elimination that reduce a zero-dimensional system of multivariate polynomials to a univariate
 polynomial for solving, studying the number of real solutions, or addressing other arithmetic questions, such as Galois groups.
 
-Section 3 describes a further method for studying zero-dimensional systems, based on the trace form.
+Section 3 describes a further method for studying zero-dimensional systems, {\color{red}expand on this} based on the trace form.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -157,14 +157,14 @@ It has the form
    f\ =\ c_{0}x^{a_{0}} + c_{1}x^{a_{1}} + \cdots + c_{m}x^{a_{m}}\,,
  \]
 %
-$a_{0} < a_{1} < \cdots < a_{m}$ are nonnegative integers and for $0\leq i \leq m$, $c_{i}$ is a nonzero real number.
+where $a_{0} < a_{1} < \cdots < a_{m}$ are nonnegative integers and for $0\leq i \leq m$, $c_{i}$ is a nonzero real number.
 Let $\defcolor{\var(c_0,\dotsc,c_m)}\vcentcolon=\#\{1\leq i\leq m\mid c_{i-1}c_i<0\}$ be the number of sign variations in the coefficients
 of $f$.
 Descartes' Rule of Signs \cite{So_Book} gives an upper bound for the number of positive real roots of $f$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{theorem}[Descartes' Rule of Signs]
-  The number of positive real roots of $f$, counted with multiplicity is at most $\var(c_0,\dotsc,c_m)$ and it has the same parity
+  The number of positive real roots of $f$, counted with multiplicity, is at most $\var(c_0,\dotsc,c_m)$ and it has the same parity
   as $\var(c_0,\dotsc,c_m)$.
 \end{theorem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,7 +189,7 @@ Given a polynomial $f\in\RR[x]$ of degree $\ell$, consider its sequence of deriv
  \]
 %
 For $a,b\in \RR\cup\{\pm \infty\}$ with $a<b$, let \defcolor{$r(f,a,b)$} be the number of roots of $f$ in the interval $(a,b\hspace{.05cm}]$, counted
-with multiplcity.
+with multiplicity.
 Budan and Fourier~\cite[Ch.\ 2]{So_Book} generalized Descartes' Rule.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -226,9 +226,9 @@ Note that we have $f_k = \gcd(f,f'g)$ and for each $i=0,\dotsc,k$ there exists $
     f_{i-1}\ =\ q_i(x)f_i(x)-f_{i+1}(x)\,.
  \end{equation}
 %
-The \demph{reduced Sylvester sequence} is obtained by dividing each term each term in the Sylvester sequence by $f_k$.
-Note that the elements $(g_1,\dotsc,g_k)$ of the reduced sequence satisfy~\eqref{Eq:divisionAlgorithm} with $f_j$ replacing $g_j$, and also
-that $g_k=1$.
+The \demph{reduced Sylvester sequence} is obtained by dividing each term in the Sylvester sequence by the $\gcd$ $f_k$.
+Note that the elements $(g_0,\dotsc,g_k)$ of the reduced sequence satisfy~\eqref{Eq:divisionAlgorithm} with $f_j$ replacing $g_j$, and
+we also have $g_k=1$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{theorem}[Sylvester]
@@ -245,14 +245,14 @@ that $g_k=1$.
 \end{theorem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{proof}
-  In~\cite{BCR}\footnote{Give a more precise reference}, this is stated and provenin the case when $f$ does not vanish at $a$ or at $b$,
-  and for the Sylvester sequence $\Syl(f,f'g)$, not the reduced Syvester sequence.
+  In~\cite{BCR}\footnote{Give a more precise reference}, this is stated and proven in the case when $f$ does not vanish at $a$ or at $b$,
+  for the Sylvester sequence $\Syl(f,f'g)$, and not for the reduced Syvester sequence.
   The proof proceeds by studying the variation $\var(\Syl(f,g), t)$ as $t$ increases fron $a$ to $b$, noting that this quantity may only
   change when $t$ passes a root of some member of the Sylvester sequence $\Syl(f,g)$.
-  Since multiplying a sequence by a nonzero number $f_K(t)$ does not change its variation, the proof in~\cite{BCR} establishes the theorem
+  Since multiplying a sequence by a nonzero number $f_(kt)$ does not change its variation, the proof in~\cite{BCR} establishes the theorem
   when $f$ does not vanish at $a$ or at $b$.
 
-  The variation $\var(g_\bullet,t)$ can only change when $t$ passes a root $\zeta$ of some polynomial $g_i$ in the reduced Sylvester
+  The variation $\var(g_\bullet,t)$ may only change when $t$ passes a root $\zeta$ of some polynomial $g_i$ in the reduced Sylvester
   sequence $g_\bullet$, or possibly when the
   root $\zeta$ is an   endpoint of $[a,b\hspace{.05cm}]$.
   Observe that $\zeta$ cannot be a root of two consecutive elements of $g_\bullet$.
@@ -263,7 +263,69 @@ that $g_k=1$.
   $g_{i-1},g_i,g_{i+1}$ do not contribute to any change in $\var(G,t)$ for $t$ in a neighborhood of $\zeta$.
   This in particular remains true if $\zeta=a$ and $t$ increases from $a$ or if $\zeta=b$ and $t$ approaches $b$.
 
+  We now suppose that $g_0(\zeta)=0$ and thus $g_1(\zeta)\neq 0$.
+  Then we have $f(\zeta)=0$.
+  Let $m$ be the multiplicity of the root $\zeta$ of $f$.
+  Then $f=(x-\zeta)^m h$ with $h(\zeta)\neq 0$.
+  If $g(\zeta)=0$, then $(x-\zeta)^m$ divides $f'g$ and thus $f_k$, and so $g_0=f/f_k$ does not vanish at $\zeta$.
+  Thus $g(\zeta)\neq 0$.
 
+  Notice that $h_0\vcentcolon=f/(x-\zeta)^{m-1}$ and $h_1\vcentcolon=f'g/(x-\zeta)^{m-1}$ have the same signs in a neighborhood of $\zeta$
+  as do $g_0$ and $g_1$.
+  A computation reveals that $h_1=mhg+(x{-}\zeta)h'g$. 
+ Let $\epsilon>0$ be a real number such that $\zeta$ is the only root if any element in $H$ lying in the interval
+ $[\zeta-\epsilon,\zeta+\epsilon]$.
+ We have
+ %
+ \[
+ \begin{array}{c|c|l}
+   x & h_0(x) & h_1(x)\\\hline
+   \zeta-\epsilon & -\epsilon h(\zeta-\epsilon)  & mh(\zeta-\epsilon)g(\zeta-\epsilon) - \epsilon h'(\zeta-\epsilon)g(\zeta-\epsilon)\\
+   \zeta     &     0    &   mh(\zeta)g(\zeta)\\
+   \zeta+\epsilon & \epsilon h(\zeta-\epsilon)  & mh(\zeta-\epsilon)g(\zeta-\epsilon) + \epsilon h'(\zeta-\epsilon)g(\zeta-\epsilon)\\
+ \end{array}
+ \]
+ %
+  
+ Let $\epsilon>0$ be a real number such that $\zeta$ is the only root if any element in $H$ lying in the interval
+ $[\zeta-\epsilon,\zeta+\epsilon]$.
+ We have
+ %
+ \[
+ \begin{array}{c|c|l}
+   x & h_0(x) & h_1(x)\\\hline
+   \zeta-\epsilon & -\epsilon h(\zeta-\epsilon)  & mh(\zeta-\epsilon)g(\zeta-\epsilon) - \epsilon h'(\zeta-\epsilon)g(\zeta-\epsilon)\\
+   \zeta     &     0    &   mh(\zeta)g(\zeta)\\
+   \zeta+\epsilon & \epsilon h(\zeta-\epsilon)  & mh(\zeta-\epsilon)g(\zeta-\epsilon) + \epsilon h'(\zeta-\epsilon)g(\zeta-\epsilon)\\
+ \end{array}
+ \]
+ %
+
+ Suppose that $g(\zeta)>0$.
+ Then the sign of $h_1$ on $[\zeta-\epsilon,\zeta+\epsilon]$ is opposite to the sign of $h_0(\zeta-\epsilon)$, but the same as the sign of
+ $h_0(\zeta+\epsilon)$.
+ We conclude that the variation $\var(H,t)=\var(G,t)$ decreases by 1 as $t$ passes from $\zeta-\epsilon$ to $\zeta$, but is unchanged as $t$
+ passes from $\zeta$ to $\zeta+\epsilon$,
+ \[
+ \var(G,\zeta-\epsilon)-1\ =\ \var(G,\zeta)\ =\ \var(G,\zeta+\epsilon)\,.
+ \]
+  
+
+ Suppose that $g(\zeta)<0$.
+ Then the sign of $h_1$ on $[\zeta-\epsilon,\zeta+\epsilon]$ is the same as the sign of $h_0(\zeta-\epsilon)$, but opposite to the sign of
+ $h_0(\zeta+\epsilon)$.
+ We conclude that the variation $\var(H,t)=\var(G,t)$ is unchanged as $t$ passes from $\zeta-\epsilon$ to $\zeta$, but increases by 1 as $t$ 
+ passes from $\zeta$ to $\zeta+\epsilon$,
+ \[
+   \var(G,\zeta-\epsilon)\ =\ \var(G,\zeta)\ =\ \var(G,\zeta+\epsilon)-1\,.
+ \]
+
+ Now consider the variation $\var(G,t)$ for $t\in[a,b\hspace{.05cm}]$.
+ This may only change at a number $\zeta\in[a,b]$ if $f(\zeta)=0$.
+ If $g(\zeta)>0$ and $\zeta\neq b$, then it decreases by 1.
+ If $g(\zeta)<0$ and $\zeta\neq a$, then it increases by 1.
+ It is unchanged in all other cases.
+ This completes the proof of the Theorem.  
  \end{proof}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
