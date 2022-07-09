@@ -46,7 +46,7 @@
 \newcommand{\note}[1]{{\color{red}(#1)}}
  
 
-\title{Real solutions of polynomial systems}
+\title{Real solutions to systems of polynomial equations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \author[J.~Lopez Garcia]{Jordy Lopez Garcia} 
 \address{J.~Lopez Garcia\\ 
@@ -126,20 +126,19 @@
 
 %historical background/motivation, discussion of prior results, contribution and why it's important/interesting/novel
 
-Understanding the number of real solutions to systems of polynomials is fundamental for real algebraic geometry and for applications of
-algebraic geometry.
+Understanding the number of real solutions to systems of polynomial equations is fundamental for real algebraic geometry and for
+applications of algebraic geometry.
 In 1999, Grayson and Sottile \cite{So_M2} developed the \textit{Macaulay2} package \texttt{realroots} for this purpose.
 That package had limited functionality and not all of its implemented methods remain compatible with modern releases of \textit{Macaulay2}.
 
 The \textit{Macaulay2} package \texttt{RealRoots} expands and modernizes \texttt{realroots}, superseding it.
-\texttt{RealRoots} implements symbolic methods for studying real solutions of polynomial systems.
-This note provides some descriptions of the mathematical background and examples of methods from the package.
+\texttt{RealRoots} implements symbolic methods for studying real solutions to polynomial systems.
+This note provides some mathematical background and examples of methods from the package.
 Its  three sections each describe related methods.
 
 Section 1 describes methods for counting and isolating real roots of univariate polynomials, as well as methods for determining if a
 polynomial is Hurwitz stable.
-We could not find a proof of Sylvester's Theorem~\ref{Th:Sylvester} in complete generality in the literature, and have included a sketch for
-completeness. 
+We give an extension of Sylvester's Theorem that we coule not find in the literature and sketch its proof.
 
 Section 2 describes methods involving elimination that reduce a zero-dimensional system of multivariate polynomials to a univariate
 polynomial for solving, studying the number of real solutions, or addressing other arithmetic questions, such as Galois groups.
