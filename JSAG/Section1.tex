@@ -185,7 +185,17 @@ Let us continue with the same polynomial $f=x(2x-3)(x^4-2)^2$ as before.
 \verbatiminput{examples/Sturm.txt}
 \end{leftbar}
 %
-Calling {\tt SturmCount(f)} without endpoints $a,b$ computes the number of real roots of $f$.
+Calling {\tt SturmCount(f)} without endpoints $a,b$ returns the number of real roots of $f$.
+An application of Sturm's Theorem is to give \demph{isolating intervals}, which are disjoint intervals with each containing exactly one root
+of $f$. 
+Our implementation gives a list of pairs $\{p,q\}$ such that $(p,q]$ contains a unique root of $f$ and $q-p$ is less than a
+user-provided tolerance.
+The numbers $p,q$ are dyadic, lying in $\ZZ[\frac{1}{2}]$ as they are found using a binary search.
+%
+\begin{leftbar}
+\verbatiminput{examples/realRootIsolation.txt}
+\end{leftbar}
+%
 
     
 %Real root isolation
