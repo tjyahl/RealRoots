@@ -1,6 +1,6 @@
 i1 : R = QQ[x];
 
-i2 : f = (2*x-3)*(x^4-2)^2*x
+i2 : f = x*(2*x-3)*(x^4-2)^2
 
        10     9     6      5     2
 o2 = 2x   - 3x  - 8x  + 12x  + 8x  - 12x
@@ -11,6 +11,6 @@ i3 : BudanFourierBound(f, 0, infinity)
 
 o3 = 3
 
-i4 : BudanFourierBound(f)
+i4 : BudanFourierBound(f, -2, 1)
 
-o4 = 10
+o4 = 7
