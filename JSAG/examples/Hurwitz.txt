@@ -1,0 +1,17 @@
+i11 : HurwitzMatrix( x^4 + 5*x^3 + 7*x^2 + 11*x + 13 ) 
+
+o11 = | 5 11 0  0  |
+      | 1 7  13 0  |
+      | 0 5  11 0  |
+      | 0 1  7  13 |
+
+               4        4
+o11 : Matrix QQ  <--- QQ
+
+i12 : isHurwitzStable( x^4 + 5*x^3 + 7*x^2 + 11*x + 13 ) 
+
+o12 = false
+
+i13 : isHurwitzStable( x^4 + 9*x^3 + 7*x^2 + 5*x + 3 )
+
+o13 = true

@@ -1,7 +1,7 @@
-i5 : SylvesterCount(f, x^2-1, -2, 3)
+i7 : SylvesterCount(f, x^2-1, -2, 3)
 
-o5 = 2
+o7 = 2
 
-i6 : SturmCount(f)
+i8 : SturmCount(f)
 
-o6 = 4
+o8 = 4

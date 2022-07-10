@@ -1,0 +1,63 @@
+
+i1 : loadPackage("RealRoots");
+
+i2 : variations({2,-3,0,-8,12,0,0,8,-12,0})
+
+o2 = 3
+
+i3 : R = QQ[x];
+
+i4 : f = x*(2*x-3)*(x^4-2)^2
+
+       10     9     6      5     2
+o4 = 2x   - 3x  - 8x  + 12x  + 8x  - 12x
+
+o4 : R
+
+i5 : BudanFourierBound(f, 0, infinity)
+
+o5 = 3
+
+i6 : BudanFourierBound(f, -2, 1)
+
+o6 = 7
+
+i7 : SylvesterCount(f, x^2-1, -2, 3)
+
+o7 = 2
+
+i8 : SturmCount(f)
+
+o8 = 4
+
+i9 : realRootIsolation(f,1/2)
+
+         45    15      15       15  45    45  15
+o9 = {{- --, - --}, {- --, 0}, {--, --}, {--, --}}
+         32    16      32       16  32    32   8
+
+o9 : List
+
+i10 : SturmCount(f, -1, 2, Multiplicity=>true)
+
+o10 = 4
+
+i11 : HurwitzMatrix( x^4 + 5*x^3 + 7*x^2 + 11*x + 13 ) 
+
+o11 = | 5 11 0  0  |
+      | 1 7  13 0  |
+      | 0 5  11 0  |
+      | 0 1  7  13 |
+
+               4        4
+o11 : Matrix QQ  <--- QQ
+
+i12 : isHurwitzStable( x^4 + 5*x^3 + 7*x^2 + 11*x + 13 ) 
+
+o12 = false
+
+i13 : isHurwitzStable( x^4 + 9*x^3 + 7*x^2 + 5*x + 3 )
+
+o13 = true
+
+i14 : 
