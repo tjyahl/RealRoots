@@ -1,0 +1,88 @@
+%!PS-Adobe-3.0 EPSF
+%%Title: NetImage.eps
+%%Creator: Frank Sottile
+%%Pages:  1
+%%BoundingBox: 0 0 220 120 
+%%EndComments
+
+25 dict begin
+1 setlinejoin
+1 setlinecap
+
+/f {/xv exch def
+    /f1 {xv 2 mul 3 sub} def
+    /xv2 {xv xv mul} def
+    /f2 { xv2 xv2 mul 2 sub } def
+    xv f1 f2 f2 mul mul mul } def
+%    xv f1 mul }def
+    
+/xsc 60 def
+/ysc 8 def
+/xst -1.5 def
+/xnd 2.0001 def
+
+/ylow 36 def
+/yhgt 120 def
+
+/arr {newpath -5 2.5 moveto 0 0 lineto -5 -2.5 lineto stroke} def
+    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Draws box from (a,b) to (c,d) 
+/BOX {/d exch def /c exch def /b exch def /a exch def 
+        a b moveto c b lineto c d lineto a d lineto closepath} def
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+50 150 translate 2 2 scale 0.5 setlinewidth % 0.5 0.5 0.5 setrgbcolor
+0 0 220 yhgt BOX %
+stroke %clip
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+100 ylow translate
+
+%  Isoating intervals
+5 setlinewidth
+1 1 0.5 setrgbcolor
+newpath -45 32 div xsc mul 0 moveto -15 16 div xsc mul 0 lineto stroke
+newpath -15 32 div xsc mul 0 moveto   0 0 lineto stroke
+newpath  15 16 div xsc mul 0 moveto  45 32 div xsc mul 0 lineto stroke
+newpath  45 32 div xsc mul 0 moveto  15 8 div xsc mul 0 lineto stroke
+
+
+% axes
+0.5 setlinewidth
+0 0 0 setrgbcolor
+newpath -100  0      moveto 120 0 lineto stroke
+newpath   0 ylow neg moveto 0 yhgt ylow sub lineto stroke
+newpath xsc neg  -3      moveto 0 6 rlineto stroke
+newpath xsc      -3      moveto 0 6 rlineto stroke
+newpath -3   ysc -3  mul moveto 6 0 rlineto stroke
+newpath -3   ysc  3  mul moveto 6 0 rlineto stroke
+newpath -3   ysc  6  mul moveto 6 0 rlineto stroke
+newpath -3   ysc  9  mul moveto 6 0 rlineto stroke
+gsave  120   0  translate            arr grestore
+gsave -100   0  translate 180 rotate arr grestore
+gsave    0      ylow neg  translate -90 rotate arr grestore
+gsave    0  yhgt ylow sub translate  90 rotate arr grestore
+
+
+0 0 1 setrgbcolor
+0.8 setlinewidth
+newpath xst xsc mul  xst f ysc mul moveto
+xst 0.01 xnd {/x exch def   x xsc mul  x f ysc mul lineto } for
+stroke 
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+showpage
+grestore
+end
