@@ -2,12 +2,12 @@
 %%Title: NetImage.eps
 %%Creator: Frank Sottile
 %%Pages:  1
-%%BoundingBox: 0 0 220 120 
+%%BoundingBox: 0 0 220 125 
 %%EndComments
 
 25 dict begin
 1 setlinejoin
-1 setlinecap
+0 setlinecap
 
 /f {/xv exch def
     /f1 {xv 2 mul 3 sub} def
@@ -22,7 +22,7 @@
 /xnd 2.0001 def
 
 /ylow 36 def
-/yhgt 120 def
+/yhgt 125 def
 
 /arr {newpath -5 2.5 moveto 0 0 lineto -5 -2.5 lineto stroke} def
     
@@ -31,21 +31,20 @@
 /BOX {/d exch def /c exch def /b exch def /a exch def 
         a b moveto c b lineto c d lineto a d lineto closepath} def
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-50 150 translate 2 2 scale 0.5 setlinewidth % 0.5 0.5 0.5 setrgbcolor
-0 0 220 yhgt BOX %
-stroke %clip
+%50 150 translate 2 2 scale 0.5 setlinewidth % 0.5 0.5 0.5 setrgbcolor
+0 0 220 yhgt BOX %stroke %
+clip
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 100 ylow translate
 
 %  Isoating intervals
 5 setlinewidth
-1 1 0.5 setrgbcolor
-newpath -45 32 div xsc mul 0 moveto -15 16 div xsc mul 0 lineto stroke
-newpath -15 32 div xsc mul 0 moveto   0 0 lineto stroke
-newpath  15 16 div xsc mul 0 moveto  45 32 div xsc mul 0 lineto stroke
-newpath  45 32 div xsc mul 0 moveto  15 8 div xsc mul 0 lineto stroke
+1 0.5 0.5 setrgbcolor
+newpath -165 128 div xsc mul 0 moveto -75  64 div xsc mul 0 lineto stroke
+newpath  -15 128 div xsc mul 0 moveto   0   0 lineto stroke
+newpath   75  64 div xsc mul 0 moveto 165 128 div xsc mul 0 lineto stroke
+newpath   45  32 div xsc mul 0 moveto 195 128 div xsc mul 0 lineto stroke
 
 
 % axes

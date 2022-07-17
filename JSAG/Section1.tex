@@ -1,7 +1,7 @@
 %Section1.tex
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Real roots of univariate polynomials}
+\section{Real roots of univariate polynomials}\label{S:one}
 
 Let $f\in\RR[x]$ be a polynomial.
 It has the form
@@ -102,13 +102,13 @@ Observe the different roles that the endpoints $\{a,b\}$ play in this formula.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{proof}
-  In~\cite{BCR}\footnote{Give a more precise reference (e.g.\ page or Theorem number)},
-  Sylvester's Theorem is stated and proven when $f$ does not vanish at $a$ or at $b$.
-  This is for the Sylvester sequence $\Syl(f,g)$, and not for the reduced Sylvester sequence $g_\bullet$.
-  The proof proceeds by studying $\var(\Syl(f,g), t)$ as $t$ increases fron $a$ to $b$, noting that it may only
+  The version of Sylvester's Theorem~\cite[Thm.\ 2.55]{BPR} states and proves it in the case 
+  when $f$ does not vanish at $a$ or at $b$, and it uses the 
+  the Sylvester sequence $\Syl(f,g)$.
+  That proof proceeds by studying $\var(\Syl(f,g), t)$ as $t$ increases fron $a$ to $b$, noting that it may only
   change when $t$ passes a root of some element of the Sylvester sequence.
-  Since multiplying a sequence by a nonzero number $f_k(t)$ does not change its variation, the proof in~\cite{BCR} also establishes the
-  theorem when $f$ does not vanish at $a$ or at $b$.
+  Since multiplying a sequence by a nonzero number $f_k(t)$ does not change its variation, that proof establishes this refined version
+  when $f$ does not vanish at $a$ or at $b$.
 
   The variation $\var(g_\bullet,t)$ may only change when $t$ passes a root $\zeta\in[a,b\hspace{.05cm}]$ of some $g_i$ in
   $g_\bullet$. 
@@ -188,6 +188,21 @@ Let us continue with the same polynomial $f=x(2x-3)(x^4-2)^2$ as before.
 Calling {\tt SturmCount(f)} without endpoints $a,b$ returns the total number of real roots of $f$.
 
 Figure~\ref{F:One} shows the graph of $f$ in a neighborhood of its roots.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[htb]
+  \centering
+  \begin{picture}(220,125)
+
+    \put(0,0){\includegraphics{pictures/graph_f}}
+    \put(209,40){\small$x$}    \put( 90,114){\small$y$}
+    \put( 31,24){\small$-1$}
+    %\put(155,25){\small$1$}  \put(100, 9){\small$-3$}
+    \put(105,57){\small$3$}  \put(105,81){\small$6$} \put(105,105){\small$9$}
+        
+  \end{picture}
+\caption{Graph of $f$.}\label{F:One}
+\end{figure}  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 An application of Sturm's Theorem is to give \demph{isolating intervals}, which are disjoint intervals with each containing exactly one root
 of $f$. 
@@ -207,6 +222,7 @@ This same idea may be used to upgrade Sylvester's Theorem to give the count with
 \verbatiminput{examples/SturmMultiplicity.txt}
 \end{leftbar}
 %
+These isolating intervals are shown in Figure~\ref{F:One}. 
 
 A polynomial $f\in\RR[x]$ is \demph{Hurwitz-stable} if all of its complex roots have negative real parts.
 Solutions to the system of constant coefficient ordinary differential equations 
