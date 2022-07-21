@@ -4,22 +4,9 @@ o1 = R
 
 o1 : PolynomialRing
 
-i2 : I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
-
-               2    2         2
-o2 = ideal (- x  + y  - 1, - y  + x + 4y - 2)
-
-o2 : Ideal of R
-
-i3 : g = 2*x + y
-
-o3 = 2x + y
-
-o3 : R
-
-i4 : minimalPolynomial(g,I)
+i2 : minimalPolynomial(2*x + y,ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2))
 
          4        3         2
-o4 = 727Z  - 8724Z  - 12359Z  - 11632Z - 34169
+o2 = 727Z  - 8724Z  - 12359Z  - 11632Z - 34169
 
-o4 : QQ[Z]
+o2 : QQ[Z]

@@ -1,13 +1,13 @@
-i5 : minimalPolynomial(y,I)
+i3 : minimalPolynomial(y,ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2))
 
       4     3      2
-o5 = Z  - 8Z  + 19Z  - 16Z + 5
+o3 = Z  - 8Z  + 19Z  - 16Z + 5
 
-o5 : QQ[Z]
+o3 : QQ[Z]
 
-i6 : univariateEliminant(y,I)
+i4 : univariateEliminant(y,ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2))
 
       4     3      2
-o6 = y  - 8y  + 19y  - 16y + 5
+o4 = y  - 8y  + 19y  - 16y + 5
 
-o6 : R
+o4 : R
