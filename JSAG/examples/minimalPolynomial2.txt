@@ -1,0 +1,13 @@
+i5 : minimalPolynomial(y,I)
+
+      4     3      2
+o5 = Z  - 8Z  + 19Z  - 16Z + 5
+
+o5 : QQ[Z]
+
+i6 : univariateEliminant(y,I)
+
+      4     3      2
+o6 = y  - 8y  + 19y  - 16y + 5
+
+o6 : R
