@@ -458,7 +458,18 @@ traceSignature (RingElement) := ZZ => f->(
     signature(traceForm(f))
     )
 
+--Computes the rank of the trace form.
+traceRank = method()
+traceRank (RingElement,Ideal) := ZZ => (f,I)->(
+    rank(traceForm(f,I))
+    )
 
+traceRank (RingElement) := ZZ => f->(
+    rank(traceForm(f))
+    )
+
+--
+	
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 traceCount = method()
 traceCount (RingElement) := ZZ => f->(

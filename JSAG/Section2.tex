@@ -20,30 +20,35 @@ which is the \defcolor{\textit{regular representation}} of $\KK[x_{1},\dots,x_{n
 \end{theorem}
 
 %what we mean by elimination (minimal polynomial in Artinian ring)
-In \texttt{RealRoots}, \defcolor{elimination} refers to computing the minimal polynomial of the element of an Artinian ring. Note that we obtain a new polynomial with indeterminante \texttt{Z}.
+In \texttt{RealRoots}, \demph{elimination} refers to computing the minimal polynomial of the element of an Artinian ring. Note that we obtain a new polynomial with indeterminante \texttt{Z}.
 %
 \begin{leftbar}
 \verbatiminput{examples/minimalPolynomial1.txt}
 \end{leftbar}
+%
+The package contains two methods to compute the minimal polynomial of an input $f$. The default strategy finds a minimal linear combination in the powers of $f$. The second strategy computes the kernel of the multiplication map $m_{i}$.
+%
+\begin{leftbar}
+\verbatiminput{examples/minimalPolynomial2.txt}
+\end{leftbar}
 % define univariate eliminant
+Consider a multivariate system of polynomials with real coefficients \[f_{1}(x_{1},\dots,x_{n}) = f_{2}(x_{1},x_{2},\dots, x_{n}) = \cdots = f_{N}(x_{1},\dots, x_{n}) = 0.
+\] Let $I = \langle f_{1},\dots,f_{N}\rangle \subset \RR[x_{1},\dots,x_{n}]$. For each variable $x_{i}$, there exists a univariate polynomial $g(x_{i})$ of minimal degree called a \demph{univariant eliminant} for $I$. The roots of $g(x_{i})$ form the set of $i$th coordinates of solutions to the system \cite{So_Book}.
 
 %this is an univariate eliminant in the case ring element is variable
 In the case the ring element is a variable, the minimal polynomial is the univariate eliminant.
 %
 \begin{leftbar}
-\verbatiminput{examples/minimalPolynomial2.txt}
+\verbatiminput{examples/minimalPolynomial3.txt}
 \end{leftbar}
 %
-
-
-
 
 %rational univariate eliminant uses characteristic polynomial instead of minimal polynomial
 
 %for zero-dimensional real systems, this gives an effective way to compute real solutions
 %
 
-
+{\color{red} Any problem with the above example having ring QQ[Z] and not RR[Z]?}
 
 {\color{red} Frank thinks we should do a Galois computation of 27 lines on a symmetric cubic surface.}
 
