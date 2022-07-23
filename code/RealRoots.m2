@@ -483,7 +483,7 @@ traceCount (Ideal) := ZZ=> I->(
     R := ring I;
     traceCount(R/I)
     )
-
+-- This is where the action takes place
 traceCount (QuotientRing) := ZZ=> R->(
     signature(traceForm(1_R))
     )
