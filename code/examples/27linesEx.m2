@@ -10,7 +10,6 @@ start = transpose matrix{apply(20,i->random(-30,30)*random(QQ))};
 curMax = 0;
 stuckCount = 0;
 i=0;
-bigEnough = {};
 while true do (
     i=i+1;
     stuckCount=stuckCount+1;
@@ -35,9 +34,6 @@ while true do (
     --print("rationalUnivariateRepresentation complete, counting real roots");
     --if first degree ch != 27 then continue;
     n = SturmCount(ch);
-    if (n>=19) then (
-	bigEnough = bigEnough|{h}
-	);
     if (n>=curMax) then (
 	print("new or equivalent maximum found, changing base point");
 	if (n>curMax) then (

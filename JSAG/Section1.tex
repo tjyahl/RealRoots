@@ -71,7 +71,7 @@ and for $i\geq 1$,
     \defcolor{f_{i+1}}\ \vcentcolon=\ -1\cdot \mbox{remainder}(f_{i-1},f_i)\,,
   \]
 %
-the negative remainder term in the division of $f_{i-1}$ by $f_i$.
+the negative remainder term in the division of $f_{i-1}$ by $f_i$. \note{This is the Sylvester sequence of $f$ and $f'g$, not $f$ and $g$. Either correct this here or change the statement of the thoerem. Make sure the use is consistent throughout.}
 The last nonzero remainder is $f_k = \gcd(f,f'g)$.
 Observe that for each $1\leq i\leq k$ there exists $\defcolor{q_i}\in\RR[x]$ such that
 %
@@ -81,7 +81,7 @@ Observe that for each $1\leq i\leq k$ there exists $\defcolor{q_i}\in\RR[x]$ suc
 %
 The \demph{reduced Sylvester sequence} is obtained by dividing each term in the Sylvester sequence by $f_k=\gcd(f,f'g)$.
 Note that the elements $(g_0,\dotsc,g_k)$ of the reduced Sylvester sequence satisfy~\eqref{Eq:divisionAlgorithm} with $f_j$ replacing $g_j$,
-and we also have that $g_k=1$.
+and we also have that $g_k=1$. \note{Is there a better symbol than $g$ to use for the (reduced) Sylvester sequence?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{theorem}[Sylvester]
@@ -108,12 +108,12 @@ Observe the different roles that the endpoints $\{a,b\}$ play in this formula.
   That proof proceeds by studying $\var(\Syl(f,g), t)$ as $t$ increases fron $a$ to $b$, noting that it may only
   change when $t$ passes a root of some element of the Sylvester sequence.
   Since multiplying a sequence by a nonzero number $f_k(t)$ does not change its variation, that proof establishes this refined version
-  when $f$ does not vanish at $a$ or at $b$.
+  when $f$ does not vanish at $a$ or at $b$. 
 
   The variation $\var(g_\bullet,t)$ may only change when $t$ passes a root $\zeta\in[a,b\hspace{.05cm}]$ of some $g_i$ in
   $g_\bullet$. 
   Observe that $\zeta$ cannot be a root of two consecutive elements of $g_\bullet$.
-  If it were, then by~\eqref{Eq:divisionAlgorithm} and an induction, it is a root of all elements of $g_\bullet$, and thus of $g_k=1$, which is a
+  If it were, then by~\eqref{Eq:divisionAlgorithm} and induction, it is a root of all elements of $g_\bullet$, and thus of $g_k=1$, which is a
   contradiction.
   Suppose that $g_i(\zeta)=0$ for some $i\geq 1$.
   By~\eqref{Eq:divisionAlgorithm} again, $g_{i-1}(x)$ and $g_{i+1}(x)$ have opposite signs for $x$ near $\zeta$ and thus
@@ -122,14 +122,13 @@ Observe the different roles that the endpoints $\{a,b\}$ play in this formula.
 
   We now suppose that $g_0(\zeta)=0$ and thus $g_1(\zeta)\neq 0$.
   Then we have $f(\zeta)=0$.
-  Let $m$ be the multiplicity of the root $\zeta$ of $f$.
-  Then $f=(x{-}\zeta)^m h$ with $h(\zeta)\neq 0$.
+  Let $m$ be the multiplicity of the root $\zeta$ of $f$ so that $f=(x{-}\zeta)^m h$ with $h(\zeta)\neq 0$.
   If $g(\zeta)=0$, then $(x{-}\zeta)^m$ divides $f'g$ and thus $f_k$, and so $g_0=f/f_k$ does not vanish at $\zeta$.
   Thus $g(\zeta)\neq 0$.
 
   Notice that $\defcolor{h_0}\vcentcolon=f/(x{-}\zeta)^{m-1}$ and $\defcolor{h_1}\vcentcolon=f'g/(x{-}\zeta)^{m-1}$ have the same signs for
   $x$ near $\zeta$ as do $g_0$ and $g_1$.
-  A computation reveals that $h_1=mhg+(x{-}\zeta)h'g$. 
+  A computation reveals that $h_1=mhg+(x{-}\zeta)h'g$.
  Choose $\epsilon>0$ so that $\zeta$ is the only root of any element in $g_\bullet$ lying in the interval
  $[\zeta-\epsilon,\zeta+\epsilon]$.
  We have
@@ -222,7 +221,7 @@ This same idea may be used to upgrade Sylvester's Theorem to give the count with
 \verbatiminput{examples/SturmMultiplicity.txt}
 \end{leftbar}
 %
-These isolating intervals are shown in Figure~\ref{F:One}. 
+These isolating intervals are shown in Figure~\ref{F:One}. \note{This should be above with the comments about isolation.}
 
 A polynomial $f\in\RR[x]$ is \demph{Hurwitz-stable} if all of its complex roots have negative real parts.
 Solutions to the system of constant coefficient ordinary differential equations 
@@ -244,7 +243,7 @@ Given a polynomial $f=c_kx^k+c_{k-1}x^{k-1}+\dotsb+c_0$,  let \defcolor{$H$} be 
     0    &    0   & \dotsb&c_2 & c_0
 \end{matrix}\right)
 \]
-For $1\leq \ell\leq k$, the Hurwitz determinant \defcolor{$\Delta_\ell$} is the $\ell$th principal minor of $H$.
+For $1\leq \ell\leq k$, the Hurwitz determinant \defcolor{$\Delta_\ell$} is the $\ell$th principal minor of $H$. \note{Mention that $c_k\ge 0$ is necessary for stability? Also, what is $a_k$ below? $c_k$?}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

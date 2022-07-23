@@ -149,7 +149,7 @@ derivSequence (RingElement) := List => f->(
 
 --Compute the minimalPolynomial of 'f' in the quotient ideal defined by 'I'
 ----better naming for strategies?
-minimalPolynomial = method(Options=>{Strategy=>0})
+minimalPolynomial = method(Options=>{Strategy=>0,Variable=>"Z"})
 minimalPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
     R := ring f;
     if not (ring I === R) then error "Error: Expected polynomial and ideal of the same ring";
@@ -161,7 +161,7 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
     if not isArtinian(R) then error "Error: Expected element of Artinian ring";
 
     K := coefficientRing R;
-    Z := getSymbol "Z";
+    Z := opts.Variable;
     S := K(monoid [Z]);
     
     if (opts.Strategy === 0) then (
@@ -183,11 +183,9 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
 
 
 --Function alias
-univariateEliminant = method(Options=>{Strategy=>0})
+univariateEliminant = method(Options=>{Strategy=>0,Variable=>"Z"})
 univariateEliminant (RingElement,Ideal) := o-> (g,I)-> (
-    f := minimalPolynomial(g,I,o);
-    phi := map(ring g,ring f,{g});
-    phi(f)
+    minimalPolynomial(g,I,o)
     )
 
 
@@ -467,8 +465,6 @@ traceRank (RingElement,Ideal) := ZZ => (f,I)->(
 traceRank (RingElement) := ZZ => f->(
     rank(traceForm(f))
     )
-
---
 	
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 traceCount = method()
@@ -569,7 +565,13 @@ isHurwitzStable (RingElement) := Boolean => f->(
 
 beginDocumentation()
 
-undocumented {delete((SylvesterCount,RingElement,RingElement,RR,RR),flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(SylvesterCount,RingElement,RingElement,a,b))),delete((SturmCount,RingElement,RR,RR),flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(SturmCount,RingElement,a,b))),(realRootIsolation, RingElement,ZZ),(realRootIsolation, RingElement,QQ),delete((BudanFourierBound,RingElement,RR,RR),flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(BudanFourierBound,RingElement,a,b)))}
+undocumented {
+    delete((SylvesterCount,RingElement,RingElement,RR,RR),flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(SylvesterCount,RingElement,RingElement,a,b))),
+    delete((SturmCount,RingElement,RR,RR),flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(SturmCount,RingElement,a,b))),
+    delete((BudanFourierBound,RingElement,RR,RR),flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(BudanFourierBound,RingElement,a,b))),
+    (realRootIsolation, RingElement,ZZ),
+    (realRootIsolation, RingElement,QQ)
+    }
 
 document {
 	Key => RealRoots,

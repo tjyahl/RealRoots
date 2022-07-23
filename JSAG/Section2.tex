@@ -5,50 +5,36 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Elimination}
 
-%regular reprersentation and Stickelberger's theorem?
+We provide two means of reducing the study of a zero-dimensional affine scheme to the study of roots of a univariate polynomial. Representing the scheme as the zero set of a multivariate polynomial ideal allows for classical symbolic methods such as univariate elimination. Elimination restricts the given ideal to a user-specified univariate subring and is readily computable, but makes no guarantee on preservation of degree or multiplicity. The rational univariate representation is a stronger version of elimination that does preserve these structures and can be used to recover coordinates of points in the original scheme, but this comes at an additional cost.
 
-\textcolor{red}{Frank, how do we reference your aag paper?}
+Let $I\subseteq\CC[x_1,\dotsc,x_n]$ \note{$\RR$ vs $\CC$?} be a zero-dimensional ideal with associated scheme $\mathcal{V}(I)\subseteq\CC^n$. Note the Artinian ring $\CC[x_1,\dotsc,x_n]/I$ is a vector space of dimension $d = \deg(I)$ and $|\mathcal{V}(I)|\le d$. Given an element $f\in\CC[x_1,\dotsc,x_n]/I$, the \defcolor{regular representation} of $f$ denoted by $m_f$ is the linear map on $\CC[x_1,\dotsc,x_n]/I$ sending $g\to fg$. \note{better letter than $g$?} The eigenvalues of $m_f$ are the values of $f$ evaluated at points of $\mathcal{V}(I)$, and the multiplicity of each eigenvalue is the sum of multiplicities of the corresponding points for which $f$ evaluates to this value \note{cite Stickelberger}.
 
-Let $\KK$ be an algebraically closed ring, and let $I\subset \KK[x_{1},\dots,x_{n}]$ be a zero-dimensional ideal. It is well-known that $\KK[x_{1},\dots,x_{n}]/I$ is a finite-dimensional vector space with $d:=\text{dim}\left( \KK[x_{1},
-\dots, x_{n}]/I \right) = \deg(I)$, and $|\mathcal{V}(I)|< d$ [aag]. Given $f\in \KK[x_{1},\dots, x_{n}]$, and for each $i=1,\dots,n$, we define the multiplication map $m_{i}\in \text{End} (\KK[x_{1},\dots, x_{n}]/I)$ sending $\overline{f}$ to $\overline{x_{i}f}$. Hence, $x_{i}\mapsto m_{i}$ induces the injection
+The \defcolor{univariate eliminant} of $I$ with respect to $f$ is the minimal polynomial of $m_f$. When $f$ is a variable, e.g. $f=x_1$, this is the monic generator of the univariate ideal $I\cap\CC[x_1]$. Choosing a basis for the vector space $\CC[x_1,\dotsc,x_n]/I$, the regular representation is given as a $d\times d$ matrix and its minimal polynomial is easily computed. This gives an explicit way of computing univariate eliminants.
 
-\begin{align*}\KK[x_{1},\dots,x_{n}]/I \hookrightarrow \text{End }\left(\KK[x_{1},\dots, x_{n}]/I \right), \end{align*}
+The function \texttt{regularRepresentation} takes as input a polynomial $f\in\CC[x_1,\dotsc,x_n]$ and an ideal $I\subseteq\CC[x_1,\dotsc,x_n]$ and outputs a basis for the vector space $\CC[x_1,\dotsc,x_n]/I$ and the matrix representation of the regular representation $m_f$. Note that the method \texttt{minimalPolynomial} takes various forms of input and its output is a univariate polynomial in a new variable \texttt{Z} which may be chosen by the user via the option \texttt{Variable}. The function \texttt{univariateEliminant} is an alias for the function \texttt{minimalPolynomial}. \note{maybe \texttt{minimalPolynomial} should accept the direct outout of \texttt{regularRepresentation}}\note{Should we restart the M2 I/O counter between sections?}
 
-which is the \defcolor{\textit{regular representation}} of $\KK[x_{1},\dots,x_{n}]/I$. Thus the map $m_{i}$ can be represented as a $d\times d$-matrix with respect to a basis of standard monomials.
-
-\begin{theorem}[Stickelberger's Theorem] For each $i=1,\dots, n$, the value $\lambda \in \KK$ is an eigenvalue of the endomorphism $m_{i}$ if and only if here exists $a\in \mathcal{V}(I)$ such that $a_{i}=\lambda$.
-\end{theorem}
-
-%what we mean by elimination (minimal polynomial in Artinian ring)
-In \texttt{RealRoots}, \demph{elimination} refers to computing the minimal polynomial of the element of an Artinian ring. Note that we obtain a new polynomial with indeterminante \texttt{Z}.
 %
 \begin{leftbar}
-\verbatiminput{examples/minimalPolynomial1.txt}
-\end{leftbar}
-%
-The package contains two methods to compute the minimal polynomial of an input $f$. The default strategy finds a minimal linear combination in the powers of $f$. The second strategy computes the kernel of the multiplication map $m_{i}$.
-%
-\begin{leftbar}
-\verbatiminput{examples/minimalPolynomial2.txt}
-\end{leftbar}
-% define univariate eliminant
-Consider a multivariate system of polynomials with real coefficients \[f_{1}(x_{1},\dots,x_{n}) = f_{2}(x_{1},x_{2},\dots, x_{n}) = \cdots = f_{N}(x_{1},\dots, x_{n}) = 0.
-\] Let $I = \langle f_{1},\dots,f_{N}\rangle \subset \RR[x_{1},\dots,x_{n}]$. For each variable $x_{i}$, there exists a univariate polynomial $g(x_{i})$ of minimal degree called a \demph{univariant eliminant} for $I$. The roots of $g(x_{i})$ form the set of $i$th coordinates of solutions to the system \cite{So_Book}.
-
-%this is an univariate eliminant in the case ring element is variable
-In the case the ring element is a variable, the minimal polynomial is the univariate eliminant.
-%
-\begin{leftbar}
-\verbatiminput{examples/minimalPolynomial3.txt}
+\verbatiminput{examples/regularRep.txt}
 \end{leftbar}
 %
 
-%rational univariate eliminant uses characteristic polynomial instead of minimal polynomial
+When $f$ and $I$ are represented by real polynomials, the real roots of the univariate eliminant correspond to real points of $\mathcal{V}(I)$. This allows one to study real points of zero-dimensional schemes by studying roots of the the univariate eliminant. \note{By this, the RUR is just an eliminant + the rational inverse map. We should say this explicitly rather than treating them separately.}
 
-%for zero-dimensional real systems, this gives an effective way to compute real solutions
+The computation below shows there are at least 2 real points of the scheme $\mathcal{V}(I)$. 
+
+%
+\begin{leftbar}
+\verbatiminput{examples/eliminantSturm.txt}
+\end{leftbar}
 %
 
-{\color{red} Any problem with the above example having ring QQ[Z] and not RR[Z]?}
+When $f$ separates the points of $\mathcal{V}(I)$, the univariate eliminant of $I$ with respect to $f$ is a univariate polynomial of degree $d$ whose roots have the same multiplicities as the points of $\mathcal{V}(I)$. That is to say, these are isomorphic schemes. In this setting, the function $f$ defines a map from $\mathcal{V}(I)$ to the roots of the roots of the univariate eliminant and there is a rational map $\phi:\CC\to\CC^n$ that restricts to an inverse of $f$. Such a tuple $(f,E,\phi)$ is known as a \defcolor{rational univariate representation} of $I$. \note{We need to settle on notation for the univariate eliminant and stop writing "univariate eliminant" every time (and replace $E$ here)}
 
-{\color{red} Frank thinks we should do a Galois computation of 27 lines on a symmetric cubic surface.}
+We implement the alorithm of \note{names/citation} to compute rational univariate representations. This method has the advantage that the number of real roots and their multiplicities are preserved with an explicit isomorphism, though there is the additional cost of certifying that the chosen $f$ separates the points of $\mathcal{V}(I)$ and computing the rational map $\phi$. The method \texttt{rationalUnivariateRepresentation} outputs such a rational univariate representation tuple $(f,E,\phi)$ and is illustrated below.
 
+%
+\begin{leftbar}
+\verbatiminput{examples/RUR.txt}
+\end{leftbar}
+%

@@ -1,0 +1,21 @@
+i1 : R = QQ[x,y];
+
+i2 : I = ideal(y^2-x^2-1,x-y^2+4*y-2);
+
+i3 : f = 2*x+y;
+
+i4 : regularRepresentation(f,I)
+
+o4 = (| 1 x xy y |, | 0 -6 -19 -2 |)
+                    | 2 2  7   1  |
+                    | 0 1  6   2  |
+                    | 1 8  30  4  |
+
+o4 : Sequence
+
+i5 : minimalPolynomial(f,I)
+
+         4        3         2
+o5 = 727Z  - 8724Z  - 12359Z  - 11632Z - 34169
+
+o5 : QQ[Z]
