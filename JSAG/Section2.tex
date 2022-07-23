@@ -3,16 +3,29 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Elimination}
+\section{Elimination}\label{S:two}
 
-We provide two means of reducing the study of a zero-dimensional affine scheme to the study of roots of a univariate polynomial. Representing the scheme as the zero set of a multivariate polynomial ideal allows for classical symbolic methods such as univariate elimination. Elimination restricts the given ideal to a user-specified univariate subring and is readily computable, but makes no guarantee on preservation of degree or multiplicity. The rational univariate representation is a stronger version of elimination that does preserve these structures and can be used to recover coordinates of points in the original scheme, but this comes at an additional cost.
+Elimination is a classical symbolic method often used to solve systems of equations.
+Geometrically, it gives the image of a variety under a polynomial map, such as a coordinate projection.
+\texttt{RealRoots} implements two methods for zero-dimensional ideals that reduce their study to that of univariate polynomials.
 
-Let $I\subseteq\CC[x_1,\dotsc,x_n]$ \note{$\RR$ vs $\CC$?} be a zero-dimensional ideal with associated scheme $\mathcal{V}(I)\subseteq\CC^n$. Note the Artinian ring $\CC[x_1,\dotsc,x_n]/I$ is a vector space of dimension $d = \deg(I)$ and $|\mathcal{V}(I)|\le d$. Given an element $f\in\CC[x_1,\dotsc,x_n]/I$, the \defcolor{regular representation} of $f$ denoted by $m_f$ is the linear map on $\CC[x_1,\dotsc,x_n]/I$ sending $g\to fg$. \note{better letter than $g$?} The eigenvalues of $m_f$ are the values of $f$ evaluated at points of $\mathcal{V}(I)$, and the multiplicity of each eigenvalue is the sum of multiplicities of the corresponding points for which $f$ evaluates to this value \note{cite Stickelberger}.
+Let  $\Bbbk$ be a field and $I\subseteq\Bbbk[x_1,\dotsc,x_n]$ be a zero-dimensional ideal  with scheme $\calV(I)\subseteq\Bbbk^n$.
+The Artinian ring $R=\Bbbk[x_1,\dotsc,x_n]/I$ is a vector space over $\Bbbk$ of dimension $\defcolor{d}\vcentcolon=\mbox{degree}(I)$, and
+$|\calV(I)|\leq d$.
+The ring $R$ acts on itself by multiplication.
+For $f\in R$, let \defcolor{$m_f$} be the operator of multiplication by $f$, for $g\in R$, $m_f(g)=fg$.
+By the Stickelberger's Theorem~\cite{Cox2021}, the eigenvalues of $m_f$ are the values of $f$ at the  points of $\calV(I)$,
+and the multiplicity of the eigenvalue $\lambda$ is the sum of the multiplicities in $\calV(I)$ of the inverse images,
+$f^{-1}(\lambda)\cap\calV(I)$. 
 
-The \defcolor{univariate eliminant} of $I$ with respect to $f$ is the minimal polynomial of $m_f$. When $f$ is a variable, e.g. $f=x_1$, this is the monic generator of the univariate ideal $I\cap\CC[x_1]$. Choosing a basis for the vector space $\CC[x_1,\dotsc,x_n]/I$, the regular representation is given as a $d\times d$ matrix and its minimal polynomial is easily computed. This gives an explicit way of computing univariate eliminants.
 
-The function \texttt{regularRepresentation} takes as input a polynomial $f\in\CC[x_1,\dotsc,x_n]$ and an ideal $I\subseteq\CC[x_1,\dotsc,x_n]$ and outputs a basis for the vector space $\CC[x_1,\dotsc,x_n]/I$ and the matrix representation of the regular representation $m_f$. Note that the method \texttt{minimalPolynomial} takes various forms of input and its output is a univariate polynomial in a new variable \texttt{Z} which may be chosen by the user via the option \texttt{Variable}. The function \texttt{univariateEliminant} is an alias for the function \texttt{minimalPolynomial}. \note{maybe \texttt{minimalPolynomial} should accept the direct outout of \texttt{regularRepresentation}}\note{Should we restart the M2 I/O counter between sections?}
-
+The (univariate) \defcolor{eliminant} of $I$ with respect to $f$ is the minimal polynomial of $m_f$.
+When $f$ is a variable, e.g.\ $f=x_1$, this is the monic generator of the univariate ideal $I\cap\Bbbk[x_1]$.
+In general, it is the kernel of the map $\Bbbk[Z]\to R$, where $Z\mapsto f$.
+The function \texttt{regularRepresentation} computes a matrix representing $m_f$ with respect to the standard basis for $I$ in
+$\Bbbk[x_1,\dotsc,x_n]$, returning both.
+The function \texttt{univariateEliminant} returns the minimal polynomial of $m_f$, with respect to new user-chosen variable (or the default
+\texttt{Z}).
 %
 \begin{leftbar}
 \verbatiminput{examples/regularRep.txt}

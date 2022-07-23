@@ -10,7 +10,7 @@ It has the form
    f\ =\ c_kx^{a_k}  + \dotsb + c_{1}x^{a_{1}} + c_0x^{a_0}\,,
  \]
 %
-where $a_k> \dotsb > a_1 > a_0$ are nonnegative integers and for $0\leq i \leq k$, $c_{i}$ is a nonzero real number.
+where $a_k> \dotsb > a_1 > a_0 \geq 0$ are integers and for $0\leq i \leq k$, $c_{i}\in\RR$ is nonzero.
 Let $\defcolor{\var(c_0,\dotsc,c_k)}\vcentcolon=\#\{1\leq i\leq k\mid c_{i-1}c_i<0\}$ be the number of variations in sign of the
 coefficients of $f$.
 Descartes' Rule of Signs \cite{So_Book} gives an upper bound for the number of positive real roots of $f$.
@@ -22,7 +22,7 @@ Descartes' Rule of Signs \cite{So_Book} gives an upper bound for the number of p
 \end{theorem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-More generally, given any sequence $c=(c_0,\dotsc,c_k)$, we compute the \demph{variation}  \defcolor{$\var(c)$} of $c$ by counting the
+Given any sequence $c=(c_0,\dotsc,c_k)$, the \demph{variation}  \defcolor{$\var(c)$} of $c$ is the
 number of variations in sign after removing all zero terms.
 %
 \begin{leftbar}
@@ -71,7 +71,7 @@ and for $i\geq 1$,
     \defcolor{f_{i+1}}\ \vcentcolon=\ -1\cdot \mbox{remainder}(f_{i-1},f_i)\,,
   \]
 %
-the negative remainder term in the division of $f_{i-1}$ by $f_i$. \note{This is the Sylvester sequence of $f$ and $f'g$, not $f$ and $g$. Either correct this here or change the statement of the thoerem. Make sure the use is consistent throughout.}
+the negative remainder term in the division of $f_{i-1}$ by $f_i$.
 The last nonzero remainder is $f_k = \gcd(f,f'g)$.
 Observe that for each $1\leq i\leq k$ there exists $\defcolor{q_i}\in\RR[x]$ such that
 %
@@ -79,14 +79,15 @@ Observe that for each $1\leq i\leq k$ there exists $\defcolor{q_i}\in\RR[x]$ suc
     f_{i-1}\ =\ q_i(x)f_i(x)-f_{i+1}(x)\,.
  \end{equation}
 %
-The \demph{reduced Sylvester sequence} is obtained by dividing each term in the Sylvester sequence by $f_k=\gcd(f,f'g)$.
-Note that the elements $(g_0,\dotsc,g_k)$ of the reduced Sylvester sequence satisfy~\eqref{Eq:divisionAlgorithm} with $f_j$ replacing $g_j$,
-and we also have that $g_k=1$. \note{Is there a better symbol than $g$ to use for the (reduced) Sylvester sequence?}
+The \demph{reduced Sylvester sequence} $\defcolor{g_\bullet}=(g_0,\dotsc,g_k)$ is obtained by dividing each term in the Sylvester sequence
+by $f_k=\gcd(f,f'g)$, so that $g_if_k=f_i$ for each $i$. 
+Note that  $g_k=1$ and elements of the reduced Sylvester sequence satisfy~\eqref{Eq:divisionAlgorithm} with $f_j$ replacing $g_j$,
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{theorem}[Sylvester]
   \label{Th:Sylvester}
-  Let $f,g\in\RR[x]$ and suppose that $g_\bullet$ is the reduced Sylvester sequence of $f$ and $f'g$.
+  Let $f,g\in\RR[x]$ and suppose that $g_\bullet$ is the reduced Sylvester sequence of $f$ and $g$.
   For $a<b$ in $\RR\cup\{\pm\infty\}$ we have
   %
   \begin{multline*}
@@ -102,7 +103,7 @@ Observe the different roles that the endpoints $\{a,b\}$ play in this formula.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{proof}
-  The version of Sylvester's Theorem~\cite[Thm.\ 2.55]{BPR} states and proves it in the case 
+  The version of Sylvester's Theorem given in~\cite[Thm.\ 2.55]{BPR} states and proves it 
   when $f$ does not vanish at $a$ or at $b$, and it uses the 
   the Sylvester sequence $\Syl(f,g)$.
   That proof proceeds by studying $\var(\Syl(f,g), t)$ as $t$ increases fron $a$ to $b$, noting that it may only
@@ -168,7 +169,7 @@ Observe the different roles that the endpoints $\{a,b\}$ play in this formula.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The \demph{Sturm sequence} of a polynomial $f\in\RR[x]$ is the Sylvester sequence $\Syl(f,1)$.
-We form the \demph{reduced Sturm sequence} as before.
+We may form the \demph{reduced Sturm sequence} as before.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{corollary}[Sturm's Theorem]
@@ -203,7 +204,7 @@ Figure~\ref{F:One} shows the graph of $f$ in a neighborhood of its roots.
 \end{figure}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-An application of Sturm's Theorem is to give \demph{isolating intervals}, which are disjoint intervals with each containing exactly one root
+An application of Sturm's Theorem is to give \demph{isolating intervals}, which are disjoint intervals each containing exactly one root
 of $f$. 
 Our implementation gives a list of pairs $\{p,q\}$ such that $(p,q]$ contains a unique root of $f$ and $q-p$ is less than a
 user-provided tolerance.
@@ -213,6 +214,8 @@ The numbers $p,q$ are dyadic, lying in $\ZZ[\frac{1}{2}]$, as they are found usi
 \verbatiminput{examples/realRootIsolation.txt}
 \end{leftbar}
 %
+These isolating intervals are shown in Figure~\ref{F:One}. 
+
 Thomas~\cite{Thomas} observed that recursively iterating Sturm's Theorem on $f_k:=\gcd(f,f')$ can be used to give the number of real roots of
 $f$, counted with multiplicity.
 This same idea may be used to upgrade Sylvester's Theorem to give the count with multiplicity.
@@ -221,9 +224,8 @@ This same idea may be used to upgrade Sylvester's Theorem to give the count with
 \verbatiminput{examples/SturmMultiplicity.txt}
 \end{leftbar}
 %
-These isolating intervals are shown in Figure~\ref{F:One}. \note{This should be above with the comments about isolation.}
 
-A polynomial $f\in\RR[x]$ is \demph{Hurwitz-stable} if all of its complex roots have negative real parts.
+A polynomial $f\in\RR[x]$ is \demph{Hurwitz-stable} if its complex roots all have negative real parts.
 Solutions to the system of constant coefficient ordinary differential equations 
 %
  \[
@@ -231,7 +233,7 @@ Solutions to the system of constant coefficient ordinary differential equations
  \]
 %
 are asymptotically stable ($\lim_{t\to\infty}y(t)=0$) when all eigenvalues $\zeta$ of $A$ have negative real part,
-if and only if the characteristic polynomial of $A$ is Hurwitz-stable.
+equivalently when the characteristic polynomial of $A$ is Hurwitz-stable.
  
 Given a polynomial $f=c_kx^k+c_{k-1}x^{k-1}+\dotsb+c_0$,  let \defcolor{$H$} be the matrix
 \[
@@ -243,13 +245,13 @@ Given a polynomial $f=c_kx^k+c_{k-1}x^{k-1}+\dotsb+c_0$,  let \defcolor{$H$} be 
     0    &    0   & \dotsb&c_2 & c_0
 \end{matrix}\right)
 \]
-For $1\leq \ell\leq k$, the Hurwitz determinant \defcolor{$\Delta_\ell$} is the $\ell$th principal minor of $H$. \note{Mention that $c_k\ge 0$ is necessary for stability? Also, what is $a_k$ below? $c_k$?}
+For $1\leq \ell\leq k$, the \demph{Hurwitz determinant} \defcolor{$\Delta_\ell$} is the $\ell$th principal minor of $H$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Hurwitz stability
 \begin{theorem}[Hurwitz~\cite{Hurwitz}]
-  Suppose that $a_k>0$.
+  Suppose that $c_k>0$.
   Then $f$ is Hurwitz stable if and only if all the Hurwitz determinants $\Delta_{1},\dots,\Delta_{k}$ are positive.
 \end{theorem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
