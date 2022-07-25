@@ -32,7 +32,7 @@ The function \texttt{univariateEliminant} returns the minimal polynomial of $m_f
 \end{leftbar}
 %
 
-When $f$ and $I$ are represented by real polynomials, the real roots of the univariate eliminant correspond to real points of $\mathcal{V}(I)$. This allows one to study real points of zero-dimensional schemes by studying roots of the the univariate eliminant. \note{By this, the RUR is just an eliminant + the rational inverse map. We should say this explicitly rather than treating them separately.}
+When $f$ is a real polynomial, the real roots of the eliminant correspond to real points of $\mathcal{V}(I)$. This allows one to count real points of zero-dimensional schemes by studying roots of the the eliminant. 
 
 The computation below shows there are at least 2 real points of the scheme $\mathcal{V}(I)$. 
 
@@ -42,9 +42,9 @@ The computation below shows there are at least 2 real points of the scheme $\mat
 \end{leftbar}
 %
 
-When $f$ separates the points of $\mathcal{V}(I)$, the univariate eliminant of $I$ with respect to $f$ is a univariate polynomial of degree $d$ whose roots have the same multiplicities as the points of $\mathcal{V}(I)$. That is to say, these are isomorphic schemes. In this setting, the function $f$ defines a map from $\mathcal{V}(I)$ to the roots of the roots of the univariate eliminant and there is a rational map $\phi:\CC\to\CC^n$ that restricts to an inverse of $f$. Such a tuple $(f,E,\phi)$ is known as a \defcolor{rational univariate representation} of $I$. \note{We need to settle on notation for the univariate eliminant and stop writing "univariate eliminant" every time (and replace $E$ here)}
+When $f$ separates the points of $\mathcal{V}(I)$, each eigenvalue of $m_f$ occurs with multiplicity equal to the multiplicity of a distinct point of $\mathcal{V}(I)$. That is to say, the scheme of zeros of the characteristic polynomial $\chi_{m_f}$, $\mathcal{V}(\chi_{m_f})$, is isomorphic to $\mathcal{V}(I)$. When this occurs, $f$ maps $\mathcal{V}(I)$ to the eigenvalues of $m_f$ and there is a rational map $\phi:\Bbbk\to\Bbbk^n$ that restricts to an inverse of $f$. Such a tuple $(f,\chi_{m_F},\phi)$ is known as a \defcolor{rational univariate representation} of $I$.
 
-We implement the alorithm of \note{names/citation} to compute rational univariate representations. This method has the advantage that the number of real roots and their multiplicities are preserved with an explicit isomorphism, though there is the additional cost of certifying that the chosen $f$ separates the points of $\mathcal{V}(I)$ and computing the rational map $\phi$. The method \texttt{rationalUnivariateRepresentation} outputs such a rational univariate representation tuple $(f,E,\phi)$ and is illustrated below.
+We implement the alorithm of \note{names/citation} to compute rational univariate representations. This method of elimination has the advantage that the number of real roots and their multiplicities are preserved, though there is the additional cost of certifying that the chosen $f$ separates the points of $\mathcal{V}(I)$ and in computing the rational map $\phi$. The method \texttt{rationalUnivariateRepresentation} outputs such a rational univariate representation tuple $(f,\chi_{m_f},\phi)$ and is illustrated below.
 
 %
 \begin{leftbar}
