@@ -1,0 +1,10 @@
+i6 : g = univariateEliminant(f,I)
+
+         4        3         2
+o6 = 727Z  - 8724Z  - 12359Z  - 11632Z - 34169
+
+o6 : QQ[Z]
+
+i7 : SturmCount(g)
+
+o7 = 2

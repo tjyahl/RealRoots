@@ -1,0 +1,16 @@
+i8 : rationalUnivariateRepresentation(I)
+
+                                            3     2              3      2
+              4      3      2              Z  + 9Z  - 3Z + 3   4Z  - 19Z  + 12Z - 5
+o8 = (x + y, Z  - 10Z  + 10Z  - 6Z + 1, {--------------------, --------------------})
+                                           3      2              3      2
+                                         2Z  - 15Z  + 10Z - 3  2Z  - 15Z  + 10Z - 3
+
+o8 : Sequence
+
+i9 : univariateEliminant(x+y,I)
+
+      4      3      2
+o9 = Z  - 10Z  + 10Z  - 6Z + 1
+
+o9 : QQ[Z]

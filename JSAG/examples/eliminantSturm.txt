@@ -1,10 +1,11 @@
-i6 : g = univariateEliminant(f,I)
 
-         4        3         2
-o6 = 727Z  - 8724Z  - 12359Z  - 11632Z - 34169
+i19 : T=ring(g)
 
-o6 : QQ[Z]
+i20 : gens gb ideal(g,diff(Z,g))
 
-i7 : SturmCount(g)
+o20 = | 1 |
 
-o7 = 2
+i21 : SturmCount(g)
+
+o21 = 4
+

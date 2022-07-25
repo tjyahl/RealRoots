@@ -5,47 +5,51 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Elimination}\label{S:two}
 
-Elimination is a classical symbolic method often used to solve systems of equations.
+Elimination is a classical symbolic method often used to solve systems of equations involving multivariate polynomials.
 Geometrically, it gives the image of a variety under a polynomial map, such as a coordinate projection.
-\texttt{RealRoots} implements two methods for zero-dimensional ideals that reduce their study to that of univariate polynomials.
+\texttt{RealRoots} implements methods for zero-dimension\-al ideals that reduce their study to that of univariate polynomials.
 
-Let  $\Bbbk$ be a field and $I\subseteq\Bbbk[x_1,\dotsc,x_n]$ be a zero-dimensional ideal  with scheme $\calV(I)\subseteq\Bbbk^n$.
-The Artinian ring $R=\Bbbk[x_1,\dotsc,x_n]/I$ is a vector space over $\Bbbk$ of dimension $\defcolor{d}\vcentcolon=\mbox{degree}(I)$, and
-$|\calV(I)|\leq d$.
+Let  $\Bbbk$ be a field and $I\subseteq\Bbbk[x_1,\dotsc,x_n]$ be a zero-dimension\-al ideal  with scheme $\calV(I)\subseteq\Bbbk^n$.
+The Artinian ring $\defcolor{R}\vcentcolon=\Bbbk[x_1,\dotsc,x_n]/I$ is a vector space over $\Bbbk$ of dimension
+$\defcolor{d}\vcentcolon=\mbox{degree}(I)$, and $|\calV(I)|\leq d$.
 The ring $R$ acts on itself by multiplication.
-For $f\in R$, let \defcolor{$m_f$} be the operator of multiplication by $f$, for $g\in R$, $m_f(g)=fg$.
-By the Stickelberger's Theorem~\cite{Cox2021}, the eigenvalues of $m_f$ are the values of $f$ at the  points of $\calV(I)$,
+For $f\in R$, let \defcolor{$m_f$} be the operator of multiplication by $f$: for $g\in R$, $m_f(g)=fg$.
+By Stickelberger's Theorem~\cite{Cox2021}, the eigenvalues of $m_f$ are the values of $f$ at the  points of $\calV(I)$,
 and the multiplicity of the eigenvalue $\lambda$ is the sum of the multiplicities in $\calV(I)$ of the inverse images,
 $f^{-1}(\lambda)\cap\calV(I)$. 
 
 
-The (univariate) \defcolor{eliminant} of $I$ with respect to $f$ is the minimal polynomial of $m_f$.
+The (univariate) \defcolor{eliminant} \defcolor{$g$} of $I$ with respect to $f$ is the minimal polynomial of $m_f$.
 When $f$ is a variable, e.g.\ $f=x_1$, this is the monic generator of the univariate ideal $I\cap\Bbbk[x_1]$.
-In general, it is the kernel of the map $\Bbbk[Z]\to R$, where $Z\mapsto f$.
+In general, $g$ generates the kernel of the map $\Bbbk[Z]\to R$, where $Z\mapsto f$.
 The function \texttt{regularRepresentation} computes a matrix representing $m_f$ with respect to the standard basis for $I$ in
 $\Bbbk[x_1,\dotsc,x_n]$, returning both.
 The function \texttt{univariateEliminant} returns the minimal polynomial of $m_f$, with respect to new user-chosen variable (or the default
-\texttt{Z}).
+\texttt{Z}). 
 %
 \begin{leftbar}
 \verbatiminput{examples/regularRep.txt}
 \end{leftbar}
 %
-
-When $f$ is a real polynomial, the real roots of the eliminant correspond to real points of $\mathcal{V}(I)$. This allows one to count real points of zero-dimensional schemes by studying roots of the the eliminant. 
-
-The computation below shows there are at least 2 real points of the scheme $\mathcal{V}(I)$. 
-
+The eliminant \defcolor{$g$} of $I$ with respect to $f$ defines the image of the scheme $\calV(I)$ under $f$.
+When $g$ has degree equal to the degree of $I$, then $f$ is an isomorphism and thus $g$ may be used to study the scheme
+$\calV(I)$.
+For example, when both are reduced, $g$ and $R$ have the same Galois groups over $\Bbbk$.
+While the eliminant {\it a priori} only tells us about $f(\calV(I))$, when $f$ is \demph{separating} (injective on the
+points of $\calV(I)$) it tells us more about those points.
+In our running example, both $g$ and $I$ have degree eight. (For $I$, note the dimension of $m_f$ in \texttt{o17}.)
+We see that $g$ is reduced and has four real roots.
 %
 \begin{leftbar}
 \verbatiminput{examples/eliminantSturm.txt}
 \end{leftbar}
 %
+Thus $\calV(I)$ is reduced and consists of eight points, exactly four of which are real.
 
-When $f$ separates the points of $\mathcal{V}(I)$, each eigenvalue of $m_f$ occurs with multiplicity equal to the multiplicity of a distinct point of $\mathcal{V}(I)$. That is to say, the scheme of zeros of the characteristic polynomial $\chi_{m_f}$, $\mathcal{V}(\chi_{m_f})$, is isomorphic to $\mathcal{V}(I)$. When this occurs, $f$ maps $\mathcal{V}(I)$ to the eigenvalues of $m_f$ and there is a rational map $\phi:\Bbbk\to\Bbbk^n$ that restricts to an inverse of $f$. Such a tuple $(f,\chi_{m_F},\phi)$ is known as a \defcolor{rational univariate representation} of $I$.
-
-We implement the alorithm of \note{names/citation} to compute rational univariate representations. This method of elimination has the advantage that the number of real roots and their multiplicities are preserved, though there is the additional cost of certifying that the chosen $f$ separates the points of $\mathcal{V}(I)$ and in computing the rational map $\phi$. The method \texttt{rationalUnivariateRepresentation} outputs such a rational univariate representation tuple $(f,\chi_{m_f},\phi)$ and is illustrated below.
-
+A useful variant of the eliminant is a rational univariate representation of a zero-dimension\-al ideal $I$~\cite[???]{BPR}.
+This is a triple $(f,\chi,\phi)$ where $f$ is a linear form that is separating for $\calV(I)$, $\chi$ is the characteristic
+polynomial of $m_f$---which retains the multiplicities of points of $\calV(I)$, if not their scheme structure, and $\phi$
+is a rational map $\phi\colon\Bbbk\ \to\Bbbk^n$ that restricts to a bijection between $\calV(\chi)$ and $\calV(I)$.
 %
 \begin{leftbar}
 \verbatiminput{examples/RUR.txt}
