@@ -9,8 +9,8 @@ Elimination is a classical symbolic method often used to solve systems of equati
 Geometrically, it gives the image of a variety under a polynomial map, such as a coordinate projection.
 \texttt{RealRoots} implements methods for zero-dimension\-al ideals that reduce their study to that of univariate polynomials.
 
-Let  $\Bbbk$ be a field and $I\subseteq\Bbbk[x_1,\dotsc,x_n]$ be a zero-dimension\-al ideal  with scheme $\calV(I)\subseteq\Bbbk^n$.
-The Artinian ring $\defcolor{R}\vcentcolon=\Bbbk[x_1,\dotsc,x_n]/I$ is a vector space over $\Bbbk$ of dimension
+Let  $\KK$ be a field and $I\subseteq\KK[x_1,\dotsc,x_n]$ be a zero-dimension\-al ideal  with scheme $\calV(I)\subseteq\KK^n$.
+The Artinian ring $\defcolor{R}\vcentcolon=\KK[x_1,\dotsc,x_n]/I$ is a vector space over $\KK$ of dimension
 $\defcolor{d}\vcentcolon=\mbox{degree}(I)$, and $|\calV(I)|\leq d$.
 The ring $R$ acts on itself by multiplication.
 For $f\in R$, let \defcolor{$m_f$} be the operator of multiplication by $f$: for $g\in R$, $m_f(g)=fg$.
@@ -20,12 +20,11 @@ $f^{-1}(\lambda)\cap\calV(I)$.
 
 
 The (univariate) \defcolor{eliminant} \defcolor{$g$} of $I$ with respect to $f$ is the minimal polynomial of $m_f$.
-When $f$ is a variable, e.g.\ $f=x_1$, this is the monic generator of the univariate ideal $I\cap\Bbbk[x_1]$.
-In general, $g$ generates the kernel of the map $\Bbbk[Z]\to R$, where $Z\mapsto f$.
-The function \texttt{regularRepresentation} computes a matrix representing $m_f$ with respect to the standard basis for $I$ in
-$\Bbbk[x_1,\dotsc,x_n]$, returning both.
-The function \texttt{univariateEliminant} returns the minimal polynomial of $m_f$, with respect to new user-chosen variable (or the default
-\texttt{Z}). 
+When $f$ is a variable, e.g.\ $f=x_1$, $g$ is the monic generator of the univariate ideal $I\cap\KK[x_1]$.
+In general, the eliminant generates the kernel of the map $\KK[Z]\to R$, where $Z\mapsto f$.
+The function \texttt{regularRepresentation} computes a matrix representing $m_f$ with respect to the standard basis for $R$.
+The function \texttt{univariateEliminant} returns the minimal polynomial of $m_f$, with respect to new user-chosen variable
+(or the default \texttt{Z}). 
 %
 \begin{leftbar}
 \verbatiminput{examples/regularRep.txt}
@@ -34,10 +33,10 @@ The function \texttt{univariateEliminant} returns the minimal polynomial of $m_f
 The eliminant \defcolor{$g$} of $I$ with respect to $f$ defines the image of the scheme $\calV(I)$ under $f$.
 When $g$ has degree equal to the degree of $I$, then $f$ is an isomorphism and thus $g$ may be used to study the scheme
 $\calV(I)$.
-For example, when both are reduced, $g$ and $R$ have the same Galois groups over $\Bbbk$.
+For example, when both are reduced, $g$ and $R$ have the same Galois groups over $\KK$.
 While the eliminant {\it a priori} only tells us about $f(\calV(I))$, when $f$ is \demph{separating} (injective on the
-points of $\calV(I)$) it tells us more about those points.
-In our running example, both $g$ and $I$ have degree eight. (For $I$, note the dimension of $m_f$ in \texttt{o17}.)
+points of $\calV(I)$), it tells us more about those points.
+In our running example, both $g$ and $I$ have degree eight. (For $I$, note the cardinality of the basis \texttt{o17}.)
 We see that $g$ is reduced and has four real roots.
 %
 \begin{leftbar}
@@ -49,7 +48,7 @@ Thus $\calV(I)$ is reduced and consists of eight points, exactly four of which a
 A useful variant of the eliminant is a rational univariate representation of a zero-dimension\-al ideal $I$~\cite[???]{BPR}.
 This is a triple $(f,\chi,\phi)$ where $f$ is a linear form that is separating for $\calV(I)$, $\chi$ is the characteristic
 polynomial of $m_f$---which retains the multiplicities of points of $\calV(I)$, if not their scheme structure, and $\phi$
-is a rational map $\phi\colon\Bbbk\ \to\Bbbk^n$ that restricts to a bijection between $\calV(\chi)$ and $\calV(I)$.
+is a rational map $\phi\colon\KK\to\KK^n$ that restricts to a bijection between $\calV(\chi)$ and $\calV(I)$.
 %
 \begin{leftbar}
 \verbatiminput{examples/RUR.txt}
