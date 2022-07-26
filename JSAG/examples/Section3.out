@@ -1,0 +1,25 @@
+
+i27 : S=QQ[x,y]
+
+o27 = S
+
+o27 : PolynomialRing
+
+i28 : I = ideal(5-3*x^2-3*y^2+x^2*y^2, 1+2*x*y-4*x*y^2+3*x^2*y)
+
+              2 2     2     2        2        2
+o28 = ideal (x y  - 3x  - 3y  + 5, 3x y - 4x*y  + 2x*y + 1)
+
+o28 : Ideal of S
+
+i29 : rank traceForm(1_S,I)
+
+o29 = 8
+
+i30 : traceCount(I)
+
+o30 = 4
+
+i31 : traceSignature(y,I)
+
+o31 = -2

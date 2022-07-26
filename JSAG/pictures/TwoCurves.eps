@@ -29,9 +29,10 @@ gsave
 
 /arr {newpath 0 0 moveto 250 0 lineto  90 70 moveto 250 0 lineto 90 -70 lineto stroke } def
 
-/axes 10 def
-/medium 7 def
-/curve 16 def
+/axes 13 def
+/curve 25 def
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %    Draws box from (a,b) to (c,d) 
@@ -75,7 +76,7 @@ newpath 5622 2499 moveto  0 -100 rmoveto 0  200 rlineto stroke
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %  Red curve
-0     1     1     0 Y
+0.8 0 0 setrgbcolor
 curve setlinewidth
 NP 6258 2509 m 6263 2509 l
 S
@@ -7217,7 +7218,7 @@ NP 817 2513 m 823 2513 l
 %
 %  Blue Curve
 %
-    1     1     0     0 Y
+ 0 0 0.8 setrgbcolor
 curve setlinewidth
 NP 4287 4416 m 4286 4421 l
 S

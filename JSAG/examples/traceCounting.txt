@@ -1,0 +1,7 @@
+i29 : rank traceForm(1_S,I)
+
+o29 = 8
+
+i30 : traceCount(I)
+
+o30 = 4

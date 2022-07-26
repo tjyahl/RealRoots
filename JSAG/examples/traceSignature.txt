@@ -1,0 +1,3 @@
+i31 : traceSignature(y,I)
+
+o31 = -2
