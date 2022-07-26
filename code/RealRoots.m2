@@ -583,7 +583,7 @@ document {
 	}
 
 document {
-	Key => {minimalPolynomial,(minimalPolynomial, RingElement),(minimalPolynomial,RingElement,Ideal),[minimalPolynomial,Strategy]},
+	Key => {minimalPolynomial,(minimalPolynomial, RingElement),(minimalPolynomial,RingElement,Ideal),[minimalPolynomial,Strategy],[minimalPolynomial,Variable]},
 	Headline => "the minimal polynomial of an element of an Artinian ring",
 	Usage => "minimalPolynomial(f)
 	          minimalPolynomial(g,I)",
@@ -591,7 +591,8 @@ document {
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal"},
-	    Strategy => {"set method for computing the minimal polynomial"}
+	    Strategy => {"set method for computing the minimal polynomial"},
+	    Variable => {"allows user to change the variable of the resulting polynomial"},
 	    },
 	Outputs => { RingElement => {"the desired minimal polynomial. See description"}},
 	PARA {"This computes the minimal polynomial of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the minimal polynomial of a polynomial ", TT "g", " in the Artinian ring ", TT "(ring g)/I", ".
@@ -611,7 +612,7 @@ document {
 	}
 
 document {
-        Key => {univariateEliminant,(univariateEliminant,RingElement,Ideal),[univariateEliminant,Strategy]},
+        Key => {univariateEliminant,(univariateEliminant,RingElement,Ideal),[univariateEliminant,Strategy],[univariateEliminant,Variable]},
         Headline => "the univariate eliminant of an element of an Artinian ring",
 	Usage => "univariateEliminant(f)
 	          univariateEliminant(g,I)",
@@ -619,7 +620,8 @@ document {
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal"},
-	    Strategy => {"set method for computing the univariate eliminant"}
+	    Strategy => {"set method for computing the univariate eliminant"},
+	    Variable => {"allows user to change the variable of the resulting polynomial"}
 	    },
 	Outputs => { RingElement => {"the desired univariate polynomial. See description"}},
 	PARA {"This computes the univariate eliminant of a ring element ", TT "f", " in the Artinian ring ", TT "ring f", ", or the univariate eliminant of a polynomial ", TT "g", " in the Artinian ring ", TT "(ring g)/I", ".
