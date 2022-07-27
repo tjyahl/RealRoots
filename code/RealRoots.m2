@@ -21,7 +21,7 @@ newPackage(
     --Keyword=>{"Real Algebraic Geometry"},
     PackageImports=>{},
     PackageExports=>{},
-    DebuggingMode=>false
+    DebuggingMode=>true
     )
 
 
@@ -41,6 +41,7 @@ export{
     "traceForm",
     "traceSignature",
     "traceCount",
+    "traceRealCount",
     "rationalUnivariateRepresentation",
     "HurwitzMatrix",
     "isHurwitzStable",
@@ -466,7 +467,7 @@ traceRank (RingElement) := ZZ => f->(
     rank(traceForm(f))
     )
 	
---Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
+--Compute the number of points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 traceCount = method()
 traceCount (RingElement) := ZZ => f->(
     R := ring f;
@@ -483,9 +484,32 @@ traceCount (Ideal) := ZZ=> I->(
     R := ring I;
     traceCount(R/I)
     )
--- This is where the action takes place
+
 traceCount (QuotientRing) := ZZ=> R->(
-    signature(traceForm(1_R))
+    traceRank(1_R)
+    )
+
+
+--Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
+traceRealCount = method()
+traceCount (RingElement) := ZZ => f->(
+    R := ring f;
+    traceCount(R/f)
+    )
+
+traceRealCount (List) := ZZ => F->(
+    I := ideal F;
+    R := ring I;
+    traceCount(R/I)
+    )
+
+traceRealCount (Ideal) := ZZ=> I->(
+    R := ring I;
+    traceCount(R/I)
+    )
+
+traceRealCount (QuotientRing) := ZZ=> R->(
+    traceSignature(1_R)
     )
 
 
@@ -605,7 +629,8 @@ document {
 	EXAMPLE lines ///
 		minimalPolynomial(x,Strategy => 0)
 	    	minimalPolynomial(x,Strategy => 1)
-	        ///
+	        ///,
+	SeeAlso => {"univariateEliminant"}
 	}
 
 document {
@@ -919,8 +944,35 @@ document {
 
 document {
 	Key => {traceCount,(traceCount, QuotientRing), (traceCount, RingElement), (traceCount, Ideal),(traceCount, List)},
-        Headline => "the number of real points of the spectrum of an Artinian ring (of characteristic 0), not counting multiplicity",
+        Headline => "the number of points of the spectrum of an Artinian ring (of characteristic 0), not counting multiplicity",
 	Usage => "traceCount(R)",
+	Inputs => {
+	    QuotientRing => "S" => {"an Artinian ring"},
+	    RingElement => "f" => {"a polynomial"},
+	    Ideal => "I" => {"an ideal"},
+	    List => "l" => {"a system of polynomials"},
+	    },
+	Outputs => { ZZ => {"the number of distinct points of Spec ", TT "R",", not counting multiplicity"}},
+	PARA {"This computes the number of distinct points of Spec ", TT "R", ", not counting multiplicity, and where ", TT "R", " is an Artinian ring of characteristic 0."},
+	EXAMPLE lines ///
+	         R = QQ[x,y]
+		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
+		 I = ideal F
+		 S = R/I
+		 traceCount(S)
+		 ///,
+	EXAMPLE lines ///
+		 R = QQ[x,y]
+		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
+		 traceCount(I)
+	 	 ///,
+	SeeAlso => {"traceForm"}
+     	}
+    
+document {
+	Key => {traceRealCount,(traceRealCount, QuotientRing), (traceRealCount, RingElement), (traceRealCount, Ideal),(traceRealCount, List)},
+        Headline => "the number of real points of the spectrum of an Artinian ring (of characteristic 0), not counting multiplicity",
+	Usage => "traceRealCount(R)",
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
 	    RingElement => "f" => {"a real polynomial"},
@@ -936,12 +988,12 @@ document {
 		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
 		 I = ideal F
 		 S = R/I
-		 traceCount(S)
+		 traceRealCount(S)
 		 ///,
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
-		 traceCount(I)
+		 traceRealCount(I)
 	 	 ///,
 	SeeAlso => {"traceForm"}
      	}
