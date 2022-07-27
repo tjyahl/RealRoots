@@ -487,30 +487,30 @@ traceCount (Ideal) := ZZ=> I->(
     )
 
 traceCount (QuotientRing) := ZZ=> R->(
-    traceRank(1_R)
+    rank traceForm(1_R)
     )
 
 
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 traceRealCount = method()
-traceCount (RingElement) := ZZ => f->(
+traceRealCount (RingElement) := ZZ => f->(
     R := ring f;
-    traceCount(R/f)
+    traceRealCount(R/f)
     )
 
 traceRealCount (List) := ZZ => F->(
     I := ideal F;
     R := ring I;
-    traceCount(R/I)
+    traceRealCount(R/I)
     )
 
 traceRealCount (Ideal) := ZZ=> I->(
     R := ring I;
-    traceCount(R/I)
+    traceRealCount(R/I)
     )
 
 traceRealCount (QuotientRing) := ZZ=> R->(
-    traceSignature(1_R)
+    signature traceForm(1_R)
     )
 
 
