@@ -495,18 +495,18 @@ traceCount (QuotientRing) := ZZ=> R->(
 traceRealCount = method()
 traceCount (RingElement) := ZZ => f->(
     R := ring f;
-    traceCount(R/f)
+    traceRealCount(R/f)
     )
 
 traceRealCount (List) := ZZ => F->(
     I := ideal F;
     R := ring I;
-    traceCount(R/I)
+    traceRealCount(R/I)
     )
 
 traceRealCount (Ideal) := ZZ=> I->(
     R := ring I;
-    traceCount(R/I)
+    traceRealCount(R/I)
     )
 
 traceRealCount (QuotientRing) := ZZ=> R->(
