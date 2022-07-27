@@ -953,16 +953,19 @@ document {
 
 document {
 	Key => {traceCount,(traceCount, QuotientRing), (traceCount, RingElement), (traceCount, Ideal),(traceCount, List)},
-        Headline => "the number of points of the spectrum of an Artinian ring (of characteristic 0), not counting multiplicity",
-	Usage => "traceCount(R)",
+        Headline => "the number of points of the spectrum of an Artinian ring over any field, not counting multiplicity",
+	Usage => "traceCount(S)"
+	         "traceCount(f)"
+		 "traceCount(I)"
+		 "traceCount(l)",
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
 	    RingElement => "f" => {"a polynomial"},
-	    Ideal => "I" => {"an ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal"},
 	    List => "l" => {"a system of polynomials"},
 	    },
-	Outputs => { ZZ => {"the number of distinct points of Spec ", TT "R",", not counting multiplicity"}},
-	PARA {"This computes the number of distinct points of Spec ", TT "R", ", not counting multiplicity, and where ", TT "R", " is an Artinian ring of characteristic 0."},
+	Outputs => { ZZ => {"the number of distinct points of Spec ", TT "S",", not counting multiplicity"}},
+	PARA {"This computes the number of distinct points of Spec ", TT "S", ", not counting multiplicity, and where ", TT "S", " is an Artinian ring over any field."},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
