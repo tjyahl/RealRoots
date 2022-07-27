@@ -128,6 +128,8 @@ HornerSequence (RingElement) := RingElement => f ->(
 ----can also use SylvesterCount(ch,variable ch,Multiplicity=>true)
 signature = method()
 signature (Matrix) := ZZ => M->(
+    if char ring(M) != 0 then error "Error: Expected ring of characteristic 0.";
+    if M != transpose M then error "Error: Expected symmetric matrix.";
     ch := characteristicPolynomial M;
     coeffs := flatten entries sub(last coefficients ch,ring M);
     2*(variations coeffs) - rank M
@@ -138,7 +140,7 @@ signature (Matrix) := ZZ => M->(
 derivSequence = method()
 derivSequence (RingElement) := List => f->(
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
-    if (f == 0) then error "Error: Expected nonzero polynomial";
+    if (f == 0) then error "Error: Expected nonzero polynomial.";
     
     t := variable f;
     d := first degree f;
