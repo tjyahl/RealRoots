@@ -27,6 +27,7 @@ newPackage(
 
 export{
     --methods
+    "signature",
     "minimalPolynomial",
     "univariateEliminant",
     "regularRepresentation",
@@ -519,6 +520,14 @@ traceRealCount (QuotientRing) := ZZ=> R->(
 ------a polynomial ch defining the image of the points of V(I) under the map defined by l
 ------a list of rational polynomials that consitite a rational inverse (on V(I)) of the map defined by l
 rationalUnivariateRepresentation = method()
+rationalUnivariateRepresentation (QuotientRing) := Sequence => S->(
+    R := ambient S;
+    I := ideal S;
+    if not (isArtinian(S) and isPolynomialRing(R)) then error "Error: Expected Artinian ring as quotient of polynomial ring";
+    
+    rationalUnivariateRepresentation(I)
+    )
+
 rationalUnivariateRepresentation (Ideal) := Sequence => I->(
     R := ring I;
     S := R/I;
