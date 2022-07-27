@@ -879,16 +879,16 @@ document {
     
 document {
 	Key => {traceForm,(traceForm, RingElement),(traceForm,RingElement,Ideal)},
-	Headline => "the trace quadratic form of a real polynomial in an Artinian ring",
+	Headline => "the trace quadratic form of a polynomial in an Artinian ring",
 	Usage => "traceForm(f)
 	          traceForm(g,I),",
 	Inputs => {
-	    RingElement => "f" => {"a real polynomial in an Artinian Ring"},
-	    RingElement => "g" => {"a real polynomial"},
+	    RingElement => "f" => {"a polynomial in an Artinian Ring"},
+	    RingElement => "g" => {"a polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal"},
 	    },
-	Outputs => {Matrix => {"a symmetric matrix representing the trace quadratic form of a real polynomial in the standard basis of its Artinian ring"}},
-	PARA {"This computes the trace quadratic form of a real polynomial in an Artinian ring."},
+	Outputs => {Matrix => {"a symmetric matrix representing the trace quadratic form of a polynomial in the standard basis of its Artinian ring"}},
+	PARA {"This computes the trace quadratic form of a polynomial in an Artinian ring."},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 F = {y^2 - x^2 - 1, x - y^2 + 4*y - 2}
