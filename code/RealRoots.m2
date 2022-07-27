@@ -123,19 +123,6 @@ HornerSequence (RingElement) := RingElement => f ->(
     toList H
     )
 
-
---computes the signature of a matrix
-----can also use SylvesterCount(ch,variable ch,Multiplicity=>true)
-signature = method()
-signature (Matrix) := ZZ => M->(
-    if char ring(M) != 0 then error "Error: Expected ring of characteristic 0.";
-    if M != transpose M then error "Error: Expected symmetric matrix.";
-    ch := characteristicPolynomial M;
-    coeffs := flatten entries sub(last coefficients ch,ring M);
-    2*(variations coeffs) - rank M
-    )
-
-
 --Computes the sequence of derivatives of f
 derivSequence = method()
 derivSequence (RingElement) := List => f->(
@@ -428,7 +415,17 @@ realRootIsolation (RingElement,A) := List => (f,r)->(
 	{}
 	)
     )
-    
+
+--computes the signature of a matrix
+----can also use SylvesterCount(ch,variable ch,Multiplicity=>true)
+signature = method()
+signature (Matrix) := ZZ => M->(
+    if char ring(M) != 0 then error "Error: Expected ring of characteristic 0.";
+    if M != transpose M then error "Error: Expected symmetric matrix.";
+    ch := characteristicPolynomial M;
+    coeffs := flatten entries sub(last coefficients ch,ring M);
+    2*(variations coeffs) - rank M
+    ) 
     
 --Computes the trace form of f in an Artinian ring 
 traceForm = method()
@@ -934,6 +931,26 @@ document {
      	}
     
 document {
+	Key => {signature,(signature, Matrix)},
+	Headline => "the signature of a symmetric matrix",
+	Usage => "signature(M)",
+	Inputs => {
+	    Matrix => "M" => {"a symmetric matrix"},
+	    },
+	Outputs => { ZZ => {"the signature of ", TT "M"}},
+	PARA {"This computes the signature of the symmetric matrix ", TT "M","."},
+	EXAMPLE lines ///
+		 signature(matrix{{1,-2,3/5},{-2,-16,9},{3/5,9,13}})
+		 ///,
+	PARA {"We also show an example computing the signature of the trace form."},
+	EXAMPLE lines ///
+		 R = QQ[x,y]
+		 I = ideal(5-3*x^2-3*y^2+x^2*y^2, 1+2*x*y-4*x*y^2+3*x^2*y)
+		 signature(traceForm(1_R,I))	 
+	 	 ///
+     	}    
+    
+document {
     	Key => {traceSignature,(traceSignature,RingElement),(traceSignature,RingElement,Ideal)},
 	Headline => "The signature of the trace form",
 	Usage => "traceSignature(f)
@@ -956,10 +973,10 @@ document {
 document {
 	Key => {traceCount,(traceCount, QuotientRing), (traceCount, RingElement), (traceCount, Ideal),(traceCount, List)},
         Headline => "the number of points of the spectrum of an Artinian ring over any field, not counting multiplicity",
-	Usage => "traceCount(S)"
-	         "traceCount(f)"
-		 "traceCount(I)"
-		 "traceCount(l)",
+	Usage => "traceCount(S)
+	          traceCount(f)
+		  traceCount(I)
+		  traceCount(l)",
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
 	    RingElement => "f" => {"a polynomial"},
