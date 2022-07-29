@@ -123,22 +123,11 @@ HornerSequence (RingElement) := RingElement => f ->(
     toList H
     )
 
-
---computes the signature of a matrix
-----can also use SylvesterCount(ch,variable ch,Multiplicity=>true)
-signature = method()
-signature (Matrix) := ZZ => M->(
-    ch := characteristicPolynomial M;
-    coeffs := flatten entries sub(last coefficients ch,ring M);
-    2*(variations coeffs) - rank M
-    )
-
-
 --Computes the sequence of derivatives of f
 derivSequence = method()
 derivSequence (RingElement) := List => f->(
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
-    if (f == 0) then error "Error: Expected nonzero polynomial";
+    if (f == 0) then error "Error: Expected nonzero polynomial.";
     
     t := variable f;
     d := first degree f;
@@ -428,19 +417,29 @@ realRootIsolation (RingElement,A) := List => (f,r)->(
 	{}
 	)
     )
-    
+
+--computes the signature of a matrix
+----can also use SylvesterCount(ch,variable ch,Multiplicity=>true)
+signature = method()
+signature (Matrix) := ZZ => M->(
+    if char ring(M) != 0 then error "Error: Expected ring of characteristic 0.";
+    if M != transpose M then error "Error: Expected symmetric matrix.";
+    ch := characteristicPolynomial M;
+    coeffs := flatten entries sub(last coefficients ch,ring M);
+    2*(variations coeffs) - rank M
+    ) 
     
 --Computes the trace form of f in an Artinian ring 
 traceForm = method()
 traceForm (RingElement,Ideal) := Matrix => (f,I)->(
     R := ring f;
-    if not (ring I === R) then error "Error: Expected RingElement and Ideal in same Ring";
+    if not (ring I === R) then error "Error: Expected RingElement and Ideal in same Ring.";
     traceForm(sub(f,R/I))
     )
 
 traceForm (RingElement) := Matrix => f->(
     R := ring f;
-    if not isArtinian(R) then error "Error: Expected zero-dimensional ring";
+    if not isArtinian(R) then error "Error: Expected zero-dimensional ring.";
     B := basis R;
     K := coefficientRing R;
 
@@ -516,7 +515,7 @@ traceRealCount (QuotientRing) := ZZ=> R->(
     )
 
 
---Computes the Rational Univariate Representation of a zero-dimensional ideal
+--Computes the Rational Univariate Representation of a zero-dimensional ideal in a polynomial ring
 ----output is:
 ------a linear functional l that separates the points of I
 ------a polynomial ch defining the image of the points of V(I) under the map defined by l
@@ -533,7 +532,7 @@ rationalUnivariateRepresentation (QuotientRing) := Sequence => S->(
 rationalUnivariateRepresentation (Ideal) := Sequence => I->(
     R := ring I;
     S := R/I;
-    if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal";
+    if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal in a polynomial ring";
     d := rank traceForm(1_S);
     
     i := 1;
@@ -622,7 +621,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    Strategy => {"set method for computing the minimal polynomial"},
 	    Variable => {"allows user to change the variable of the resulting polynomial"},
 	    },
@@ -652,7 +651,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    Strategy => {"set method for computing the univariate eliminant"},
 	    Variable => {"allows user to change the variable of the resulting polynomial"}
 	    },
@@ -705,7 +704,7 @@ document {
 	    Matrix => "M" => {"a square matrix"},
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I"  => {"a zero-dimensional ideal"},
+	    Ideal => "I"  => {"a zero-dimensional ideal in a polynomial ring"},
 	    },
 	Outputs => {RingElement => {"the desired characteristic polynomial. See description."}},
 	   
@@ -918,7 +917,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"a polynomial in an Artinian Ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    },
 	Outputs => {Matrix => {"a symmetric matrix representing the trace quadratic form of a polynomial in the standard basis of its Artinian ring"}},
 	PARA {"This computes the trace quadratic form of a polynomial in an Artinian ring."},
@@ -934,6 +933,26 @@ document {
      	}
     
 document {
+	Key => {signature,(signature, Matrix)},
+	Headline => "the signature of a symmetric matrix",
+	Usage => "signature(M)",
+	Inputs => {
+	    Matrix => "M" => {"a symmetric matrix"},
+	    },
+	Outputs => { ZZ => {"the signature of ", TT "M"}},
+	PARA {"This computes the signature of the symmetric matrix ", TT "M","."},
+	EXAMPLE lines ///
+		 signature(matrix{{1,-2,3/5},{-2,-16,9},{3/5,9,13}})
+		 ///,
+	PARA {"We also show an example computing the signature of the trace form."},
+	EXAMPLE lines ///
+		 R = QQ[x,y]
+		 I = ideal(5-3*x^2-3*y^2+x^2*y^2, 1+2*x*y-4*x*y^2+3*x^2*y)
+		 signature(traceForm(1_R,I))	 
+	 	 ///
+     	}    
+    
+document {
     	Key => {traceSignature,(traceSignature,RingElement),(traceSignature,RingElement,Ideal)},
 	Headline => "The signature of the trace form",
 	Usage => "traceSignature(f)
@@ -941,7 +960,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"a real polynomial in an Artinian Ring"},
 	    RingElement => "g" => {"a real polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"}
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"}
         },
     	Outputs => {ZZ => {"Computes the number of real points of Spec ", TT "(ring g)"," where ", TT "g"," is positive minus the number of real points of Spec ",TT "(ring g)"," where ",TT "g"," is negative"}},
 	EXAMPLE lines ///
@@ -956,14 +975,14 @@ document {
 document {
 	Key => {traceCount,(traceCount, QuotientRing), (traceCount, RingElement), (traceCount, Ideal),(traceCount, List)},
         Headline => "the number of points of the spectrum of an Artinian ring over any field, not counting multiplicity",
-	Usage => "traceCount(S)"
-	         "traceCount(f)"
-		 "traceCount(I)"
-		 "traceCount(l)",
+	Usage => "traceCount(S)
+	          traceCount(f)
+		  traceCount(I)
+		  traceCount(l)",
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
 	    RingElement => "f" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    List => "l" => {"a system of polynomials"},
 	    },
 	Outputs => { ZZ => {"the number of distinct points of Spec ", TT "S",", not counting multiplicity"}},
@@ -1014,13 +1033,13 @@ document {
     
 document {
         Key => {rationalUnivariateRepresentation, (rationalUnivariateRepresentation, Ideal)},
-	Headline => "the rational univariate representation of a zero-dimensional ideal",
+	Headline => "the rational univariate representation of a zero-dimensional ideal in a polynomial ring",
 	Usage => "rationalUnivariateRepresentation(I)",
 	Inputs => {
-	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    },
 	Outputs => {List => {"the rational univariate representation of ",TT "I"}},
-	PARA{"This computes the rational univariate representation of a zero-dimensional ideal."},
+	PARA{"This computes the rational univariate representation of a zero-dimensional ideal in a polynomial ring."},
 	
 	EXAMPLE lines ///
 	R = QQ[x,y]
@@ -1167,12 +1186,12 @@ TEST ///
 TEST ///
      R = QQ[x,y];
      I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
-     assert(traceCount(I) == 3);
+     assert(traceRealCount(I) == 3);
      F = {y^2-x^2-1,x-y^2+4*y-2};
-     assert(traceCount(F) == 2);
+     assert(traceRealCount(F) == 2);
      I = ideal F;
      S = R/I;
-     assert(traceCount(S) == 2);
+     assert(traceRealCount(S) == 2);
     ///
     
 TEST ///

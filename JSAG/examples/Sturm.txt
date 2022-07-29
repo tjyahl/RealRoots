@@ -1,4 +1,4 @@
-i7 : SylvesterCount(f, x^2-1, -2, 3)
+i7 : SylvesterCount(f, x^2 - 1, -2, 3)
 
 o7 = 2
 

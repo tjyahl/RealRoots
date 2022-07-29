@@ -90,12 +90,12 @@ Note that  $g_k=1$ and elements of the reduced Sylvester sequence satisfy~\eqref
   Let $f,g\in\RR[x]$ and suppose that $g_\bullet$ is the reduced Sylvester sequence of $f$ and $g$.
   For $a<b$ in $\RR\cup\{\pm\infty\}$ we have
   %
-  \begin{multline*}
-    \qquad\var(g_\bullet,a)-\var(g_\bullet,b)\ =\
-    \#\{\zeta\in(a,b\hspace{.05cm}]\mid f(\zeta)=0\mbox{ and } g(\zeta)>0\}\\
-      \ -\
-    \#\{\zeta\in[a,b)\mid f(\zeta)=0\mbox{ and } g(\zeta)<0\}\,.\qquad
-  \end{multline*}
+  \begin{eqnarray*}
+    \qquad\var(g_\bullet,a)-\var(g_\bullet,b)&=&
+    \#\{\zeta\in(a,b\hspace{.05cm}]\mid f(\zeta)=0\mbox{ and } g(\zeta)>0\}  \ -\
+      \\
+    && \#\{\zeta\in[\hspace{.05cm}a,b)\mid f(\zeta)=0\mbox{ and } g(\zeta)<0\}\,.\qquad
+  \end{eqnarray*}
 \end{theorem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -103,13 +103,13 @@ Observe the different roles that the endpoints $\{a,b\}$ play in this formula.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{proof}
-  The version of Sylvester's Theorem given in~\cite[Thm.\ 2.55]{BPR} states and proves it 
-  when $f$ does not vanish at $a$ or at $b$, and it uses the 
-  the Sylvester sequence $\Syl(f,g)$.
+  In~\cite[Thm.\ 2.55]{BPR}, Sylvester's Theorem is stated and proven 
+  when $f$ does not vanish at $a$ or at $b$, and it in terms of the Sylvester sequence $\Syl(f,g)$.
   That proof proceeds by studying $\var(\Syl(f,g), t)$ as $t$ increases fron $a$ to $b$, noting that it may only
   change when $t$ passes a root of some element of the Sylvester sequence.
-  Since multiplying a sequence by a nonzero number $f_k(t)$ does not change its variation, that proof establishes this refined version
-  when $f$ does not vanish at $a$ or at $b$. 
+  Since multiplying a sequence by a nonzero number $f_k(t)$ does not change its variation, the proof in~\cite{BPR} establishes this refined
+  version when $f$ does not vanish at $a$ or at $b$.
+  We proceed with the general case.
 
   The variation $\var(g_\bullet,t)$ may only change when $t$ passes a root $\zeta\in[a,b\hspace{.05cm}]$ of some $g_i$ in
   $g_\bullet$. 
@@ -208,13 +208,13 @@ An application of Sturm's Theorem is to give \demph{isolating intervals}, which 
 of $f$. 
 Our implementation gives a list of pairs $\{p,q\}$ such that $(p,q]$ contains a unique root of $f$ and $q-p$ is less than a
 user-provided tolerance.
-The numbers $p,q$ are dyadic, lying in $\ZZ[\frac{1}{2}]$, as they are found using a binary search.
+The numbers $p,q$ are dyadic, lying in $\ZZ[\frac{1}{2}]$, as they are found in a binary search.
 %
 \begin{leftbar}
 \verbatiminput{examples/realRootIsolation.txt}
 \end{leftbar}
 %
-These isolating intervals are shown in Figure~\ref{F:One}. 
+These isolating intervals are shaded in Figure~\ref{F:One}. 
 
 Thomas~\cite{Thomas} observed that recursively iterating Sturm's Theorem on $f_k:=\gcd(f,f')$ can be used to give the number of real roots of
 $f$, counted with multiplicity.
