@@ -40,9 +40,8 @@ export{
     "realRootIsolation",
     "BudanFourierBound",
     "traceForm",
-    "traceSignature",
     "traceCount",
-    "traceRealCount",
+    "realCount",
     "rationalUnivariateRepresentation",
     "HurwitzMatrix",
     "isHurwitzStable",
@@ -450,26 +449,6 @@ traceForm (RingElement) := Matrix => f->(
     adjoint(tr*mm, source tr, source tr)
     )
 
---Computes the signature of the trace form. This is a multivariate version of Sylvester's theorem.
-----The signature of the trace form of f in the Artinian ring R(=(ring f)/I) is the number of real points in the variety of I where f is positive minus the number of real points in the variety of I where f is negative.
-traceSignature = method()
-traceSignature (RingElement,Ideal) := ZZ => (f,I)->(
-    signature(traceForm(f,I))
-    )
-
-traceSignature (RingElement) := ZZ => f->(
-    signature(traceForm(f))
-    )
-
---Computes the rank of the trace form.
-traceRank = method()
-traceRank (RingElement,Ideal) := ZZ => (f,I)->(
-    rank(traceForm(f,I))
-    )
-
-traceRank (RingElement) := ZZ => f->(
-    rank(traceForm(f))
-    )
 	
 --Compute the number of points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 traceCount = method()
@@ -495,24 +474,24 @@ traceCount (QuotientRing) := ZZ=> R->(
 
 
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
-traceRealCount = method()
-traceRealCount (RingElement) := ZZ => f->(
+realCount = method()
+realCount (RingElement) := ZZ => f->(
     R := ring f;
-    traceRealCount(R/f)
+    realCount(R/f)
     )
 
-traceRealCount (List) := ZZ => F->(
+realCount (List) := ZZ => F->(
     I := ideal F;
     R := ring I;
-    traceRealCount(R/I)
+    realCount(R/I)
     )
 
-traceRealCount (Ideal) := ZZ=> I->(
+realCount (Ideal) := ZZ=> I->(
     R := ring I;
-    traceRealCount(R/I)
+    realCount(R/I)
     )
 
-traceRealCount (QuotientRing) := ZZ=> R->(
+realCount (QuotientRing) := ZZ=> R->(
     signature traceForm(1_R)
     )
 
@@ -953,26 +932,6 @@ document {
 		 signature(traceForm(1_R,I))	 
 	 	 ///
      	}    
-    
-document {
-    	Key => {traceSignature,(traceSignature,RingElement),(traceSignature,RingElement,Ideal)},
-	Headline => "The signature of the trace form",
-	Usage => "traceSignature(f)
-	    	  traceSignature(g,I)",
-	Inputs => {
-	    RingElement => "f" => {"a real polynomial in an Artinian Ring"},
-	    RingElement => "g" => {"a real polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"}
-        },
-    	Outputs => {ZZ => {"Computes the number of real points of Spec ", TT "(ring g)"," where ", TT "g"," is positive minus the number of real points of Spec ",TT "(ring g)"," where ",TT "g"," is negative"}},
-	EXAMPLE lines ///
-	    	  R = QQ[x,y]
-		  I = ideal {y^2-x^2-1,x-y^2+4*y-2}
-		  S = R/I
-		  traceSignature(x+y)
-		  ///,
-	SeeAlso => {"traceForm","traceCount"}
-	}
 
 document {
 	Key => {traceCount,(traceCount, QuotientRing), (traceCount, RingElement), (traceCount, Ideal),(traceCount, List)},
@@ -1005,9 +964,9 @@ document {
      	}
     
 document {
-	Key => {traceRealCount,(traceRealCount, QuotientRing), (traceRealCount, RingElement), (traceRealCount, Ideal),(traceRealCount, List)},
+	Key => {realCount,(realCount, QuotientRing), (realCount, RingElement), (realCount, Ideal),(realCount, List)},
         Headline => "the number of real points of the spectrum of an Artinian ring (of characteristic 0), not counting multiplicity",
-	Usage => "traceRealCount(R)",
+	Usage => "realCount(R)",
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
 	    RingElement => "f" => {"a real polynomial"},
@@ -1023,12 +982,12 @@ document {
 		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
 		 I = ideal F
 		 S = R/I
-		 traceRealCount(S)
+		 realCount(S)
 		 ///,
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
-		 traceRealCount(I)
+		 realCount(I)
 	 	 ///,
 	SeeAlso => {"traceForm"}
      	}
@@ -1188,12 +1147,12 @@ TEST ///
 TEST ///
      R = QQ[x,y];
      I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
-     assert(traceRealCount(I) == 3);
+     assert(realCount(I) == 3);
      F = {y^2-x^2-1,x-y^2+4*y-2};
-     assert(traceRealCount(F) == 2);
+     assert(realCount(F) == 2);
      I = ideal F;
      S = R/I;
-     assert(traceRealCount(S) == 2);
+     assert(realCount(S) == 2);
     ///
     
 TEST ///
