@@ -61,6 +61,7 @@ isUnivariatePolynomial (RingElement) := Boolean => f->(
     #S <= 1
     )
 
+
 --Determines the variable of a univariate polynomial
 variable = method()
 variable (RingElement) := RingElement => f->(
@@ -70,7 +71,7 @@ variable (RingElement) := RingElement => f->(
     )
 
 variable (Ideal) := RingElement => I->(
-    S := support I;
+    S := select(support I,x->index x < numgens ring I);
     if S === {} then (ring I)_0 else S#0
     )
 
@@ -78,15 +79,15 @@ variable (Ideal) := RingElement => I->(
 --Check that a ring is zero-dimensional
 ----isArtinian does NOT work over fields with parameters.
 isArtinian = method()
-isArtinian (Ring) := Boolean => R->(
-    if instance(coefficientRing R,InexactField) then print "Warning: Computations over inexact field";
-    dim R === 0
+isArtinian (Ring) := Boolean => S->(
+    if not isPolynomialRing ambient S then error "Error: Expected quotient of polynomial ring";
+    dim S === 0
     )
 
         
 --Computes the sign of a real number
 sign = method()
-for A in {ZZ,QQ,RR} do
+for A in {ZZ,QQ} do
 sign (A) := ZZ => n->(
      if n < 0 then -1 
      else if n == 0 then 0
@@ -96,7 +97,7 @@ sign (A) := ZZ => n->(
 
 --Computes the sign of a real univariate polynomial at a given real number
 signAt = method()
-for A in {ZZ,QQ,RR} do
+for A in {ZZ,QQ} do
 signAt (RingElement,A) := ZZ => (f,r)->(
     sign(sub(f,{variable f => r}))
     )
@@ -112,13 +113,14 @@ signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
 
 --Computes the sequence of Horner polynomials associated to f
 HornerSequence = method()
-HornerSequence (RingElement) := RingElement => f ->(
+HornerSequence (RingElement) := List => f ->(
     d := first degree f;
     x := variable(f);
     a := apply(d+1,i->coefficient(x^(d-i),f));
     H := new MutableList from {sub(a#0,ring f)};
     for i from 1 to d-1 do (
-	H#i = x*H#(i-1) + a#i);
+	H#i = x*H#(i-1) + a#i
+	);
     toList H
     )
 
@@ -162,16 +164,13 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
     	P := map(R^1,R^(n+1),(i,j)->f^j);
     	M := last coefficients(P, Monomials=>B);
     	coeffs := sub(gens ker M,K);
-   	g := (map(S^1,S^(n+1),(i,j)->S_0^j) * coeffs)_(0,0);
-	c := (gens gb content g)_(0,0);
-	g/c
+   	(map(S^1,S^(n+1),(i,j)->S_0^j) * coeffs)_(0,0)
 	
 	) else if (opts.Strategy === 1) then (
       	--This strategy computes the minimalPolynomial as the kernel of the multiplication map
     	phi := map(R,S,{f});
-    	g = (ker phi)_0;
-	c = (gens gb content g)_(0,0);
-	g/c
+    	(ker phi)_0
+	
 	)
     )
 
