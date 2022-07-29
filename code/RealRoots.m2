@@ -513,7 +513,7 @@ traceRealCount (QuotientRing) := ZZ=> R->(
     )
 
 
---Computes the Rational Univariate Representation of a zero-dimensional ideal
+--Computes the Rational Univariate Representation of a zero-dimensional ideal in a polynomial ring
 ----output is:
 ------a linear functional l that separates the points of I
 ------a polynomial ch defining the image of the points of V(I) under the map defined by l
@@ -530,7 +530,7 @@ rationalUnivariateRepresentation (QuotientRing) := Sequence => S->(
 rationalUnivariateRepresentation (Ideal) := Sequence => I->(
     R := ring I;
     S := R/I;
-    if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal";
+    if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal in a polynomial ring";
     d := rank traceForm(1_S);
     
     i := 1;
@@ -619,7 +619,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    Strategy => {"set method for computing the minimal polynomial"},
 	    Variable => {"allows user to change the variable of the resulting polynomial"},
 	    },
@@ -649,7 +649,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    Strategy => {"set method for computing the univariate eliminant"},
 	    Variable => {"allows user to change the variable of the resulting polynomial"}
 	    },
@@ -702,7 +702,7 @@ document {
 	    Matrix => "M" => {"a square matrix"},
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I"  => {"a zero-dimensional ideal"},
+	    Ideal => "I"  => {"a zero-dimensional ideal in a polynomial ring"},
 	    },
 	Outputs => {RingElement => {"the desired characteristic polynomial. See description."}},
 	   
@@ -915,7 +915,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"a polynomial in an Artinian Ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    },
 	Outputs => {Matrix => {"a symmetric matrix representing the trace quadratic form of a polynomial in the standard basis of its Artinian ring"}},
 	PARA {"This computes the trace quadratic form of a polynomial in an Artinian ring."},
@@ -958,7 +958,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"a real polynomial in an Artinian Ring"},
 	    RingElement => "g" => {"a real polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"}
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"}
         },
     	Outputs => {ZZ => {"Computes the number of real points of Spec ", TT "(ring g)"," where ", TT "g"," is positive minus the number of real points of Spec ",TT "(ring g)"," where ",TT "g"," is negative"}},
 	EXAMPLE lines ///
@@ -980,7 +980,7 @@ document {
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
 	    RingElement => "f" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    List => "l" => {"a system of polynomials"},
 	    },
 	Outputs => { ZZ => {"the number of distinct points of Spec ", TT "S",", not counting multiplicity"}},
@@ -1031,13 +1031,13 @@ document {
     
 document {
         Key => {rationalUnivariateRepresentation, (rationalUnivariateRepresentation, Ideal)},
-	Headline => "the rational univariate representation of a zero-dimensional ideal",
+	Headline => "the rational univariate representation of a zero-dimensional ideal in a polynomial ring",
 	Usage => "rationalUnivariateRepresentation(I)",
 	Inputs => {
-	    Ideal => "I" => {"a zero-dimensional ideal"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    },
 	Outputs => {List => {"the rational univariate representation of ",TT "I"}},
-	PARA{"This computes the rational univariate representation of a zero-dimensional ideal."},
+	PARA{"This computes the rational univariate representation of a zero-dimensional ideal in a polynomial ring."},
 	
 	EXAMPLE lines ///
 	R = QQ[x,y]
