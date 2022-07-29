@@ -164,13 +164,15 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
     	M := last coefficients(P, Monomials=>B);
     	coeffs := sub(gens ker M,K);
    	f := (map(S^1,S^(n+1),(i,j)->S_0^j) * coeffs)_(0,0);
-	f/(leadCoefficient f)
+	c := (gens gb content f)_(0,0);
+	f/c
 	
 	) else if (opts.Strategy === 1) then (
       	--This strategy computes the minimalPolynomial as the kernel of the multiplication map
     	phi := map(R,S,{f});
     	f = (ker phi)_0;
-	f/(leadCoefficient f)
+	c = (gens gb content f)_(0,0);
+	f/c
 	)
     )
 
