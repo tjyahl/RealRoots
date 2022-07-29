@@ -431,13 +431,13 @@ signature (Matrix) := ZZ => M->(
 traceForm = method()
 traceForm (RingElement,Ideal) := Matrix => (f,I)->(
     R := ring f;
-    if not (ring I === R) then error "Error: Expected RingElement and Ideal in same Ring";
+    if not (ring I === R) then error "Error: Expected RingElement and Ideal in same Ring.";
     traceForm(sub(f,R/I))
     )
 
 traceForm (RingElement) := Matrix => f->(
     R := ring f;
-    if not isArtinian(R) then error "Error: Expected zero-dimensional ring";
+    if not isArtinian(R) then error "Error: Expected zero-dimensional ring.";
     B := basis R;
     K := coefficientRing R;
 
@@ -1184,12 +1184,12 @@ TEST ///
 TEST ///
      R = QQ[x,y];
      I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
-     assert(traceCount(I) == 3);
+     assert(traceRealCount(I) == 3);
      F = {y^2-x^2-1,x-y^2+4*y-2};
-     assert(traceCount(F) == 2);
+     assert(traceRealCount(F) == 2);
      I = ideal F;
      S = R/I;
-     assert(traceCount(S) == 2);
+     assert(traceRealCount(S) == 2);
     ///
     
 TEST ///
