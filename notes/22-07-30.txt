@@ -1,0 +1,15 @@
+
+
+* The file allSections.m2 is run to create the raw Macaulay2 output for the paper.
+   You need to uncomment the line in your init.m2 file:
+
+ if fileExists "start.m2" then load(currentDirectory()|"start.m2")
+
+
+* I put the sections back into the jsag paper, moving SectionX.tex to Old/
+
+* In the documentation:
+
+  regularRepresentation -- the regular representation of an Artinian ring
+
+  Maybe "the regular representation of an element of an Artinian ring" ?

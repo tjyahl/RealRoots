@@ -1,7 +1,8 @@
-i29 : rank traceForm(1_S,I)
+i26 : rank traceForm(1_S,I)
 
-o29 = 8
+o26 = 8
 
-i30 : traceCount(I)
+i27 : signature traceForm(1_S,I)
 
-o30 = 4
+o27 = 4
+

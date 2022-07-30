@@ -1,3 +1,3 @@
-i31 : traceSignature(y,I)
+i28 : signature traceForm(y^2+2*y,I)
 
-o31 = -2
+o28 = 4

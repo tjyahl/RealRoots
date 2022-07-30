@@ -1,4 +1,4 @@
-i19 : T=ring(g)
+i19 : T = ring(g)
 
 i20 : gens gb ideal(g,diff(Z,g))
 
