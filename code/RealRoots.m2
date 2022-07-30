@@ -948,7 +948,7 @@ document {
 	    QuotientRing => "S" => {"an Artinian ring"},
 	    RingElement => "f" => {"a polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
-	    List => "l" => {"a system of polynomials"},
+	    List => "l" => {"a system of polynomials with a finite number of solutions"},
 	    },
 	Outputs => { ZZ => {"the number of distinct points of Spec ", TT "S",", not counting multiplicity"}},
 	PARA {"This computes the number of distinct points of Spec ", TT "S", ", not counting multiplicity, and where ", TT "S", " is an Artinian ring over any field."},
@@ -960,9 +960,8 @@ document {
 		 traceCount(S)
 		 ///,
 	EXAMPLE lines ///
-		 R = QQ[x,y]
-		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
-		 traceCount(I)
+		 J = sub(ideal(5 - 3*x^2 - 3*y^2 + x^2*y^2, 1 + 2*x*y - 4*x*y^2 + 3*x^2*y),R)
+		 traceCount(J)
 	 	 ///,
 	SeeAlso => {"traceForm","realCount"}
      	}
@@ -974,8 +973,8 @@ document {
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
 	    RingElement => "f" => {"a rational polynomial"},
-	    Ideal => "I" => {"an ideal"},
-	    List => "l" => {"a system of rational polynomials"},
+	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
+	    List => "l" => {"a system of rational polynomials with a finite number of solutions"},
 	    },
 	Outputs => { ZZ => {"the number of distinct real points of Spec ", TT "R",", not counting multiplicity"}},
 	PARA {"This computes the number of distinct real points of Spec ", TT "R", ", not counting multiplicity, and where ", TT "R", " is an Artinian ring of characteristic 0. 
@@ -989,9 +988,8 @@ document {
 		 realCount(S)
 		 ///,
 	EXAMPLE lines ///
-		 R = QQ[x,y]
-		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
-		 realCount(I)
+		 J = sub(ideal(5 - 3*x^2 - 3*y^2 + x^2*y^2, 1 + 2*x*y - 4*x*y^2 + 3*x^2*y),R)
+		 realCount(J)
 	 	 ///,
 	SeeAlso => {"traceForm","traceCount"}
      	}
