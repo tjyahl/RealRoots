@@ -908,8 +908,8 @@ document {
 		 f = y^2 - x^2 - x*y + 4
 		 traceForm(f)
 	 	 ///,
-	PARA {"We can also compute the signature of the trace form of ", TT "g", ", which is the number of real points in ",TEX///$V(I)$///," where ",TT "g"," 
-	   is positive minus the number of real points in ",TEX///$V(I)$///," where ",TT "g"," is negative."},
+	PARA {"We can also compute the signature of the trace form of ", TT "g", ", which is the number of real points in ",TEX///$V(J)$///," where ",TT "g"," 
+	   is positive minus the number of real points in ",TEX///$V(J)$///," where ",TT "g"," is negative."},
 	EXAMPLE lines ///
     	    	 R = QQ[x,y]
 		 J = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
