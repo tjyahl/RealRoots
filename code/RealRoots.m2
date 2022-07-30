@@ -174,9 +174,8 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
 	);
     
     if (K === QQ) then (
-	c := gcd apply(flatten entries sub(last coefficients g,QQ),numerator);
-	d := lcm apply(flatten entries sub(last coefficients g,QQ),denominator);
-	d*g/c
+	d := gcd flatten entries sub(last coefficients g,QQ);
+	g/d
 	) else if (isField K) then (
 	g/(leadCoefficient g)
 	) else (
