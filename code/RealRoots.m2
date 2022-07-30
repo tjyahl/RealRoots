@@ -28,6 +28,7 @@ newPackage(
 export{
     --methods
     "signature",
+    "variable",
     "minimalPolynomial",
     "univariateEliminant",
     "regularRepresentation",
@@ -456,8 +457,13 @@ traceForm (RingElement) := Matrix => f->(
 --Compute the number of points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 traceCount = method()
 traceCount (RingElement) := ZZ => f->(
+    x := variable f;
     R := ring f;
-    traceCount(R/f)
+    S := for i from 0 to dim(R) - 1 list R_i;
+    L := delete(x,apply(S,i->i));
+    M := append(L,f);
+    I := ideal(M);    
+    traceCount(R/I)
     )
 
 traceCount (List) := ZZ => F->(
@@ -953,15 +959,18 @@ document {
 	Outputs => { ZZ => {"the number of distinct points of Spec ", TT "S",", not counting multiplicity"}},
 	PARA {"This computes the number of distinct points of Spec ", TT "S", ", not counting multiplicity, and where ", TT "S", " is an Artinian ring over any field."},
 	EXAMPLE lines ///
-	         R = QQ[x,y]
-		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
-		 I = ideal F
-		 S = R/I
-		 traceCount(S)
+ 	         R = QQ[x,y]
+		 I = ideal(5 - 3*x^2 - 3*y^2 + x^2*y^2, 1 + 2*x*y - 4*x*y^2 + 3*x^2*y)
+		 traceCount(I)
 		 ///,
 	EXAMPLE lines ///
-		 J = sub(ideal(5 - 3*x^2 - 3*y^2 + x^2*y^2, 1 + 2*x*y - 4*x*y^2 + 3*x^2*y),R)
-		 traceCount(J)
+	    	 l = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
+		 traceCount(l)
+	    	///,
+	EXAMPLE lines ///
+		 J = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
+		 S = R/J
+		 traceCount(S)
 	 	 ///,
 	SeeAlso => {"traceForm","realCount"}
      	}
@@ -982,15 +991,13 @@ document {
 	       Moreover, if ", TT "l", " is a system of rational polynomials, then this computes its number of solutions."},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
+		 I = ideal(5 - 3*x^2 - 3*y^2 + x^2*y^2, 1 + 2*x*y - 4*x*y^2 + 3*x^2*y)
+		 realCount(I)
 		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
-		 I = ideal F
-		 S = R/I
+		 J = ideal F
+		 S = R/J
 		 realCount(S)
 		 ///,
-	EXAMPLE lines ///
-		 J = sub(ideal(5 - 3*x^2 - 3*y^2 + x^2*y^2, 1 + 2*x*y - 4*x*y^2 + 3*x^2*y),R)
-		 realCount(J)
-	 	 ///,
 	SeeAlso => {"traceForm","traceCount"}
      	}
     
