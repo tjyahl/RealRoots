@@ -728,7 +728,7 @@ document {
 		 g = t + 2
 		 SylvesterSequence(f,g)
 	 	 ///,
-	SeeAlso => {"SylvesterCount"}
+	SeeAlso => {"SylvesterCount","SturmSequence"}
      	}
 
 document {
@@ -754,7 +754,7 @@ document {
 		 b = 4
 		 SylvesterCount(f,g,a,b)
 	 	 ///,
-	SeeAlso => {"SylvesterSequence"}
+	SeeAlso => {"SylvesterSequence","SturmCount"}
      	}
 
 document {
@@ -772,7 +772,7 @@ document {
 		 roots f
 		 SturmSequence(f)
 	 	 ///,
-	SeeAlso => {"SturmCount"}
+	SeeAlso => {"SturmCount","SylvesterSequence"}
      	}
 
 document {
@@ -821,7 +821,7 @@ document {
 		SturmCount(f,0,infinity)
 		SturmCount(f,-infinity,infinity)
 		///,
-	SeeAlso => {"SturmSequence"}
+	SeeAlso => {"SturmSequence","SylvesterCount"}
      	}
     
 document {
@@ -902,7 +902,9 @@ document {
 	Outputs => {Matrix => {"a symmetric matrix representing the trace quadratic form of a polynomial in the standard basis of its Artinian ring"}},
 	PARA {"This computes the trace quadratic form of a polynomial in an Artinian ring."},
 	EXAMPLE lines ///
-		 S = QQ[x,y]/ideal(y^2 - x^2 - 1, x - y^2 + 4*y - 2)
+		 R = QQ[x,y]
+		 I = ideal(y^2 - x^2 - 1, x - y^2 + 4*y - 2)
+		 S = R/I
 		 f = y^2 - x^2 - x*y + 4
 		 traceForm(f)
 	 	 ///,
@@ -910,15 +912,15 @@ document {
 	   is positive minus the number of real points in ",TEX///$V(I)$///," where ",TT "g"," is negative."},
 	EXAMPLE lines ///
     	    	 R = QQ[x,y]
-		 I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
+		 J = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
 		 g = x + y
-		 signature(traceForm(g,I))	 
+		 signature(traceForm(g,J))	 
 	 	 ///,
 	PARA {"Additionally, we show an example computing the number of points in ",TEX///$V(I)$///," using the rank of the trace form."},
 	EXAMPLE lines ///
-		 rank traceForm(1_R,I)	 
+		 rank traceForm(1_R,J)	 
 	 	 ///,	 
-	SeeAlso => {"traceCount"}
+	SeeAlso => {"traceCount","realCount","signature"}
      	}
     
 document {
@@ -962,7 +964,7 @@ document {
 		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
 		 traceCount(I)
 	 	 ///,
-	SeeAlso => {"traceForm"}
+	SeeAlso => {"traceForm","realCount"}
      	}
     
 document {
@@ -991,7 +993,7 @@ document {
 		 I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2)
 		 realCount(I)
 	 	 ///,
-	SeeAlso => {"traceForm"}
+	SeeAlso => {"traceForm","traceCount"}
      	}
     
 document {
