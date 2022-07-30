@@ -28,7 +28,6 @@ newPackage(
 export{
     --methods
     "signature",
-    "variable",
     "minimalPolynomial",
     "univariateEliminant",
     "regularRepresentation",
@@ -485,8 +484,13 @@ traceCount (QuotientRing) := ZZ=> R->(
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 realCount = method()
 realCount (RingElement) := ZZ => f->(
+    x := variable f;
     R := ring f;
-    realCount(R/f)
+    S := for i from 0 to dim(R) - 1 list R_i;
+    L := delete(x,apply(S,i->i));
+    M := append(L,f);
+    I := ideal(M);    
+    realCount(R/I)
     )
 
 realCount (List) := ZZ => F->(
@@ -960,6 +964,10 @@ document {
 	PARA {"This computes the number of distinct points of Spec ", TT "S", ", not counting multiplicity, and where ", TT "S", " is an Artinian ring over any field."},
 	EXAMPLE lines ///
  	         R = QQ[x,y]
+		 f = (x^2 + 1)*(x + 1)*(x - 2)^2
+		 traceCount(f)
+		 ///,
+	EXAMPLE lines ///
 		 I = ideal(5 - 3*x^2 - 3*y^2 + x^2*y^2, 1 + 2*x*y - 4*x*y^2 + 3*x^2*y)
 		 traceCount(I)
 		 ///,
@@ -990,14 +998,23 @@ document {
 	       If ", TT "f", " is a rational polynomial (resp., if ",TT "I"," is an ideal), this computes the number of real points of ",TT "R/(f)", " (resp., ",TT "R/I",").
 	       Moreover, if ", TT "l", " is a system of rational polynomials, then this computes its number of solutions."},
 	EXAMPLE lines ///
-	         R = QQ[x,y]
+ 	         R = QQ[x,y]
+		 f = (x^2 + 1)*(x + 1)*(x - 2)^2
+		 realCount(f)
+		 ///,
+	EXAMPLE lines ///
 		 I = ideal(5 - 3*x^2 - 3*y^2 + x^2*y^2, 1 + 2*x*y - 4*x*y^2 + 3*x^2*y)
 		 realCount(I)
-		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
-		 J = ideal F
+		 ///,
+	EXAMPLE lines ///
+	    	 l = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
+		 realCount(l)
+	    	///,
+	EXAMPLE lines ///
+		 J = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
 		 S = R/J
 		 realCount(S)
-		 ///,
+	 	 ///,
 	SeeAlso => {"traceForm","traceCount"}
      	}
     
