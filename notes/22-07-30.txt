@@ -5,6 +5,7 @@
 
  if fileExists "start.m2" then load(currentDirectory()|"start.m2")
 
+* I moved the unneeded files out of the examples/ directory
 
 * I put the sections back into the jsag paper, moving SectionX.tex to Old/
 
@@ -13,3 +14,27 @@
   regularRepresentation -- the regular representation of an Artinian ring
 
   Maybe "the regular representation of an element of an Artinian ring" ?
+
+  traceCount -- the number of points of the spectrum of an Artinian ring over any field, not counting multiplicity
+
+  Strictly speaking, this is not quite correct, you mean the degree of the reduced scheme of an Artinian ring, but that may
+  be confusing.   Note that this is finessed in Section 3
+
+  traceForm -- the trace quadratic form of a polynomial in an Artinian ring
+
+    "trace symmetric form"  (this is how it is in the paper.)
+
+  in traceCount, what does it mean to run traceCount(f) when f is a polynomial?  I think that something is missing here,
+    say a univariate polynomial ?
+
+  The output is defined when the input is an Artinian ring, but what about the other inputs?
+
+  The examples should illustrate traceCount with its different inputs.
+
+   I think that someting is amiss here.  The headline description does not agree with the description at the foot of the
+   page.  Maybe this routine should just be removed?  Maybe it is OK.
+
+   Let uis finish the package when I get back.
+   
+
+  
