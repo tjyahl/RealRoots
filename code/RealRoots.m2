@@ -1067,7 +1067,7 @@ document {
 
 TEST ///
     R = QQ[x,y];
-    F = {y^2-x^2-1,x-y^2+4*y-2};
+    F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2};
     I = ideal F;
     S = R/I;
     a = minimalPolynomial(x);
@@ -1098,9 +1098,9 @@ TEST ///
 
 TEST ///
     R = QQ[t];
-    f = (t-4)*(t-1)^2*(t+1)*(t+3)*(t+5)*(t-6);--roots at 6, 4, 1 (mult 2), -1, -3, -5
-    g = (2*t-1)*(3*t+8)*(t-9)*(6*t+1);--rational roots at -8/3, -1/6, 1/2, 9
-    p = (t-5)*(t-2)*(t+3)*(t+4)*(t-8)*(t+13);--roots at -13, -4, -3, 2, 5, 8
+    f = (t - 4)*(t - 1)^2*(t + 1)*(t + 3)*(t + 5)*(t - 6);--roots at 6, 4, 1 (mult 2), -1, -3, -5
+    g = (2*t - 1)*(3*t + 8)*(t - 9)*(6*t + 1);--rational roots at -8/3, -1/6, 1/2, 9
+    p = (t - 5)*(t - 2)*(t + 3)*(t + 4)*(t - 8)*(t + 13);--roots at -13, -4, -3, 2, 5, 8
     assert(BudanFourierBound(f) == 7);
     assert(BudanFourierBound(g) == 4);
     assert(BudanFourierBound(p) == 6);
@@ -1126,10 +1126,10 @@ TEST ///
     
 TEST ///
     R = QQ[t];
-    f = (t-2)*(t-1)*(t+3);
-    g = t+1;
+    f = (t - 2)*(t - 1)*(t + 3);
+    g = t + 1;
     assert(SylvesterCount(f,g,-5,4) == 1);
-    h = (t-4)*(t-1)^2*(t+1)*(t+3)*(t+5)*(t-6);
+    h = (t - 4)*(t - 1)^2*(t + 1)*(t + 3)*(t + 5)*(t - 6);
     p = t+5;
     assert(SylvesterCount(h,p,-10,10,Multiplicity=>true) == 6);
     assert(SylvesterCount(h,p,0,10) == 3);
@@ -1137,13 +1137,13 @@ TEST ///
     
 TEST ///
     R = QQ[t];
-    f = (t-1)^2*(t+3)*(t+5)*(t-6);
+    f = (t - 1)^2*(t + 3)*(t + 5)*(t - 6);
     assert(realRootIsolation(f,1/2) == {{-161/32, -299/64}, {-207/64, -23/8}, {23/32, 69/64}, {23/4, 391/64}});
     ///    
     
 TEST ///
     R = QQ[x,y];
-    F = {y^2 - x^2 - 1, x-y^2+4*y-2};
+    F = {y^2 - x^2 - 1, x - y^2 + 4*y - 2};
     I = ideal F;
     S = R/I;
     f = y^2 - x^2 - x*y + 4;
@@ -1154,7 +1154,7 @@ TEST ///
      R = QQ[x,y];
      I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
      assert(realCount(I) == 3);
-     F = {y^2-x^2-1,x-y^2+4*y-2};
+     F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2};
      assert(realCount(F) == 2);
      I = ideal F;
      S = R/I;
