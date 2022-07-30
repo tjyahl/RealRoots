@@ -80,7 +80,7 @@ variable (Ideal) := RingElement => I->(
 ----isArtinian does NOT work over fields with parameters.
 isArtinian = method()
 isArtinian (Ring) := Boolean => S->(
-    if not isPolynomialRing ambient S then error "Error: Expected quotient of polynomial ring";
+    if not (isPolynomialRing ambient S and isField coefficientRing S) then error "Error: Expected quotient of polynomial ring over a field";
     dim S === 0
     )
 
@@ -164,12 +164,14 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
     	P := map(R^1,R^(n+1),(i,j)->f^j);
     	M := last coefficients(P, Monomials=>B);
     	coeffs := sub(gens ker M,K);
-   	(map(S^1,S^(n+1),(i,j)->S_0^j) * coeffs)_(0,0)
+   	g := (map(S^1,S^(n+1),(i,j)->S_0^j) * coeffs)_(0,0);
+	g/(leadCoefficient g)
 	
 	) else if (opts.Strategy === 1) then (
       	--This strategy computes the minimalPolynomial as the kernel of the multiplication map
     	phi := map(R,S,{f});
-    	(ker phi)_0
+    	g = (ker phi)_0;
+	g/(leadCoefficient g)
 	
 	)
     )
@@ -177,7 +179,7 @@ minimalPolynomial (RingElement) := RingElement => opts->f->(
 
 --Function alias
 univariateEliminant = method(Options=>{Strategy=>0,Variable=>"Z"})
-univariateEliminant (RingElement,Ideal) := o-> (g,I)-> (
+univariateEliminant (RingElement,Ideal) := o->(g,I)->(
     minimalPolynomial(g,I,o)
     )
 
@@ -225,18 +227,10 @@ characteristicPolynomial (Matrix) := RingElement => opts->M->(
     	for k from 1 to n do (
 	    coeffs#k = -sum(k,i->coeffs#(k-i-1)*traces#(i+1))/k
 	    );
-    	sum(n+1,i->coeffs#i*S_0^(n-i))
+    	g := sum(n+1,i->coeffs#i*S_0^(n-i));
+	g/(leadCoefficient g)
 	)
     )
-
-
---characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
---    R := ring f;
---    if not (ring(I) === R) then error "Error: Expected polynomial ring and ideal of the same ring";
---    characteristicPolynomial(sub(f,R/I))
---    )
-
-
 
 --Computes the characteristic polynomial of the regular representation of f
 characteristicPolynomial (RingElement,Ideal) := RingElement => opts->(f,I)->(
@@ -271,7 +265,8 @@ characteristicPolynomial (RingElement) := RingElement => opts->t ->(
         for k from 1 to D do (
 	coeffs#k = -sum(k,i->(coeffs#(k-i-1)*traces#(i+1)))/k
 	);
-    sum(D+1,i->coeffs#i*S_0^(D-i))
+    g := sum(D+1,i->coeffs#i*S_0^(D-i));
+    g/(leadCoefficient g)
     )
     
     
@@ -288,10 +283,11 @@ variations (List) := ZZ => l->(
     n
     )
 
+
 --Computes the difference in variations of the derivative sequence at specified values
 BudanFourierBound = method()
-for A in {ZZ,QQ,RR,InfiniteNumber} do 
-for B in {ZZ,QQ,RR,InfiniteNumber} do
+for A in {ZZ,QQ,InfiniteNumber} do 
+for B in {ZZ,QQ,InfiniteNumber} do
 BudanFourierBound (RingElement,A,B) := ZZ => (f,a,b)->(
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
     if not (a<b) then error "Error: Expected non-empty interval";
@@ -310,6 +306,7 @@ SylvesterSequence = method()
 SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     if (f==0 or g==0) then error "Error: Expected nonzero polynomials";
     if not (isUnivariatePolynomial(f)) then error "Error: Expected univariate polynomials";
+
     R := ring f;
     if not isField coefficientRing R then error "Error: Expected polynomials over a field";
     if not (ring g === R) then error "Error: Polynomials should be in the same ring";
@@ -334,8 +331,8 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
 --Computes the difference in the number of roots of f where g is positive and where g is negative
 ----letting g = 1 gives the number of real roots from the Sturm sequence
 SylvesterCount = method(Options=>{Multiplicity=>false})
-for A in {ZZ,QQ,RR,InfiniteNumber} do 
-for B in {ZZ,QQ,RR,InfiniteNumber} do
+for A in {ZZ,QQ,InfiniteNumber} do 
+for B in {ZZ,QQ,InfiniteNumber} do
 SylvesterCount (RingElement,RingElement,A,B) := ZZ => opts->(f, g, a, b)->(
     if not (a<b) then error "Error: Expected non-empty interval";
     l := SylvesterSequence(f,diff(variable f,f)*g);
@@ -365,8 +362,8 @@ SturmSequence (RingElement) := List => f->(
 
 --Computes the difference in variations of the Sturm sequence at specified values
 SturmCount = method(Options=>{Multiplicity=>false})
-for A in {ZZ,QQ,RR,InfiniteNumber} do
-for B in {ZZ,QQ,RR,InfiniteNumber} do
+for A in {ZZ,QQ,InfiniteNumber} do
+for B in {ZZ,QQ,InfiniteNumber} do
 SturmCount (RingElement,A,B) := ZZ => opts->(f,a,b)->(
     R := ring f;
     SylvesterCount(f,1_R,a,b,opts)
@@ -379,7 +376,7 @@ SturmCount (RingElement) := ZZ => opts->f->(
 
 --Uses Sturm sequence and a bisection method to isolate real solutions to a real univariate polynomial within a tolerance
 realRootIsolation = method()
-for A in {ZZ,QQ,RR} do
+for A in {ZZ,QQ} do
 realRootIsolation (RingElement,A) := List => (f,r)->(
     if not r > 0 then error "Error: Expected positive integer or positive rational number";
     
@@ -422,7 +419,7 @@ realRootIsolation (RingElement,A) := List => (f,r)->(
 ----can also use SylvesterCount(ch,variable ch,Multiplicity=>true)
 signature = method()
 signature (Matrix) := ZZ => M->(
-    if char ring(M) != 0 then error "Error: Expected ring of characteristic 0.";
+    if not (ring M === ZZ or ring M === QQ) then error "Error: Expected rational matrix";
     if M != transpose M then error "Error: Expected symmetric matrix.";
     ch := characteristicPolynomial M;
     coeffs := flatten entries sub(last coefficients ch,ring M);
@@ -504,7 +501,7 @@ rationalUnivariateRepresentation = method()
 rationalUnivariateRepresentation (QuotientRing) := Sequence => S->(
     R := ambient S;
     I := ideal S;
-    if not (isArtinian(S) and isPolynomialRing(R)) then error "Error: Expected Artinian ring as quotient of polynomial ring";
+    if not isArtinian(S) then error "Error: Expected Artinian ring as quotient of polynomial ring";
     
     rationalUnivariateRepresentation(I)
     )
@@ -513,7 +510,7 @@ rationalUnivariateRepresentation (Ideal) := Sequence => I->(
     R := ring I;
     S := R/I;
     if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal in a polynomial ring";
-    d := rank traceForm(1_S);
+    d := traceCount(S);
     
     i := 1;
     X := gens R;
@@ -580,11 +577,10 @@ isHurwitzStable (RingElement) := Boolean => f->(
 beginDocumentation()
 
 undocumented {
-    delete((SylvesterCount,RingElement,RingElement,RR,RR),flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(SylvesterCount,RingElement,RingElement,a,b))),
-    delete((SturmCount,RingElement,RR,RR),flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(SturmCount,RingElement,a,b))),
-    delete((BudanFourierBound,RingElement,RR,RR),flatten table({ZZ,QQ,RR,InfiniteNumber},{ZZ,QQ,RR,InfiniteNumber},(a,b)->(BudanFourierBound,RingElement,a,b))),
-    (realRootIsolation, RingElement,ZZ),
-    (realRootIsolation, RingElement,QQ)
+    delete((SylvesterCount,RingElement,RingElement,QQ,QQ),flatten table({ZZ,QQ,InfiniteNumber},{ZZ,QQ,InfiniteNumber},(a,b)->(SylvesterCount,RingElement,RingElement,a,b))),
+    delete((SturmCount,RingElement,QQ,QQ),flatten table({ZZ,QQ,InfiniteNumber},{ZZ,QQ,InfiniteNumber},(a,b)->(SturmCount,RingElement,a,b))),
+    delete((BudanFourierBound,RingElement,QQ,QQ),flatten table({ZZ,QQ,InfiniteNumber},{ZZ,QQ,InfiniteNumber},(a,b)->(BudanFourierBound,RingElement,a,b))),
+    (realRootIsolation, RingElement,ZZ)
     }
 
 document {
@@ -729,15 +725,15 @@ document {
      	}
 
 document {
-	Key => {SylvesterCount,(SylvesterCount,RingElement,RingElement),(SylvesterCount,RingElement,RingElement,RR,RR)},
+	Key => {SylvesterCount,(SylvesterCount,RingElement,RingElement),(SylvesterCount,RingElement,RingElement,QQ,QQ)},
 	Headline => "the difference in variations of the Sylvester sequence of two rational univariate polynomials",
 	Usage => "SylvesterCount(f,g,a,b)
 	          SylvesterCount(f,g)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
 	    RingElement => "g" => {"a rational univariate polynomial"},
-	    RR => "a" => {"(optional) the lower bound of the interval"},
-	    RR => "b" => {"(optional) the upper bound of the interval"},
+	    QQ => "a" => {"(optional) the lower bound of the interval"},
+	    QQ => "b" => {"(optional) the upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the difference between the number of roots of ",TT "f"," in the interval ",TEX///$(a,b]$///," where ",TT "g",
@@ -783,14 +779,14 @@ document {
     }
 
 document {
-	Key => {SturmCount,(SturmCount,RingElement),(SturmCount,RingElement,RR,RR)},
+	Key => {SturmCount,(SturmCount,RingElement),(SturmCount,RingElement,QQ,QQ)},
 	Headline => "the number of real roots of a rational univariate polynomial",
 	Usage => "SturmCount(f,a,b)
 	          SturmCount(f)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
-	    RR => "a" => {"a lower bound of the interval"},
-	    RR => "b" => {"an upper bound of the interval"},
+	    QQ => "a" => {"a lower bound of the interval"},
+	    QQ => "b" => {"an upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," in the interval ",TEX///$(a,b]$///}},
@@ -837,12 +833,12 @@ document {
      	}
 
 document {
-        Key => {realRootIsolation,(realRootIsolation, RingElement,RR)},
+        Key => {realRootIsolation,(realRootIsolation, RingElement,QQ)},
 	Headline => "a list that isolates the real roots of a rational univariate polynomial",
 	Usage => "realRootIsolation(f,r)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
-	    RR => "r" => {"a positive rational number"},
+	    QQ => "r" => {"a positive rational number"},
 	    },
 	Outputs => {List => {"of intervals that contain all the real roots of ", TT "f"}},
 	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of ", TT "f",
@@ -857,16 +853,14 @@ document {
      	}
     
 document {
-	Key => {BudanFourierBound,(BudanFourierBound,RingElement),(BudanFourierBound,RingElement,RR,RR)},
+	Key => {BudanFourierBound,(BudanFourierBound,RingElement),(BudanFourierBound,RingElement,QQ,QQ)},
 	Headline => "a bound for the number of real roots of a univariate polynomial with rational coefficients",
 	Usage => "BudanFourierBound(f, a, b)
 	          BudanFourierBound(f)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial with rational coefficients, where", TT " ring f ", "is not necessarily univariate"},
-	    RR => "a" => {"(optional) the lower bound of the interval"},
-	    InfiniteNumber => "a" => {"(optional) the lower bound of the interval"},
-	    RR => "b" => {"(optional) the upper bound of the interval"},
-	    InfiniteNumber => "b" => {"(optional) the upper bound of the interval"},
+	    QQ => "a" => {"a lower bound of the interval"},
+	    QQ => "b" => {"an upper bound of the interval"},
 	    },
 	Outputs => { ZZ => { "the bound for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval ", TT "(a,b]"}},
 	PARA {"This computes the bound from the Budan Fourier Theorem for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval", TT "(a,b]",
