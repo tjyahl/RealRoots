@@ -508,7 +508,7 @@ rationalUnivariateRepresentation = method()
 rationalUnivariateRepresentation (QuotientRing) := Sequence => S->(
     R := ambient S;
     I := ideal S;
-    if not isArtinian(S) then error "Error: Expected Artinian ring as quotient of polynomial ring";
+    if not isArtinian(S) then error "Error: Expected Artinian ring as quotient of a polynomial ring";
     
     rationalUnivariateRepresentation(I)
     )
@@ -854,7 +854,6 @@ document {
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
 		 realRootIsolation(f,1/2)
-		 realRootIsolation(f,.2)
 	 	 ///,
 	SeeAlso => {"SturmSequence"}
      	}
@@ -903,13 +902,22 @@ document {
 	Outputs => {Matrix => {"a symmetric matrix representing the trace quadratic form of a polynomial in the standard basis of its Artinian ring"}},
 	PARA {"This computes the trace quadratic form of a polynomial in an Artinian ring."},
 	EXAMPLE lines ///
-	         R = QQ[x,y]
-		 F = {y^2 - x^2 - 1, x - y^2 + 4*y - 2}
-		 I = ideal F
-		 S = R/I
+		 S = QQ[x,y]/ideal(y^2 - x^2 - 1, x - y^2 + 4*y - 2)
 		 f = y^2 - x^2 - x*y + 4
 		 traceForm(f)
 	 	 ///,
+	PARA {"We can also compute the signature of the trace form of ", TT "g", ", which is the number of real points in ",TEX///$V(I)$///," where ",TT "g"," 
+	   is positive minus the number of real points in ",TEX///$V(I)$///," where ",TT "g"," is negative."},
+	EXAMPLE lines ///
+    	    	 R = QQ[x,y]
+		 I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
+		 g = x + y
+		 signature(traceForm(g,I))	 
+	 	 ///,
+	PARA {"Additionally, we show an example computing the number of points in ",TEX///$V(I)$///," using the rank of the trace form."},
+	EXAMPLE lines ///
+		 rank traceForm(1_R,I)	 
+	 	 ///,	 
 	SeeAlso => {"traceCount"}
      	}
     
@@ -924,13 +932,7 @@ document {
 	PARA {"This computes the signature of the symmetric matrix ", TT "M"," with rational entries."},
 	EXAMPLE lines ///
 		 signature(matrix{{1,-2,3/5},{-2,-16,9},{3/5,9,13}})
-		 ///,
-	PARA {"We show an example computing the signature of the trace form."},
-	EXAMPLE lines ///
-		 R = QQ[x,y]
-		 I = ideal(5-3*x^2-3*y^2+x^2*y^2, 1+2*x*y-4*x*y^2+3*x^2*y)
-		 signature(traceForm(1_R,I))	 
-	 	 ///
+		 ///
      	}    
 
 document {
@@ -993,13 +995,15 @@ document {
      	}
     
 document {
-        Key => {rationalUnivariateRepresentation, (rationalUnivariateRepresentation, Ideal)},
+        Key => {rationalUnivariateRepresentation, (rationalUnivariateRepresentation, Ideal),(rationalUnivariateRepresentation, QuotientRing)},
 	Headline => "the rational univariate representation of a zero-dimensional ideal in a polynomial ring",
-	Usage => "rationalUnivariateRepresentation(I)",
+	Usage => "rationalUnivariateRepresentation(I)
+	          rationalUnivariateRepresentation(S)",
 	Inputs => {
 	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
+	    QuotientRing => "S" => {"an Artinian ring as a quotient of a polynomial ring"},
 	    },
-	Outputs => {List => {"the rational univariate representation of ",TT "I"}},
+	Outputs => {List => {"the rational univariate representation of ",TT "I", " or the rational univariate representation of ", TT "S"}},
 	PARA{"This computes the rational univariate representation of a zero-dimensional ideal in a polynomial ring."},
 	
 	EXAMPLE lines ///
