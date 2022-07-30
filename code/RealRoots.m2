@@ -762,7 +762,7 @@ document {
 	    RingElement => "f" => {"a rational univariate polynomial"},
 	    },
 	Outputs => { List => {"the Sturm sequence of ", TT "f"}},
-	PARA {"This computes the Sturm sequence of the square-free part of a univariate polynomial ", TT "f","."},
+	PARA {"This computes the Sturm sequence of the square-free part of a rational univariate polynomial ", TT "f","."},
 	EXAMPLE lines ///
 	 	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
@@ -914,17 +914,17 @@ document {
     
 document {
 	Key => {signature,(signature, Matrix)},
-	Headline => "the signature of a symmetric matrix",
+	Headline => "the signature of a symmetric matrix with rational entries",
 	Usage => "signature(M)",
 	Inputs => {
-	    Matrix => "M" => {"a symmetric matrix"},
+	    Matrix => "M" => {"a symmetric matrix with rational entries"},
 	    },
 	Outputs => { ZZ => {"the signature of ", TT "M"}},
-	PARA {"This computes the signature of the symmetric matrix ", TT "M","."},
+	PARA {"This computes the signature of the symmetric matrix ", TT "M"," with rational entries."},
 	EXAMPLE lines ///
 		 signature(matrix{{1,-2,3/5},{-2,-16,9},{3/5,9,13}})
 		 ///,
-	PARA {"We also show an example computing the signature of the trace form."},
+	PARA {"We show an example computing the signature of the trace form."},
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 I = ideal(5-3*x^2-3*y^2+x^2*y^2, 1+2*x*y-4*x*y^2+3*x^2*y)
@@ -968,14 +968,14 @@ document {
 	Usage => "realCount(R)",
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
-	    RingElement => "f" => {"a real polynomial"},
+	    RingElement => "f" => {"a rational polynomial"},
 	    Ideal => "I" => {"an ideal"},
-	    List => "l" => {"a system of real polynomials"},
+	    List => "l" => {"a system of rational polynomials"},
 	    },
 	Outputs => { ZZ => {"the number of distinct real points of Spec ", TT "R",", not counting multiplicity"}},
 	PARA {"This computes the number of distinct real points of Spec ", TT "R", ", not counting multiplicity, and where ", TT "R", " is an Artinian ring of characteristic 0. 
-	       If ", TT "f", " is a real polynomial (resp., if ",TT "I"," is an ideal), this computes the number of real points of ",TT "R/(f)", " (resp., ",TT "R/I",").
-	       Moreover, if ", TT "l", " is a system of real polynomials, then this computes its number of solutions."},
+	       If ", TT "f", " is a rational polynomial (resp., if ",TT "I"," is an ideal), this computes the number of real points of ",TT "R/(f)", " (resp., ",TT "R/I",").
+	       Moreover, if ", TT "l", " is a system of rational polynomials, then this computes its number of solutions."},
 	EXAMPLE lines ///
 	         R = QQ[x,y]
 		 F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2}
