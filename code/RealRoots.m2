@@ -28,7 +28,6 @@ newPackage(
 export{
     --methods
     "signature",
-    "variable",
     "minimalPolynomial",
     "univariateEliminant",
     "regularRepresentation",
@@ -457,12 +456,12 @@ traceForm (RingElement) := Matrix => f->(
 --Compute the number of points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 traceCount = method()
 traceCount (RingElement) := ZZ => f->(
-    x := variable f
-    R := ring f
-    S := for i from 0 to dim(R) - 1 list R_i
-    L := delete(x,apply(S,i->i))
-    M := append(L,f)
-    I := ideal(M)   
+    x := variable f;
+    R := ring f;
+    S := for i from 0 to dim(R) - 1 list R_i;
+    L := delete(x,apply(S,i->i));
+    M := append(L,f);
+    I := ideal(M);   
     traceCount(R/I)
     )
 
