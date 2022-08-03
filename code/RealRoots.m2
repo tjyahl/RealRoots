@@ -480,7 +480,6 @@ traceCount (QuotientRing) := ZZ=> R->(
     rank traceForm(1_R)
     )
 
-
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the trace form.
 realCount = method()
 realCount (RingElement) := ZZ => f->(
@@ -666,7 +665,7 @@ document {
 
 document {
 	Key => {regularRepresentation,(regularRepresentation, RingElement, Ideal), (regularRepresentation, RingElement)},
-	Headline => "the regular representation of an Artinian ring",
+	Headline => "the regular representation of an element of an Artinian ring",
 	Usage => "regularRepresentation(f)
 	          regularRepresentation(g,I)",
 	Inputs => {
@@ -901,7 +900,7 @@ document {
     
 document {
 	Key => {traceForm,(traceForm, RingElement),(traceForm,RingElement,Ideal)},
-	Headline => "the trace quadratic form of a polynomial in an Artinian ring",
+	Headline => "the trace symmetric form of a polynomial in an Artinian ring",
 	Usage => "traceForm(f)
 	          traceForm(g,I),",
 	Inputs => {
@@ -909,8 +908,8 @@ document {
 	    RingElement => "g" => {"a polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    },
-	Outputs => {Matrix => {"a symmetric matrix representing the trace quadratic form of a polynomial in the standard basis of its Artinian ring"}},
-	PARA {"This computes the trace quadratic form of a polynomial in an Artinian ring."},
+	Outputs => {Matrix => {"a symmetric matrix representing the trace symmetric form of a polynomial in the standard basis of its Artinian ring"}},
+	PARA {"This computes the trace symmetric form of a polynomial in an Artinian ring."},
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 I = ideal(y^2 - x^2 - 1, x - y^2 + 4*y - 2)
@@ -949,19 +948,22 @@ document {
 
 document {
 	Key => {traceCount,(traceCount, QuotientRing), (traceCount, RingElement), (traceCount, Ideal),(traceCount, List)},
-        Headline => "the number of points of the spectrum of an Artinian ring over any field, not counting multiplicity",
+        Headline => "the degree of the reduced scheme of an Artinian ring",
+	--the number of points of the spectrum of an Artinian ring over any field, not counting multiplicity",
 	Usage => "traceCount(S)
 	          traceCount(f)
 		  traceCount(I)
 		  traceCount(l)",
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
-	    RingElement => "f" => {"a polynomial"},
+	    RingElement => "f" => {"a univariate polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    List => "l" => {"a system of polynomials with a finite number of solutions"},
 	    },
-	Outputs => { ZZ => {"the number of distinct points of Spec ", TT "S",", not counting multiplicity"}},
-	PARA {"This computes the number of distinct points of Spec ", TT "S", ", not counting multiplicity, and where ", TT "S", " is an Artinian ring over any field."},
+	Outputs => { ZZ => {"the degree of the reduced scheme of an Artinian ring"}},
+		--the number of distinct points of Spec ", TT "S",", not counting multiplicity"}},
+	PARA {"This computes the degree of the reduced scheme of an Artinian ring, which is equivalent to the
+	    number of distinct points of Spec ", TT "S", ", not counting multiplicity, where ", TT "S", " is an Artinian ring over any field."},
 	EXAMPLE lines ///
  	         R = QQ[x,y]
 		 f = (x^2 + 1)*(x + 1)*(x - 2)^2
@@ -986,17 +988,17 @@ document {
 document {
 	Key => {realCount,(realCount, QuotientRing), (realCount, RingElement), (realCount, Ideal),(realCount, List)},
         Headline => "the number of real points of the spectrum of an Artinian ring (of characteristic 0), not counting multiplicity",
-	Usage => "realCount(R)",
+	Usage => "realCount(S)",
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
-	    RingElement => "f" => {"a rational polynomial"},
+	    RingElement => "f" => {"a univariate polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    List => "l" => {"a system of rational polynomials with a finite number of solutions"},
 	    },
-	Outputs => { ZZ => {"the number of distinct real points of Spec ", TT "R",", not counting multiplicity"}},
-	PARA {"This computes the number of distinct real points of Spec ", TT "R", ", not counting multiplicity, and where ", TT "R", " is an Artinian ring of characteristic 0. 
-	       If ", TT "f", " is a rational polynomial (resp., if ",TT "I"," is an ideal), this computes the number of real points of ",TT "R/(f)", " (resp., ",TT "R/I",").
-	       Moreover, if ", TT "l", " is a system of rational polynomials, then this computes its number of solutions."},
+	Outputs => { ZZ => {"the number of distinct real points of Spec ", TT "S",", not counting multiplicity"}},
+	PARA {"This computes the number of distinct real points of Spec ", TT "S", ", not counting multiplicity, and where ", TT "S", " is an Artinian ring of characteristic 0. 
+	       If ", TT "f", " is a univariate polynomial (resp., if ",TT "I"," is a zero-dimensional ideal), this computes the number of real points of ",TT "(ring f)/M", " (resp., ",TT "(ring I)/I","),
+	       where ",TEX///$M$/// ," is the ideal generated by ",TT "f" ," and all variables of ",TT "ring f" ," except the variable in ",TT "f",". Moreover, if ", TT "l", " is a system of rational polynomials, then this computes its number of solutions."},
 	EXAMPLE lines ///
  	         R = QQ[x,y]
 		 f = (x^2 + 1)*(x + 1)*(x - 2)^2
