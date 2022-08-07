@@ -27,6 +27,6 @@ f
 ch
 ph
 -------------   Section 3   ---------------
-rank traceForm(1_S,I)
-signature traceForm(1_S,I)
+traceCount(I)
+realCount(I)
 signature traceForm(y^2+2*y,I)

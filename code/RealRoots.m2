@@ -902,7 +902,7 @@ document {
 	Key => {traceForm,(traceForm, RingElement),(traceForm,RingElement,Ideal)},
 	Headline => "the trace symmetric form of a polynomial in an Artinian ring",
 	Usage => "traceForm(f)
-	          traceForm(g,I),",
+	          traceForm(g,I)",
 	Inputs => {
 	    RingElement => "f" => {"a polynomial in an Artinian Ring"},
 	    RingElement => "g" => {"a polynomial"},

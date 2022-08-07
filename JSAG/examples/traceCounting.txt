@@ -1,8 +1,7 @@
-i26 : rank traceForm(1_S,I)
+i26 : traceCount(I)
 
 o26 = 8
 
-i27 : signature traceForm(1_S,I)
+i27 : realCount(I)
 
 o27 = 4
-

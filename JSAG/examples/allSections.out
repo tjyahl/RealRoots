@@ -149,11 +149,11 @@ o25 =      7         6        5          4         3          2        ...
 o25 : List
 
 i26 : -------------   Section 3   ---------------
-      rank traceForm(1_S,I)
+      traceCount(I)
 
 o26 = 8
 
-i27 : signature traceForm(1_S,I)
+i27 : realCount(I)
 
 o27 = 4
 
