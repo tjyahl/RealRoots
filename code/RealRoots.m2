@@ -464,9 +464,9 @@ traceCount (List) := ZZ => F->(
     )
 
 traceCount (Ideal) := ZZ => I->(
-    supp := support I;
+    supp := new Array from support I;
     C := coefficientRing ring I;
-    R := C[supp];
+    R := C(monoid supp);
     traceCount(R/sub(I,R))
     )
 
@@ -486,9 +486,9 @@ realCount (List) := ZZ => F->(
     )
 
 realCount (Ideal) := ZZ=> I->(
-    supp := support I;
+    supp := new Array from support I;
     C := coefficientRing ring I;
-    R := C[supp];
+    R := C(monoid supp);
     realCount(R/sub(I,R))
     )
 
