@@ -456,35 +456,21 @@ traceForm (RingElement) := Matrix => f->(
 --Compute the number of points of a scheme/real univariate polynomial/real polynomial system using the rank of the trace form.
 traceCount = method()
 traceCount (RingElement) := ZZ => f->(
-    x := variable f;
-    R := ring f;
-    S := for i from 0 to dim(R) - 1 list R_i;
-    L := delete(x,apply(S,i->i));
-    M := append(L,f);
-    I := ideal(M);   
-    traceCount(R/I)
+    traceCount {f}
     )
 
 traceCount (List) := ZZ => F->(
-    I := ideal F;
-    R := ring I;
-    L := unique flatten apply(I_*, i -> support(i));
-    if numgens I < numgens R then R = coefficientRing(R)[L];
-    traceCount(R/I)
+    traceCount ideal F
     )
 
 traceCount (Ideal) := ZZ => I->(
-    R := ring I;
-    L := unique flatten apply(I_*, i -> support(i));
-    if numgens I < numgens R then R = coefficientRing(R)[L];
+    supp := support I;
+    C := coefficientRing ring I;
+    R := C[supp];
     traceCount(R/sub(I,R))
     )
 
 traceCount (QuotientRing) := ZZ => S->(
-    I := ideal(S);
-    L := unique flatten apply(I_*, i -> support(i));
-    T := (coefficientRing(newRing(S))[L]);
-    if numgens I < numgens S then S = T/sub(ideal(S),T);
     rank traceForm(1_S)
     )
 
@@ -492,28 +478,22 @@ traceCount (QuotientRing) := ZZ => S->(
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the signature of the trace form.
 realCount = method()
 realCount (RingElement) := ZZ => f->(
-    x := variable f;
-    R := ring f;
-    S := for i from 0 to dim(R) - 1 list R_i;
-    L := delete(x,apply(S,i->i));
-    M := append(L,f);
-    I := ideal(M);    
-    realCount(R/I)
+    realCount {f}
     )
 
 realCount (List) := ZZ => F->(
-    I := ideal F;
-    R := ring I;
-    realCount(R/I)
+    realCount ideal F
     )
 
 realCount (Ideal) := ZZ=> I->(
-    R := ring I;
-    realCount(R/I)
+    supp := support I;
+    C := coefficientRing ring I;
+    R := C[supp];
+    realCount(R/sub(I,R))
     )
 
-realCount (QuotientRing) := ZZ=> R->(
-    signature traceForm(1_R)
+realCount (QuotientRing) := ZZ=> S->(
+    signature traceForm(1_S)
     )
 
 
@@ -526,7 +506,7 @@ rationalUnivariateRepresentation = method()
 rationalUnivariateRepresentation (QuotientRing) := Sequence => S->(
     R := ambient S;
     I := ideal S;
-    if not isArtinian(S) then error "Error: Expected Artinian ring as quotient of a polynomial ring";
+    if not (isArtinian S and isPolynomialRing R) then error "Error: Expected Artinian ring as quotient of a polynomial ring";
     
     rationalUnivariateRepresentation(I)
     )
@@ -534,7 +514,7 @@ rationalUnivariateRepresentation (QuotientRing) := Sequence => S->(
 rationalUnivariateRepresentation (Ideal) := Sequence => I->(
     R := ring I;
     S := R/I;
-    if not isArtinian(S) then error "Error: Expected I to be a zero-dimensional ideal in a polynomial ring";
+    if not (isArtinian S and isPolynomialRing R) then error "Error: Expected I to be a zero-dimensional ideal in a polynomial ring";
     d := traceCount(S);
     
     i := 1;
