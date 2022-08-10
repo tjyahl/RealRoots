@@ -1,6 +1,6 @@
 i19 : T = ring(g)
 
-i20 : gens gb ideal(g,diff(Z,g))
+i20 : gens gb ideal(g, diff(Z,g))
 
 o20 = | 1 |
 

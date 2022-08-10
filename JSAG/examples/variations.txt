@@ -1,5 +1,5 @@
 i1 : loadPackage("RealRoots");
 
-i2 : variations({2,-3,0,-8,12,0,0,8,-12,0})
+i2 : variations {2, -3, 0, -8, 12, 0, 0, 8, -12, 0}
 
 o2 = 3

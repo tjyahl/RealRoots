@@ -1,4 +1,4 @@
-i9 : realRootIsolation(f,1/5)
+i9 : realRootIsolation(f, 1/5)
 
          165    75       15       75  165    45  195
 o9 = {{- ---, - --}, {- ---, 0}, {--, ---}, {--, ---}}
