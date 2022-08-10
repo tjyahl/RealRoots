@@ -42,8 +42,8 @@
 \DeclareMathOperator{\Syl}{{\rm Syl}}
 
 \definecolor{TAMU}{RGB}{140,0,0}
-\definecolor{myblue}{RGB}{0,0,204}
-\definecolor{myred}{RGB}{204,0,0}
+\definecolor{myblue}{RGB}{0,0,198}
+\definecolor{myred}{RGB}{182,0,0}
 
 \newcommand{\defcolor}[1]{{\color{TAMU}#1}}
 \newcommand{\demph}[1]{\defcolor{{\sl #1}}}
@@ -113,7 +113,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
  The \textit{Macaulay2} package \texttt{RealRoots} provides symbolic methods to study real solutions to systems of polynomial equations.
- It updates and expands an earlier package developed by Sottile and Grayson in 1999.
+ It updates and expands an earlier package developed by Grayson and Sottile in 1999.
  We provide mathematical background and descriptions of the  \texttt{RealRoots} package, giving examples which illustrate some of its
  implemented methods.
  We also prove a general version of Sylvester's Theorem whose statement and proof we could not find in the literature.
@@ -185,7 +185,7 @@ number of variations in sign after removing all zero terms.
 For a sequence of polynomials  $\defcolor{f_\bullet}=(f_0,\dotsc,f_k)$ in $\RR[x]$ and $a\in\RR$, \defcolor{$\var(f_\bullet,a)$} is the
 variation in the sequence 
 $(f_0(a),\dotsc,f_{k}(a))$. 
-We extend this to $a=\pm\infty$, by taking $f(\infty)$ to be the leading coefficient of $f(x)$ and $f(-\infty)$ to be the leading
+We extend this to $a\in\{\pm\infty\}$, by taking $f(\infty)$ to be the leading coefficient of $f(x)$ and $f(-\infty)$ to be the leading
 coefficient of $f(-x)$.
 
 Given a polynomial $f\in\RR[x]$ of degree $k$, consider its sequence of derivatives,
@@ -212,7 +212,7 @@ Let us consider an example.
 \verbatiminput{examples/BudanFourierBound.txt}
 \end{leftbar}
 %
-Note that $r(f,0,\infty)=r(f,-2,1)=3$, as the real roots of $f$ are $-\sqrt[4]{2},-\sqrt[4]{2},0,\sqrt[4]{2},\sqrt[4]{2},3/2$.
+\noindent Note that $r(f,0,\infty)=r(f,-2,1)=3$, as the real roots of $f$ are $-\sqrt[4]{2},-\sqrt[4]{2},0,\sqrt[4]{2},\sqrt[4]{2},3/2$.
 
 In contrast to these bounds, 
 Sylvester's Theorem determines the actual number of real roots, and more.
@@ -234,7 +234,7 @@ Observe that for each $1\leq i\leq k$ there exists $\defcolor{q_i}\in\RR[x]$ suc
 %
 The \demph{reduced Sylvester sequence}, $\defcolor{g_\bullet}=(g_0,\dotsc,g_k)$ is obtained by dividing each term in the Sylvester sequence
 by $f_k=\gcd(f,f'g)$, so that $g_if_k=f_i$ for each $i$. 
-Note that  $g_k=1$ and elements of the reduced Sylvester sequence satisfy~\eqref{Eq:divisionAlgorithm} with $f_j$ replacing $g_j$,
+Note that  $g_k=1$ and elements of the reduced Sylvester sequence satisfy~\eqref{Eq:divisionAlgorithm} with $g_j$ replacing $f_j$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -286,7 +286,7 @@ Observe the different roles that the endpoints $\{a,b\}$ play in this formula.
   A computation reveals that $h_1=mhg+(x{-}\zeta)h'g$.
  Choose $\epsilon>0$ so that $\zeta$ is the only root of any element in $g_\bullet$ lying in the interval
  $[\zeta-\epsilon,\zeta+\epsilon]$.
- We have
+ We have:
  %
  \[
  \begin{array}{c|c|l}
@@ -303,8 +303,8 @@ Observe the different roles that the endpoints $\{a,b\}$ play in this formula.
  Suppose that $g(\zeta)>0$.
  Then the sign of $h_1$ on $[\zeta-\epsilon,\zeta+\epsilon]$ is opposite to the sign of $h_0(\zeta-\epsilon)$, but the same as the sign of
  $h_0(\zeta+\epsilon)$.
- Thus the variation $\var(g_\bullet,t)$ decreases by 1 as $t$ passes from $\zeta{-}\epsilon$ to $\zeta$, but is unchanged as $t$
- passes from $\zeta$ to $\zeta{+}\epsilon$.
+ Thus the variation $\var(g_\bullet,t)$ decreases by 1 as $t$ passes from $\zeta-\epsilon$ to $\zeta$, but is unchanged as $t$
+ passes from $\zeta$ to $\zeta+\epsilon$.
   
 
  Suppose that $g(\zeta)<0$.
@@ -333,13 +333,13 @@ The \demph{reduced Sturm sequence} of $f$ is the reduced Sylvester sequence of $
 \end{corollary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Let us continue with the same polynomial $f=x(2x-3)(x^4-2)^2$ as before.
+Using the reduced Sylvester sequence of $f$ and $-1$, we obtain the number of zeros of $f$ in $[a,b)$. Let us continue with the same polynomial $f=x(2x-3)(x^4-2)^2$ as before.
 %
 \begin{leftbar}
 \verbatiminput{examples/Sturm.txt}
 \end{leftbar}
 %
-Calling {\tt SturmCount(f)} without endpoints $a,b$ returns the total number of real roots of $f$.
+\noindent Calling {\tt SturmCount(f)} without endpoints $a,b$ returns the total number of real roots of $f$.
 
 Figure~\ref{F:One} shows the graph of $f$ in a neighborhood of its real roots.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -369,11 +369,11 @@ The numbers $p,q$ are dyadic, lying in $\ZZ[\frac{1}{2}]$, as they are found in 
 \verbatiminput{examples/realRootIsolation.txt}
 \end{leftbar}
 %
-These isolating intervals are shaded in Figure~\ref{F:One}. 
+\noindent These isolating intervals are shaded in Figure~\ref{F:One}. 
 
-Thomas~\cite{Thomas} observed that recursively iterating Sturm's Theorem on $f_k:=\gcd(f,f')$ can be used to give the
+Thomas~\cite{Thomas} observed that recursively iterating Sturm's Theorem on $f_k=\gcd(f,f')$ can be used to give the
 number of real roots of $f$, counted with multiplicity.
-This same idea may be used to upgrade Sylvester's Theorem to give the count with multiplicity.
+This same idea may be used to extend Sylvester's Theorem to give the count with multiplicity.
 %
 \begin{leftbar}
 \verbatiminput{examples/SturmMultiplicity.txt}
@@ -400,7 +400,7 @@ Given a polynomial $f=c_kx^k+c_{k-1}x^{k-1}+\dotsb+c_0$,  let \defcolor{$H$} be 
     0    &    0   & \dotsb&c_2 & c_0
 \end{matrix}\right)
 \]
-For $1\leq \ell\leq k$, the \demph{Hurwitz determinant}, \defcolor{$\Delta_\ell$} is the $\ell$th principal minor of $H$.
+For $1\leq i\leq k$, the \demph{Hurwitz determinant}, \defcolor{$\Delta_i$} is the $i$th principal minor of $H$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -431,7 +431,7 @@ Geometrically, it gives the image of a variety under a polynomial map, such as a
 
 Let  $\KK$ be a field and $I\subseteq\KK[x_1,\dotsc,x_n]$ be a zero-dimension\-al ideal  with scheme $\calV(I)\subseteq\KK^n$.
 The Artinian ring $\defcolor{R}\vcentcolon=\KK[x_1,\dotsc,x_n]/I$ is a vector space over $\KK$ of dimension
-$\defcolor{d}\vcentcolon=\mbox{degree}(I)$, and $|\calV(I)|\leq d$.
+$\defcolor{d}\vcentcolon=\mbox{degree}(I)$, and $\#\calV(I)\leq d$.
 The ring $R$ acts on itself by multiplication.
 For $f\in R$, let \defcolor{$m_f$} be the operator of multiplication by $f$: for $g\in R$, $m_f(g)=fg$.
 By Stickelberger's Theorem~\cite{Cox2021}, the eigenvalues of $m_f$ are the values of $f$ at the  points of $\calV(I)$,
@@ -443,7 +443,7 @@ The (univariate) \defcolor{eliminant} \defcolor{$g$} of $I$ with respect to $f$ 
 When $f$ is a variable, e.g.\ $f=x_1$, $g$ is the monic generator of the univariate ideal $I\cap\KK[x_1]$.
 In general, the eliminant generates the kernel of the map $\KK[Z]\to R$, where $Z\mapsto f$.
 The function \texttt{regularRepresentation} computes a matrix representing $m_f$ with respect to the standard basis for $R$.
-The function \texttt{univariateEliminant} returns the minimal polynomial of $m_f$, with respect to new user-chosen variable
+The function \texttt{univariateEliminant} returns the minimal polynomial of $m_f$, with respect to a new user-chosen variable
 (or the default \texttt{Z}). 
 %
 \begin{leftbar}
@@ -453,7 +453,7 @@ The function \texttt{univariateEliminant} returns the minimal polynomial of $m_f
 The eliminant \defcolor{$g$} of $I$ with respect to $f$ defines the image of the scheme $\calV(I)$ under $f$.
 When $g$ has degree equal to the degree of $I$, then $f$ is an isomorphism and thus $g$ may be used to study the scheme
 $\calV(I)$.
-For example, when both are reduced, $g$ and $R$ have the same Galois groups over $\KK$.
+For example, when both are reduced, $g$ and $R$ have the same Galois group over $\KK$.
 While the eliminant {\it a priori} only tells us about $f(\calV(I))$, when $f$ is \demph{separating} (injective on the
 points of $\calV(I)$), it tells us more about those points.
 In our running example, both $g$ and $I$ have degree eight. (For $I$, note that this is the cardinality of the basis in \texttt{o17}.)
@@ -463,12 +463,12 @@ We see that $g$ is reduced and has four real roots.
 \verbatiminput{examples/eliminantSturm.txt}
 \end{leftbar}
 %
-Thus $\calV(I)$ is reduced and consists of eight points, exactly four of which are real.
+\noindent Thus $\calV(I)$ is reduced and consists of eight points, exactly four of which are real.
 
 A useful variant of the eliminant is a \demph{rational univariate representation} of a zero-dimension\-al ideal $I$~\cite[Sect.\ 11.4]{BPR}.
 This is a triple \defcolor{$(f,\chi,\phi)$} where $f$ is a linear form that is separating for $\calV(I)$, $\chi$ is the characteristic
 polynomial of $m_f$---which retains the multiplicities of points of $\calV(I)$, if not their scheme structure---and $\phi$
-is a rational map $\phi\colon\KK\to\KK^n$ that restricts to a bijection between $\calV(\chi)$ and $\calV(I)$.
+is a rational map $\phi\colon\KK\to\KK^n$ that restricts to a bijection between the roots of $\chi$ and the points of $\calV(I)$.
 %
 \begin{leftbar}
 \verbatiminput{examples/RUR.txt}
@@ -482,8 +482,8 @@ is a rational map $\phi\colon\KK\to\KK^n$ that restricts to a bijection between 
 \section{Trace symmetric form}\label{S:three}
 %
 %
-The remaining method in \texttt{RealRoots} is linear-algebraic and may be used to count the points of $\calV(I)$ over any
-field and to count real zeroes of $I$ according to 
+The remaining methods in \texttt{RealRoots} are linear-algebraic and may be used to count the points of $\calV(I)$ over any
+field and to count real points of $\calV(I)$ according to 
 the sign of another polynomial, similar to Sylvester's Theorem~\ref{Th:Sylvester}.
 We demonstrate how this may be used for real root location.
 
@@ -501,20 +501,20 @@ symmetric form $S$.
 
 Let $\KK$ be any field, let $I\subset\KK[x_1,\dotsc,x_n]$ be a zero-dimensional ideal, and set
 $\defcolor{R}\vcentcolon=\KK[x_1,\dotsc,x_n]/I$, an  Artinian ring.    
-For $f\in R$ (or in $\KK[x_1,\dotsc,x_n]$) multiplication by $f$ induces an endomorphism $m_f$ of $R$ as in Section~\ref{S:two}.
-For $h\in R$ (or in $\KK[x_1,\dotsc,x_n]$) we define the symmetric bilinear \demph{trace form}, \defcolor{$S_h$} on $R$ by
+For $f\in R$ (or in $\KK[x_1,\dotsc,x_n]$), multiplication by $f$ induces an endomorphism $m_f$ of $R$ as in Section~\ref{S:two}.
+For $h\in R$ (or in $\KK[x_1,\dotsc,x_n]$), we define the symmetric bilinear \demph{trace form}, \defcolor{$S_h$} on $R$ by
 $S_h(f,g)\vcentcolon= \mbox{trace}(m_{fgh})$.
 The significance of the trace form is the following theorem.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{theorem}[\protect{\cite[Thm.\ 4.72]{BPR}}]
-  Suppose that $\KK$ is a subfield of $\RR$,  $I\subset\KK[x_1,\dotsc,x_n]$ a zero-dimensional ideal with scheme
+  Suppose that $\KK$ is a subfield of $\RR$ and $I\subset\KK[x_1,\dotsc,x_n]$ is a zero-dimensional ideal with scheme
   $\calV(I)\subset\CC^n$.
   For $h\in\KK[x_1,\dotsc,x_n]$, the rank and signature of the trace form $S_h$ satisfy
   %
   \begin{eqnarray}
     \rho(S_h)&=&    \label{Eq:traceCount}
-      \#\{ z \in \calV(I) \mid h(z)\neq 0\}   \\
+      \#\{ z \in \calV(I) \mid h(z)\neq 0\} \quad and  \\
     \sigma(S_h)&=&
         \#\{ z \in \calV(I)\cap\RR \mid h(z)> 0\} \ -\  \nonumber
         \#\{ z \in \calV(I)\cap\RR \mid h(z)< 0\} \,.
@@ -530,8 +530,8 @@ The rank of the trace form $S_1$ is used in \texttt{rationalUnivariateRepresenta
 We demonstrate how this may be used to study the number and location of real zeroes, using the ideal $I$ of Section~\ref{S:two}.
 Let
 \[
- {\color{myblue}f\ \vcentcolon=\ x^2y^2-3x^2-3y^2+5}\,,
-\ \quad
+ {\color{myblue}f\ \vcentcolon=\ x^2y^2-3x^2-3y^2+5}\,
+\ \quad\mbox{and}\quad
   {\color{myred}g\ \vcentcolon=\ -3x^2y+4xy^2+2xy+1}\,.
 \]
 These define two curves in $\RR^2$, shown in Figure~\ref{F:two}.
@@ -559,9 +559,9 @@ While they have eight complex points in common, only four are real.
 \verbatiminput{examples/traceCounting.txt}
 \end{leftbar}
 %
-We saw this in Section~\ref{S:two}, following \texttt{o21}.
-(When $h=1$, the rank and signature of the trace form $S_1$ count the complex and real points of $\calV(I)$, respectively,
-and these are implemented as \texttt{traceCount(I)} and  \texttt{realCount(I)}.)
+\noindent We saw this in Section~\ref{S:two}, following \texttt{o21}.
+When $h=1$, the rank and signature of the trace form $S_1$ count the complex and real points of $\calV(I)$, respectively,
+and these are implemented as \texttt{traceCount(I)} and  \texttt{realCount(I)}.
 Thus the possible tangency that we see in the third quadrant is only a near miss.
 
 To see this in another way, consider the signature of the trace form $S_{y^2+2y}$,
@@ -570,8 +570,8 @@ To see this in another way, consider the signature of the trace form $S_{y^2+2y}
 \verbatiminput{examples/traceSignature.txt}
 \end{leftbar}
 %
-As this equals the number of real points of $\calV(I)$ and $y^2+2y<0$ for $-2<y<0$, there are no real points of
-$\calV(I)$ in that horizontal strip, which includes the apparent 'near tangency' in Figure~\ref{F:two}.
+\noindent As this equals the number of real points of $\calV(I)$ and $y^2+2y<0$ for $-2<y<0$, there are no real points of
+$\calV(I)$ in that horizontal strip, which includes the apparent `near tangency' in Figure~\ref{F:two}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

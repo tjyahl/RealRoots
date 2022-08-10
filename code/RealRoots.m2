@@ -719,7 +719,9 @@ document {
 	    RingElement => "g" => {"a rational univariate polynomial in the same variable as ", TT"f"},
 	    },
 	Outputs => { List => { "the Sylvester sequence of ", TT "f", " and ",TT "g"}},
-	PARA {"This computes the Sylvester sequence of two rational univariate polynomials ", TT "f", " and ", TT "g", " in the same ring."},
+	PARA {"This computes the Sylvester sequence of two rational univariate polynomials ", TT "f", " and ", TT "g", " in the same ring. 
+	    This is the sequence ",TEX///$(f_{0},f_{1},\dots,f_{k})$///,", where ",TEX///$f_{0} = f, f_{1} = f'\cdot g$///," and for ",
+	    TEX///$i\geq 1, f_{i+1} = -1\cdot$///,"remainder ",TEX///$(f_{i-1},f_{i})$///,". The last nonzero remainder is ",TEX///$f_{k}$///," is a greatest common divisor of ",TEX///$f$///," and ",TEX///$f'\cdotg$///,"."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = (t + 1)*(t + 2)
