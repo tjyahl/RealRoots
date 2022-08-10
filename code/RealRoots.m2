@@ -468,17 +468,26 @@ traceCount (RingElement) := ZZ => f->(
 traceCount (List) := ZZ => F->(
     I := ideal F;
     R := ring I;
+    L := unique flatten apply(I_*, i -> support(i));
+    if numgens I < numgens R then R = coefficientRing(R)[L];
     traceCount(R/I)
     )
 
-traceCount (Ideal) := ZZ=> I->(
+traceCount (Ideal) := ZZ => I->(
     R := ring I;
-    traceCount(R/I)
+    L := unique flatten apply(I_*, i -> support(i));
+    if numgens I < numgens R then R = coefficientRing(R)[L];
+    traceCount(R/sub(I,R))
     )
 
-traceCount (QuotientRing) := ZZ=> R->(
-    rank traceForm(1_R)
+traceCount (QuotientRing) := ZZ => S->(
+    I := ideal(S);
+    L := unique flatten apply(I_*, i -> support(i));
+    T := (coefficientRing(newRing(S))[L]);
+    if numgens I < numgens S then S = T/sub(ideal(S),T);
+    rank traceForm(1_S)
     )
+
 
 --Compute the number of real points of a scheme/real univariate polynomial/real polynomial system using the signature of the trace form.
 realCount = method()
