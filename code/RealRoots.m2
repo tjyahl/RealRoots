@@ -485,14 +485,14 @@ realCount (List) := ZZ => F->(
     realCount ideal F
     )
 
-realCount (Ideal) := ZZ=> I->(
+realCount (Ideal) := ZZ => I->(
     supp := new Array from support I;
     C := coefficientRing ring I;
     R := C(monoid supp);
     realCount(R/sub(I,R))
     )
 
-realCount (QuotientRing) := ZZ=> S->(
+realCount (QuotientRing) := ZZ => S->(
     signature traceForm(1_S)
     )
 
