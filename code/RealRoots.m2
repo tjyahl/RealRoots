@@ -720,7 +720,7 @@ document {
 	Outputs => { List => { "the Sylvester sequence of ", TT "f", " and ",TT "g"}},
 	PARA {"This computes the Sylvester sequence of two rational univariate polynomials ", TT "f", " and ", TT "g", " in the same ring. 
 	    This is the sequence ",TEX///$(f_{0},f_{1},\dots,f_{k})$///,", where ",TEX///$f_{0} = f, f_{1} = f'\cdot g$///," and for ",
-	    TEX///$i\geq 1, f_{i+1} = -1\cdot$///,"remainder ",TEX///$(f_{i-1},f_{i})$///,". The last nonzero remainder is ",TEX///$f_{k}$///," is a greatest common divisor of ",TEX///$f$///," and ",TEX///$f'\cdotg$///,"."},
+	    TEX///$i\geq 1, f_{i+1} = -1\cdot$///,"remainder ",TEX///$(f_{i-1},f_{i})$///,". The last nonzero remainder is ",TEX///$f_{k}$///," is a greatest common divisor of ",TEX///$f$///," and ",TEX///$f'\cdot g$///,"."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = (t + 1)*(t + 2)
@@ -732,7 +732,7 @@ document {
 
 document {
 	Key => {SylvesterCount,(SylvesterCount,RingElement,RingElement),(SylvesterCount,RingElement,RingElement,QQ,QQ)},
-	Headline => "the difference between the number of roots of two rational univariate polynomials",
+	Headline => "a sign count of the real roots of a univariate polynomial",
 	Usage => "SylvesterCount(f,g,a,b)
 	          SylvesterCount(f,g)",
 	Inputs => {
@@ -742,9 +742,9 @@ document {
 	    QQ => "b" => {"(optional) the upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
-	Outputs => { ZZ => {"the difference between the number of roots of ",TT "f"," on the interval ",TEX///$(a,b]$///,", where ",TT "g",
+	Outputs => { ZZ => {"a sign count of the real roots of ",TT "f"," on the interval ",TEX///$(a,b]$///,", where ",TT "g",
 		" is positive, and where ",TT "g"," is negative"}},
-	PARA {"This computes the difference between the number of roots of rational univariate polynomials ",TT "f"," and ",TT "g"," on the interval ",TEX///$(a,b]$///,", where ",TT "g","
+	PARA {"This computes a sign count of the real roots of a rational univariate polynomial ",TT "f"," on the interval ",TEX///$(a,b]$///,", where a rational univariate polynomial ",TT "g","
 	     is positive, and where ",TT "g"," is negative. This is computed by taking the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g","."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
