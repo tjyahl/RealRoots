@@ -312,18 +312,18 @@ BudanFourierBound (RingElement) := ZZ => f->(
 SylvesterSequence = method()
 SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     if (f==0 or g==0) then error "Error: Expected nonzero polynomials";
-    if not (isUnivariatePolynomial(f)) then error "Error: Expected univariate polynomials";
+    if not (isUnivariatePolynomial(f) and isUnivariatePolynomial(g)) then error "Error: Expected univariate polynomials";
 
     R := ring f;
     if not isField coefficientRing R then error "Error: Expected polynomials over a field";
     if not (ring g === R) then error "Error: Polynomials should be in the same ring";
     
     --dividing out common factors
-    h := gcd(f,g);
-    f = sub(f/h,R);
-    g = sub(g/h,R);
+    h := gcd(f,diff(variable f,f)*g);
+    f0 := sub(f/h,R);
+    f1 := sub(diff(variable f,f)*g/h,R);
 
-    Syl := new MutableList from {f,g};
+    Syl := new MutableList from {f0,f1};
     
     i := 1;
     while (Syl#i != 0) do (
@@ -342,7 +342,7 @@ for A in {ZZ,QQ,InfiniteNumber} do
 for B in {ZZ,QQ,InfiniteNumber} do
 SylvesterCount (RingElement,RingElement,A,B) := ZZ => opts->(f, g, a, b)->(
     if not (a<b) then error "Error: Expected non-empty interval";
-    l := SylvesterSequence(f,diff(variable f,f)*g);
+    l := SylvesterSequence(f,g);
     n := variations apply(l,h->signAt(h,a)) - variations apply(l,h->signAt(h,b));
     if opts.Multiplicity then (
 	h := gcd(f,diff(variable f,f));
@@ -363,7 +363,8 @@ SylvesterCount (RingElement,RingElement) := ZZ => opts->(f,g)->(
 SturmSequence = method()
 SturmSequence (RingElement) := List => f->(
     if (f == 0) then error "Error: Expected nonzero polynomial";
-    SylvesterSequence(f,diff(variable f,f))
+    R := ring f;
+    SylvesterSequence(f,1_R)
     )
 
 
@@ -721,7 +722,7 @@ document {
 	PARA {"This computes the reduced Sylvester sequence of two rational univariate polynomials ", TT "f", " and ", TT "g", " in the same ring.
 	    This begins with the Sylvester sequence ",TEX///$(f_{0},f_{1},\dots,f_{k})$///,", where ",TEX///$f_{0} = f, f_{1} = f'\cdot g$///," and for ",
 	    TEX///$i\geq 1, f_{i+1} = -1\cdot$///,"remainder ",TEX///$(f_{i-1},f_{i})$///,". The last nonzero remainder is ",TEX///$f_{k}$///," 
-	    is a greatest common divisor of ",TEX///$f$///," and ",TEX///$f'\cdot g$///,". The reduced Sylvester sequence is obtained by dividing each term of 
+	    is a greatest common divisor of ",TEX///$f$///," and ",TEX///$g$///,". The reduced Sylvester sequence is obtained by dividing each term of 
 	    the Sylvester sequence by ",TEX///$f_{k}$///,"."},
 	EXAMPLE lines ///
 	         R = QQ[t]
@@ -748,7 +749,7 @@ document {
 	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative"}},
 	PARA {"This computes the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
 	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative.
-	     This is computed by taking the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g","."},
+	     This is computed by taking the difference in variations of the reduced Sylvester sequence of ", TT "f"," and ",TT "g","."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = (t - 2)*(t - 1)*(t + 3)
@@ -1140,7 +1141,7 @@ TEST ///
     R = QQ[t];
     f = (t + 1)*(t + 2);
     g = (t + 2);
-    assert(SylvesterSequence(f,g) == {t + 1, 1, 0});
+    assert(SylvesterSequence(f,g) == {t + 1, 2*t+3,1/2,0});
     
     f =  45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5;
     assert(SturmSequence(f) == {t^4 - 8*t^3 + 14*t^2 + 8*t - 15, 5*t^3 - 29*t^2 + 27*t + 13, 104/25*t^2 - 432/25*t + 232/25, 3100/169*t - 5300/169, 194688/24025, 0});
