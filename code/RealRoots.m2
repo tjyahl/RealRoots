@@ -796,7 +796,8 @@ document {
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," in the interval ",TEX///$(a,b]$///}},
-	PARA {"This computes the difference in variation of the Sturm sequence of ", TT "f"," on the interval ",TEX///$(a,b]$///,". If ", TT "a", " and ", TT "b"," are not specified,
+	PARA {"This computes the number of real roots of a rational univariate polynomial ",TT "f",". This is computed by taking
+	     the difference in variation of the Sturm sequence of ", TT "f"," on the interval ",TEX///$(a,b]$///,". If ", TT "a", " and ", TT "b"," are not specified,
 	     the interval will be taken from ",TEX///$-\infty$///," to ",TEX///$\infty$///,"."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
