@@ -717,10 +717,12 @@ document {
 	    RingElement => "f" => {"a rational univariate polynomial"},
 	    RingElement => "g" => {"a rational univariate polynomial in the same variable as ", TT"f"},
 	    },
-	Outputs => { List => { "the Sylvester sequence of ", TT "f", " and ",TT "g"}},
-	PARA {"This computes the Sylvester sequence of two rational univariate polynomials ", TT "f", " and ", TT "g", " in the same ring. 
-	    This is the sequence ",TEX///$(f_{0},f_{1},\dots,f_{k})$///,", where ",TEX///$f_{0} = f, f_{1} = f'\cdot g$///," and for ",
-	    TEX///$i\geq 1, f_{i+1} = -1\cdot$///,"remainder ",TEX///$(f_{i-1},f_{i})$///,". The last nonzero remainder is ",TEX///$f_{k}$///," is a greatest common divisor of ",TEX///$f$///," and ",TEX///$f'\cdot g$///,"."},
+	Outputs => { List => { "the reduced Sylvester sequence of ", TT "f", " and ",TT "g"}},
+	PARA {"This computes the reduced Sylvester sequence of two rational univariate polynomials ", TT "f", " and ", TT "g", " in the same ring.
+	    This begins with the Sylvester sequence ",TEX///$(f_{0},f_{1},\dots,f_{k})$///,", where ",TEX///$f_{0} = f, f_{1} = f'\cdot g$///," and for ",
+	    TEX///$i\geq 1, f_{i+1} = -1\cdot$///,"remainder ",TEX///$(f_{i-1},f_{i})$///,". The last nonzero remainder is ",TEX///$f_{k}$///," 
+	    is a greatest common divisor of ",TEX///$f$///," and ",TEX///$f'\cdot g$///,". The reduced Sylvester sequence is obtained by dividing each term of 
+	    the Sylvester sequence by ",TEX///$f_{k}$///,"."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = (t + 1)*(t + 2)
@@ -745,7 +747,7 @@ document {
 	Outputs => { ZZ => {"the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
 	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative"}},
 	PARA {"This computes the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
-	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative. 
+	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative.
 	     This is computed by taking the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g","."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
