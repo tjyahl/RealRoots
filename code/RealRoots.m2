@@ -527,7 +527,6 @@ rationalUnivariateRepresentation (Ideal) := Sequence => I->(
 	
 	chbar := ch/gcd(ch,diff((support ch)_0,ch));
 	chbar = sub(chbar,ring ch);
-	print(first degree chbar);
 	if (first degree chbar === d) then break;
 	i = i+1
 	);
@@ -1270,7 +1269,9 @@ TEST ///
      S = R/I
      d = traceCount(S)
           
-     assert(rationalUnivariateRepresentation(I) == (x + y, Z^2 - 3/2*Z - 9, {(-3*Z + 15)/(4*Z - 3), (6*Z + 21)/(4*Z - 3)}));
+     (l,ch,ph) = rationalUnivariateRepresentation(I);
+     use ring ch;
+     assert((l,ch,ph) == (x + y, Z^2 - 3/2*Z - 9, {(-3*Z + 15)/(4*Z - 3), (6*Z + 21)/(4*Z - 3)}));
      ///	 
     
 end
