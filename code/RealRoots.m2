@@ -742,9 +742,9 @@ document {
 	    QQ => "b" => {"(optional) the upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
-	Outputs => { ZZ => {"the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///,", where ",TT "g","
+	Outputs => { ZZ => {"the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
 	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative"}},
-	PARA {"This computes the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///,", where ",TT "g","
+	PARA {"This computes the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
 	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative. 
 	     This is computed by taking the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g","."},
 	EXAMPLE lines ///
