@@ -6,19 +6,19 @@ newPackage(
     Authors=>{
      	{Name=>"Jordy Lopez Garcia",
 	 Email=>"jordy.lopez@tamu.edu",
-	 HomePage=>"https://www.github.com/jordylopez27"},
+	 HomePage=>"https://jordylopez27.github.io/"},
     	{Name=>"Kelly Maluccio",
-	 Email=>"keleburke@aggienetwork.com",
+	 Email=>"kmaluccio@gmail.com",
 	 HomePage=>"https://www.github.com/kmaluccio"},
     	{Name=>"Frank Sottile",
 	 Email=>"sottile@tamu.edu",
-	 HomePage=>"https://www.math.tamu.edu/~frank.sottile/"},
+	 HomePage=>"https://www.math.tamu.edu/~sottile/"},
 	{Name=>"Thomas Yahl",
 	 Email=>"thomasjyahl@tamu.edu",
-	 HomePage=>"https://www.github.com/tjyahl"}
+	 HomePage=>"https://tjyahl.github.io/"}
 	},
     Headline=>"Package for symbolically exploring, counting, and locating real solutions to general polynomial systems",
-    --Keyword=>{"Real Algebraic Geometry"},
+    Keyword=>{"Real Algebraic Geometry"},
     PackageImports=>{},
     PackageExports=>{},
     DebuggingMode=>true
