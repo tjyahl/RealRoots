@@ -900,7 +900,7 @@ document {
 	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    },
 	Outputs => {Matrix => {"a symmetric matrix representing the trace symmetric form of a polynomial in the standard basis of its Artinian ring"}},
-	PARA {"This computes the trace symmetric form of a polynomial in an Artinian ring."},
+	PARA {"This computes the trace symmetric form of a polynomial in an Artinian ring in terms of the standard basis."},
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 I = ideal(y^2 - x^2 - 1, x - y^2 + 4*y - 2)
@@ -1262,22 +1262,14 @@ TEST ///
      assert(HurwitzMatrix(h,1) == matrix{{2_R}});
      ///
 
---TEST ///
---     R = QQ[x,y];
---     I = ideal(x*y - 1,2*x - y + 3);
---     S = R/I
---     d = traceCount(S)
-     
-     
---     assert(rationalUnivariateRepresentation(I) == (x + y, Z^2 - 3/2*Z - 9, {(-3*Z + 15)/(4*Z - 3), (6*Z + 21)/(4*Z - 3)}));
---    ///
-
---TEST ///
-  --   R = QQ[x,y];
-  --   I = ideal(x*y - 1,2*x - y + 3);
-    -- Z = (support I)_0; --little trick to compute Z not being symbol
-    -- assert(rationalUnivariateRepresentationresentation(I) == {Z^2 - (3/2)*Z - 9, x + y});
-    -- ///	 
+TEST ///
+     R = QQ[x,y];
+     I = ideal(x*y - 1,2*x - y + 3);
+     S = R/I
+     d = traceCount(S)
+          
+     assert(rationalUnivariateRepresentation(I) == (x + y, Z^2 - 3/2*Z - 9, {(-3*Z + 15)/(4*Z - 3), (6*Z + 21)/(4*Z - 3)}));
+     ///	 
     
 end
 
