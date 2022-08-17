@@ -899,8 +899,10 @@ document {
 	    RingElement => "g" => {"a polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
 	    },
-	Outputs => {Matrix => {"a symmetric matrix representing the trace symmetric form of a polynomial in the standard basis of its Artinian ring"}},
-	PARA {"This computes the trace symmetric form of a polynomial in an Artinian ring in terms of the standard basis."},
+	Outputs => {Matrix => {"the symmetric matrix representing the trace symmetric form of ",TT "f"," (resp. ",TT "g",") in ",TT "ring f",
+		" (resp. ",TT "(ring g)/I",")"}},
+	PARA {"This command gives the symmetric matrix of the trace symmetric form of ", TT "f", " (resp. ",TT "g",")
+	       in terms of the standard basis of the finite-dimensional vector space ", TT "ring f"," (resp. ",TT "(ring g)/I",")."},
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 I = ideal(y^2 - x^2 - 1, x - y^2 + 4*y - 2)
