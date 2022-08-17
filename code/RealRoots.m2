@@ -732,7 +732,7 @@ document {
 
 document {
 	Key => {SylvesterCount,(SylvesterCount,RingElement,RingElement),(SylvesterCount,RingElement,RingElement,QQ,QQ)},
-	Headline => "the difference in variations of the Sylvester sequence of two rational univariate polynomials",
+	Headline => "the difference between the number of roots of two rational univariate polynomials",
 	Usage => "SylvesterCount(f,g,a,b)
 	          SylvesterCount(f,g)",
 	Inputs => {
@@ -742,9 +742,10 @@ document {
 	    QQ => "b" => {"(optional) the upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
-	Outputs => { ZZ => {"the difference between the number of roots of ",TT "f"," in the interval ",TEX///$(a,b]$///," where ",TT "g",
-		" is positive and where ",TT "g"," is negative"}},
-	PARA {"This computes the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g"," on the interval ",TEX///$(a,b]$///,"."},
+	Outputs => { ZZ => {"the difference between the number of roots of ",TT "f"," on the interval ",TEX///$(a,b]$///,", where ",TT "g",
+		" is positive, and where ",TT "g"," is negative"}},
+	PARA {"This computes the difference between the number of roots of rational univariate polynomials ",TT "f"," and ",TT "g"," on the interval ",TEX///$(a,b]$///,", where ",TT "g","
+	     is positive, and where ",TT "g"," is negative. This is computed by taking the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g","."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = (t - 2)*(t - 1)*(t + 3)
@@ -796,9 +797,9 @@ document {
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," in the interval ",TEX///$(a,b]$///}},
-	PARA {"This computes the number of real roots of a rational univariate polynomial ",TT "f",". This is computed by taking
-	     the difference in variation of the Sturm sequence of ", TT "f"," on the interval ",TEX///$(a,b]$///,". If ", TT "a", " and ", TT "b"," are not specified,
-	     the interval will be taken from ",TEX///$-\infty$///," to ",TEX///$\infty$///,"."},
+	PARA {"This computes the number of real roots of a rational univariate polynomial ",TT "f"," on the interval ", TEX///$(a,b]$///,".
+	     If ", TT "a", " and ", TT "b"," are not specified, this computes the number of real roots of ",TT "f",". This is computed by taking
+	     the difference in variation of the Sturm sequence of ", TT "f","."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = (t - 5)*(t - 3)^2*(t - 1)*(t + 1)
