@@ -810,9 +810,9 @@ document {
 	 	 ///,
 	PARA {"In the above example, multiplicity is not counted. To include it, make the multiplicity option ",TT "true","."},
 	EXAMPLE lines ///
-		SturmCount(f,Multiplicity=>true)
-		SturmCount(f,0,5,Multiplicity=>true)
-		SturmCount(f,0,3,Multiplicity=>true)
+		SturmCount(f,Multiplicity => true)
+		SturmCount(f,0,5,Multiplicity => true)
+		SturmCount(f,0,3,Multiplicity => true)
 		///,
 	PARA {"If ", TT "a"," is an ", TT "InfiniteNumber", ", then the lower bound will be ",TEX///$-\infty$///,", and if ", TT "b"," is an ", TT "InfiniteNumber", 
 	    ", then the upper bound is ",TEX///$\infty$///,"."},
@@ -1099,7 +1099,30 @@ TEST ///
     ans = Z^4 - 8*Z^3 + 19*Z^2 - 16*Z + 5;
     assert(pol == ans); 
     ///
-
+    
+TEST ///
+    R = QQ[x,y];
+    M = matrix{{2,1},{1,-1}};
+    c1 =  characteristicPolynomial(M);
+    G = ring c1;
+    ans = Z^2 - Z - 3;
+    assert(c1 == ans);
+    
+    I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2);
+    c2 = characteristicPolynomial(y,I);
+    G = ring c2;
+    assert(c2 == Z^4 - 8*Z^3 + 19*Z^2 - 16*Z + 5);
+    
+    S = R/I;
+    c3 = characteristicPolynomial(y)
+    G = ring c3;
+    assert(c3 == Z^4 - 8*Z^3 + 19*Z^2 - 16*Z + 5);
+    
+    c4 = characteristicPolynomial(M,Variable => "x");
+    G = ring c4;
+    assert(c4 == x^2 - x - 3);
+    /// 
+   
 TEST ///
     c1 = {4, 5, -1, -11, 13, -9, 8};
     c2 = {9, 0, 1, 0, -1, -2, 11, 0, 14};
@@ -1109,10 +1132,12 @@ TEST ///
 
 TEST ///
     R = QQ[t];
-    f = (t-1)*(t+1);
-    g = (t+1);
-    assert(SylvesterSequence(f,g) == {t-1, 1, 0});
-    assert(SturmSequence(f) == {t^2-1, 2*t, 1, 0});
+    f = (t + 1)*(t + 2);
+    g = (t + 2);
+    assert(SylvesterSequence(f,g) == {t + 1, 1, 0});
+    
+    f =  45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5;
+    assert(SturmSequence(f) == {t^4 - 8*t^3 + 14*t^2 + 8*t - 15, 5*t^3 - 29*t^2 + 27*t + 13, 104/25*t^2 - 432/25*t + 232/25, 3100/169*t - 5300/169, 194688/24025, 0});
     ///
 
 TEST ///
@@ -1125,14 +1150,22 @@ TEST ///
     assert(BudanFourierBound(p) == 6);
     assert(BudanFourierBound(g,-infinity,0) == 2);
     assert(BudanFourierBound(g,-1,infinity) == 3);
+   
+    f' = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5;
+    assert(BudanFourierBound(f') == 5);
+    g' = (t + 5)*(t + 3)*(t + 1)*(t - 1)^2*(t - 4)*(t - 6);
+    assert(BudanFourierBound(g',-6,infinity) == 7);
+    assert(BudanFourierBound(g',-1,5) == 3);
+    assert(BudanFourierBound(g',-infinity,0) == 3);
+    assert(BudanFourierBound(g',3,infinity) == 2);
+    assert(BudanFourierBound(g',-infinity,infinity) == 7);
     
-    assert(SturmCount(f)== 6);
+    assert(SturmCount(f) == 6);
     assert(SturmCount(f,-6,0) == 3);
     assert(SturmCount(f,-1,10) == 3);
-    assert(SturmCount(f,Multiplicity=>true) == 7);
-    assert(SturmCount(f,-10,5,Multiplicity=>true) == 6);
-    assert(SturmCount(f,0,6,Multiplicity=>true) == 4);
-    
+    assert(SturmCount(f,Multiplicity => true) == 7);
+    assert(SturmCount(f,-10,5,Multiplicity => true) == 6);
+    assert(SturmCount(f,0,6,Multiplicity => true) == 4);
     
     assert(SturmCount(g) == 4);
     assert(SturmCount(g,-3,1) == 3);
@@ -1141,6 +1174,18 @@ TEST ///
     assert(SturmCount(p) == 6);
     assert(SturmCount(p,-15,0) == 3);
     assert(SturmCount(p,2,10) == 2);
+    
+    h = (t - 5)*(t - 3)^2*(t - 1)*(t + 1);
+    assert(SturmCount(h) == 4);
+    assert(SturmCount(h,0,5) == 3);
+    assert(SturmCount(h,-2,2) == 2);
+    assert(SturmCount(h,-1,5) == 3);
+    assert(SturmCount(h,Multiplicity => true) == 5);
+    assert(SturmCount(h,0,5,Multiplicity => true) == 4);
+    assert(SturmCount(h,0,3,Multiplicity => true) == 3);
+    assert(SturmCount(h,-infinity, 0) == 1);
+    assert(SturmCount(h,0,infinity) == 3);
+    assert(SturmCount(h,-infinity,infinity) == 4);
     ///
     
 TEST ///
@@ -1149,7 +1194,7 @@ TEST ///
     g = t + 1;
     assert(SylvesterCount(f,g,-5,4) == 1);
     h = (t - 4)*(t - 1)^2*(t + 1)*(t + 3)*(t + 5)*(t - 6);
-    p = t+5;
+    p = t + 5;
     assert(SylvesterCount(h,p,-10,10,Multiplicity=>true) == 6);
     assert(SylvesterCount(h,p,0,10) == 3);
     ///
@@ -1158,26 +1203,47 @@ TEST ///
     R = QQ[t];
     f = (t - 1)^2*(t + 3)*(t + 5)*(t - 6);
     assert(realRootIsolation(f,1/2) == {{-161/32, -299/64}, {-207/64, -23/8}, {23/32, 69/64}, {23/4, 391/64}});
+    
+    g = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5;
+    assert(realRootIsolation(g,1/2) == {{-69/64, -23/32},{23/32,69/64},{23/8,207/64},{299/64,161/32}});
     ///    
     
 TEST ///
     R = QQ[x,y];
-    F = {y^2 - x^2 - 1, x - y^2 + 4*y - 2};
-    I = ideal F;
+    I = ideal(y^2 - x^2 - 1, x - y^2 + 4*y - 2);
     S = R/I;
     f = y^2 - x^2 - x*y + 4;
     assert(flatten entries traceForm(f) == {4, -86, -340, -42, -86, -266, -1262, -340, -340, -1262, -5884, -1454, -42, -340, -1454, -262});
+    
+    R = QQ[x,y];
+    J = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2);
+    g = x + y;
+    assert(signature(traceForm(g, J)) == 2);
+    assert(rank traceForm(1_R,J) == 4);
+    ///
+    
+TEST ///
+    assert(signature(matrix{{1,-2,3/5},{-2,-16,9},{3/5,9,13}}) == 1);
+    ///
+
+TEST ///
+    R = QQ[x,y];
+    f = (x^2 + 1)*(x + 1)*(x - 2)^2;
+    assert(traceCount(f) == 4); 
+    I = ideal(5 - 3*x^2 - 3*y^2 + x^2*y^2, 1 + 2*x*y - 4*x*y^2 + 3*x^2*y);
+    assert(traceCount(I) == 8);
+    l = {y^2 - x^2 - 1,x - y^2 + 4*y - 2};
+    assert(traceCount(l) == 4);
     ///
     
 TEST ///
      R = QQ[x,y];
-     I = ideal(1 - x^2*y + 2*x*y^2, y - 2*x - x*y + x^2);
-     assert(realCount(I) == 3);
-     F = {y^2 - x^2 - 1,x - y^2 + 4*y - 2};
-     assert(realCount(F) == 2);
-     I = ideal F;
-     S = R/I;
-     assert(realCount(S) == 2);
+     f = (x^2 + 1)*(x + 1)*(x - 2)^2;
+     assert(realCount(f) == 2); 
+     I = ideal(5 - 3*x^2 - 3*y^2 + x^2*y^2, 1 + 2*x*y - 4*x*y^2 + 3*x^2*y)
+     assert(realCount(I) == 4);
+     l = {y^2 - x^2 - 1,x - y^2 + 4*y - 2};
+     assert(realCount(l) == 2);
     ///
     
 TEST ///
@@ -1188,7 +1254,23 @@ TEST ///
      assert(isHurwitzStable(f) == false);
      g = x^2 + 10*x + 21;
      assert(isHurwitzStable(g) == true);
+     
+     S = R[y];
+     h = y^3 + 2*y^2 + y - x + 1;
+     assert(HurwitzMatrix(h,3) == matrix{{2, -x + 1, 0},{1, 1, 0},{0, 2, -x + 1}});
+     assert(HurwitzMatrix(h,2) == matrix{{2, -x + 1}, {1, 1}});
+     assert(HurwitzMatrix(h,1) == matrix{{2_R}});
      ///
+
+--TEST ///
+--     R = QQ[x,y];
+--     I = ideal(x*y - 1,2*x - y + 3);
+--     S = R/I
+--     d = traceCount(S)
+     
+     
+--     assert(rationalUnivariateRepresentation(I) == (x + y, Z^2 - 3/2*Z - 9, {(-3*Z + 15)/(4*Z - 3), (6*Z + 21)/(4*Z - 3)}));
+--    ///
 
 --TEST ///
   --   R = QQ[x,y];
