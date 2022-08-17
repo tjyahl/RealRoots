@@ -18,7 +18,7 @@ newPackage(
 	 HomePage=>"https://tjyahl.github.io/"}
 	},
     Headline=>"Package for symbolically exploring, counting, and locating real solutions to general polynomial systems",
-    Keyword=>{"Real Algebraic Geometry"},
+    Keywords=>{"Real Algebraic Geometry"},
     PackageImports=>{},
     PackageExports=>{},
     DebuggingMode=>true
