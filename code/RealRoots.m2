@@ -742,10 +742,11 @@ document {
 	    QQ => "b" => {"(optional) the upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
-	Outputs => { ZZ => {"a sign count of the real roots of ",TT "f"," on the interval ",TEX///$(a,b]$///,", where ",TT "g",
-		" is positive, and where ",TT "g"," is negative"}},
-	PARA {"This computes a sign count of the real roots of a rational univariate polynomial ",TT "f"," on the interval ",TEX///$(a,b]$///,", where a rational univariate polynomial ",TT "g","
-	     is positive, and where ",TT "g"," is negative. This is computed by taking the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g","."},
+	Outputs => { ZZ => {"the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///,", where ",TT "g","
+	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative"}},
+	PARA {"This computes the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///,", where ",TT "g","
+	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative. 
+	     This is computed by taking the difference in variations of the Sylvester sequence of ", TT "f"," and ",TT "f'g","."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = (t - 2)*(t - 1)*(t + 3)
