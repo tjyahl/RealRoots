@@ -1,7 +1,7 @@
 --RealRoots.m2
 newPackage(
     "RealRoots",
-    Version=>"0.1",
+    Version=>"1.0",
     Date=>"Oct 9, 2020",
     Authors=>{
      	{Name=>"Jordy Lopez Garcia",
@@ -21,7 +21,7 @@ newPackage(
     Keywords=>{"Real Algebraic Geometry"},
     PackageImports=>{},
     PackageExports=>{},
-    DebuggingMode=>true
+    DebuggingMode=>false
     )
 
 
