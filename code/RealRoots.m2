@@ -732,7 +732,7 @@ document {
 
 document {
 	Key => {SylvesterCount,(SylvesterCount,RingElement,RingElement),(SylvesterCount,RingElement,RingElement,QQ,QQ)},
-	Headline => "a sign count of the real roots of a univariate polynomial",
+	Headline => "a signed count of the real roots of a univariate polynomial",
 	Usage => "SylvesterCount(f,g,a,b)
 	          SylvesterCount(f,g)",
 	Inputs => {
