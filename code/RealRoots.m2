@@ -591,7 +591,8 @@ undocumented {
 document {
 	Key => RealRoots,
 	Headline => "Package for exploring, counting and locating real solutions to polynomial systems",
-	"The purpose of this package is to provide general tools for elimination and solving systems of polynomial equations."
+	Acknowledgement => {"This package is an updated version the ",TT "realroots"," package by Grayson and Sottile."},
+	"This package provides general tools for elimination and solving systems of polynomial equations, with the particular emphasis on real solutions."
 	}
 
 document {
@@ -1050,7 +1051,7 @@ document {
 	    ZZ => "k" => {"a nonnegative integer at most ",TEX///$n$///},
 	    },
 	Outputs => {Matrix => {"the principal ",TEX///$k\times k$///, " submatrix ",TEX///$H_{k}$///}},
-	PARA{"This computes the principal ",TEX///$k\times k$///, " submatrix ",TEX///$H_{k}$///, "of the Hurwitz matrix ",TEX///$H$///," of a rational univariate polynomial ", TT "f"," of degree n with positive leading coefficient and degree at least 1.
+	PARA{"This computes the principal ",TEX///$k\times k$///, " submatrix ",TEX///$H_{k}$///, " of the Hurwitz matrix ",TEX///$H$///," of a rational univariate polynomial ", TT "f"," of degree n with positive leading coefficient and degree at least 1.
 	    The polynomial, however, is not necessarily from a univariate polynomial ring."},
 	
 	EXAMPLE lines ///
@@ -1075,11 +1076,11 @@ document {
 
 document {
 	Key => {isHurwitzStable,(isHurwitzStable, RingElement)},
-	Headline => "determines whether or not a rational univariate polynomial is Hurwitz stable",
+	Headline => "determines if a univariate polynomial with rational coefficients is Hurwitz-stable",
 	Usage => "isHurwitzStable(f)",
 	Inputs => {RingElement => "f" => {"a real univariate polynomial"}},
-	Outputs => { Boolean => { "the Hurwitz stability of a rational univariate polynomial ", TT "f"}},
-	PARA {"A real univariate polynomial is Hurwitz stable if all its roots have negative real parts. This method determines the Hurwitz stability of a rational univariate polynomial ", TT "f", " with positive leading coefficient and degree at least 1. 
+	Outputs => { Boolean => { "the Hurwitz stability of a univariate polynomial with rational coefficients ", TT "f"}},
+	PARA {"A real univariate polynomial is Hurwitz stable if all its roots have negative real parts. This method determines the Hurwitz stability of a univariate polynomial with rational coefficients ", TT "f", " with positive leading coefficient and degree at least 1. 
 	    The polynomial, however, is not necessarily from a univariate polynomial ring."},
 	EXAMPLE lines ///
 	    	R = QQ[x]
