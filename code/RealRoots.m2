@@ -736,7 +736,7 @@ document {
 
 document {
 	Key => {SylvesterCount,(SylvesterCount,RingElement,RingElement),(SylvesterCount,RingElement,RingElement,QQ,QQ)},
-	Headline => "a signed count of the real roots of a univariate polynomial",
+	Headline => "a signed count of the real roots of a univariate polynomial with rational coefficients",
 	Usage => "SylvesterCount(f,g,a,b)
 	          SylvesterCount(f,g)",
 	Inputs => {
@@ -746,7 +746,7 @@ document {
 	    QQ => "b" => {"(optional) the upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
-	Outputs => { ZZ => {"the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
+	Outputs => { ZZ => {"the difference between the number of real roots of ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
 	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative"}},
 	PARA {"This computes the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
 	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative.
@@ -876,7 +876,7 @@ document {
 	    },
 	Outputs => { ZZ => { "the bound for the number of real roots in the interval ", TT "(a,b]", " of a univariate polynomial", TT " f ", "with rational coefficients"}},
 	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial", TT " f ", " with rational coefficients. It assumes an unspecified interval is
-	      ", TEX///$(-\infty, \infty)$///,". Note that", TT " ring f ", "is allowed to be multivariate."},
+	      ", TEX///$(-\infty, \infty)$///,". Note that ", TT "ring f", " is allowed to be multivariate."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
