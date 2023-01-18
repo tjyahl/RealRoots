@@ -875,8 +875,7 @@ document {
 	    QQ => "b" => {"an upper bound of the interval"},
 	    },
 	Outputs => { ZZ => { "the bound for the number of real roots in the interval ", TT "(a,b]", " of a univariate polynomial", TT " f ", "with rational coefficients"}},
-	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial", TT " f ", " with rational coefficients."
-	      "If the interval is not specified, it 
+	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial", TT " f ", " with rational coefficients. If the interval is not specified, it 
 	      computes such bound on ", TEX///$(-\infty, \infty)$///,". Moreover,", TT " ring f ", "is allowed to be multivariate."},
 	EXAMPLE lines ///
 	         R = QQ[t]
