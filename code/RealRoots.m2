@@ -746,10 +746,10 @@ document {
 	    QQ => "b" => {"(optional) the right endpoint of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
-	Outputs => { ZZ => {"the difference between the number of real roots of ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
-	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative"}},
-	PARA {"This computes the difference between the number of real roots of  ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
-	     is positive, and the number of real roots of ",TT "f"," on the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative.
+	Outputs => { ZZ => {"the difference between the number of real roots of ",TT "f"," in the interval ",TEX///$(a,b]$///," where ",TT "g","
+	     is positive, and the number of real roots of ",TT "f"," in the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative"}},
+	PARA {"This computes the difference between the number of real roots of  ",TT "f"," in the interval ",TEX///$(a,b]$///," where ",TT "g","
+	     is positive, and the number of real roots of ",TT "f"," in the interval ",TEX///$[a,b)$///," where ",TT "g"," is negative.
 	     This is computed by taking the difference in variations of the reduced Sylvester sequence of ", TT "f"," and ",TT "g","."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
@@ -802,7 +802,7 @@ document {
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," in the interval ",TEX///$(a,b]$///}},
-	PARA {"This computes the number of real roots on the interval ",TEX///$(a,b]$///,"  of a univariate polynomial ",TT "f"," with rational coefficients.
+	PARA {"This computes the number of real roots in the interval ",TEX///$(a,b]$///,"  of a univariate polynomial ",TT "f"," with rational coefficients.
 	     If ", TT "a", " and ", TT "b"," are not specified, this computes the number of real roots of ",TT "f",". This is computed by taking
 	     the difference in variation of the Sturm sequence of ", TT "f","."},
 	EXAMPLE lines ///
@@ -875,7 +875,7 @@ document {
 	    },
 	Outputs => { ZZ => { "the bound for the number of real roots in the interval ", TT "(a,b]", ", counted with multiplicity, of a univariate polynomial ", TT "f", " with rational coefficients"}},
 	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial", TT " f ", " with rational coefficients. It assumes an unspecified interval is
-	      ", TEX///$(-\infty, \infty)$///,". Note that ", TT "ring f", " is allowed to be multivariate."},
+	      ",TEX///$(-\infty, \infty)$///,". Note that ", TT "ring f", " is allowed to be multivariate."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
@@ -958,7 +958,7 @@ document {
 	    },
 	Outputs => { ZZ => {"the degree of the reduced scheme of an Artinian ring"}},
 	PARA {"This computes the degree of the reduced scheme of an Artinian ring ",TT "S" ," over any field, which is the
-	    number of distinct points of Spec ", TT "S", ", after a base change to algebraically-closed field."},
+	    number of distinct points of Spec ", TT "S", ", after a base change to an algebraically-closed field."},
 	PARA {"This counts the number of roots of a univariate polynomial ",TT "f","."},
 	EXAMPLE lines ///
  	         R = QQ[x,y]
