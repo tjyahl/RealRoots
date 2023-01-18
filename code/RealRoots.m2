@@ -633,7 +633,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
+	    Ideal => "I" => {"a zero-dimensional ideal in the polynomial ring containing ",TT "g"},
 	    Strategy => {"set method for computing the univariate eliminant"},
 	    Variable => {"allows user to change the variable of the resulting polynomial"}
 	    },
@@ -722,7 +722,7 @@ document {
 	Outputs => { List => { "the reduced Sylvester sequence of ", TT "f", " and ",TT "g"}},
 	PARA {"This computes the reduced Sylvester sequence of two univariate polynomials with rational coefficients ", TT "f", " and ", TT "g", " in the same ring.
 	    This begins with the Sylvester sequence ",TEX///$(f_{0},f_{1},\dots,f_{k})$///,", where ",TEX///$f_{0} = f, f_{1} = f'\cdot g$///," and for ",
-	    TEX///$i\geq 1, f_{i+1} = -1\cdot$///,"remainder ",TEX///$(f_{i-1},f_{i})$///,". The last nonzero remainder is ",TEX///$f_{k}$///," 
+	    TEX///$i\geq 1, f_{i+1} = -1\cdot$///,"remainder ",TEX///$(f_{i-1},f_{i})$///,". The last nonzero remainder ",TEX///$f_{k}$///," 
 	    is a greatest common divisor of ",TEX///$f$///," and ",TEX///$g$///,". The reduced Sylvester sequence is obtained by dividing each term of 
 	    the Sylvester sequence by ",TEX///$f_{k}$///,"."},
 	EXAMPLE lines ///
@@ -741,9 +741,9 @@ document {
 	          SylvesterCount(f,g)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
-	    RingElement => "g" => {"a univariate polynomial with rational coefficients"},
-	    QQ => "a" => {"(optional) the lower bound of the interval"},
-	    QQ => "b" => {"(optional) the upper bound of the interval"},
+	    RingElement => "g" => {"a univariate polynomial with rational coefficients in the same variable as ", TT"f"},
+	    QQ => "a" => {"(optional) the left endpoint of the interval"},
+	    QQ => "b" => {"(optional) the right endpoint of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the difference between the number of real roots of ",TT "f"," on the interval ",TEX///$(a,b]$///," where ",TT "g","
@@ -797,8 +797,8 @@ document {
 	          SturmCount(f)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
-	    QQ => "a" => {"a lower bound of the interval"},
-	    QQ => "b" => {"an upper bound of the interval"},
+	    QQ => "a" => {"the left endpoint of the interval"},
+	    QQ => "b" => {"the right endpoint of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," in the interval ",TEX///$(a,b]$///}},
@@ -820,8 +820,7 @@ document {
 		SturmCount(f,0,5,Multiplicity => true)
 		SturmCount(f,0,3,Multiplicity => true)
 		///,
-	PARA {"If ", TT "a"," is an ", TT "InfiniteNumber", ", then the lower bound will be ",TEX///$-\infty$///,", and if ", TT "b"," is an ", TT "InfiniteNumber", 
-	    ", then the upper bound is ",TEX///$\infty$///,"."},
+	PARA {"We give examples with infinite intervals."},
 	EXAMPLE lines ///
 	    	SturmCount(f,-infinity, 0)
 		SturmCount(f,0,infinity)
@@ -835,9 +834,9 @@ document {
 	Headline => "the number of sign changes of an ordered list of numbers",
 	Usage => "variations(l)",
 	Inputs => {
-	    List => "l" => {" of ordered numbers"},
+	    List => "l" => {" of numbers"},
 	    },
-	Outputs => {ZZ => { "the number of sign changes in the ordered list ", TT "l" }},
+	Outputs => {ZZ => {"the number of sign changes in the ordered list ", TT "l" }},
 	PARA {"This computes the number of sign changes in the ordered list ", TT "l","."},
 	EXAMPLE lines ///
 		 L = for i to 10 list random(-50,50)
@@ -871,8 +870,8 @@ document {
 	          BudanFourierBound(f)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial with rational coefficients, where", TT " ring f ", "is not necessarily univariate"},
-	    QQ => "a" => {"a lower bound of the interval"},
-	    QQ => "b" => {"an upper bound of the interval"},
+	    QQ => "a" => {"the left endpoint of the interval"},
+	    QQ => "b" => {"the right endpoint of the interval"},
 	    },
 	Outputs => { ZZ => { "the bound for the number of real roots in the interval ", TT "(a,b]", ", counted with multiplicity, of a univariate polynomial ", TT "f", " with rational coefficients"}},
 	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial", TT " f ", " with rational coefficients. It assumes an unspecified interval is
@@ -900,13 +899,13 @@ document {
 	Usage => "traceForm(f)
 	          traceForm(g,I)",
 	Inputs => {
-	    RingElement => "f" => {"a polynomial in an Artinian Ring"},
+	    RingElement => "f" => {"a polynomial in an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal in the polynomial ring containing ", TT "g",},
 	    },
 	Outputs => {Matrix => {"the symmetric matrix representing the trace symmetric form of ",TT "f"," (resp. ",TT "g",") in ",TT "ring f",
 		" (resp. ",TT "(ring g)/I",")"}},
-	PARA {"This command gives the symmetric matrix of the trace symmetric form of ", TT "f", " (resp. ",TT "g",")
+	PARA {"This computes the symmetric matrix of the trace symmetric form of ", TT "f", " (resp. ",TT "g",")
 	       in terms of the standard basis of the finite-dimensional vector space ", TT "ring f"," (resp. ",TT "(ring g)/I",")."},
 	EXAMPLE lines ///
 		 R = QQ[x,y]
@@ -959,8 +958,8 @@ document {
 	    },
 	Outputs => { ZZ => {"the degree of the reduced scheme of an Artinian ring"}},
 	PARA {"This computes the degree of the reduced scheme of an Artinian ring ",TT "S" ," over any field, which is the
-	    number of distinct points of Spec ", TT "S", ", not counting multiplicity."},
-	PARA {"This counts the number of roots of a univariate polynomial ",TT "f",", without multiplicity."},
+	    number of distinct points of Spec ", TT "S", ", after a base change to algebraically-closed field."},
+	PARA {"This counts the number of roots of a univariate polynomial ",TT "f","."},
 	EXAMPLE lines ///
  	         R = QQ[x,y]
 		 f = (x^2 + 1)*(x + 1)*(x - 2)^2
@@ -1046,7 +1045,7 @@ document {
 	Headline => "the principal submatrix of the Hurwitz matrix of a univariate polynomial",
 	Usage => "HurwitzMatrix(f,k)",
 	Inputs => {
-	    RingElement => "f" => {"a univariate polynomial of degree n with rational coefficients"},
+	    RingElement => "f" => {"a univariate polynomial of degree ",TEX///$n$///," with rational coefficients"},
 	    ZZ => "k" => {"a nonnegative integer at most ",TEX///$n$///},
 	    },
 	Outputs => {Matrix => {"the principal ",TEX///$k\times k$///, " submatrix ",TEX///$H_{k}$///}},
