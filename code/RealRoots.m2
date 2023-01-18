@@ -686,7 +686,7 @@ document {
 	    Matrix => "M" => {"a square matrix"},
 	    RingElement => "f" => {"an element of an Artinian ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I"  => {"a zero-dimensional ideal in a polynomial ring"},
+	    Ideal => "I"  => {"a zero-dimensional ideal in the polynomial ring containing ", TT "g"},
 	    },
 	Outputs => {RingElement => {"the desired characteristic polynomial. See description."}},
 	   
@@ -874,7 +874,7 @@ document {
 	    QQ => "a" => {"a lower bound of the interval"},
 	    QQ => "b" => {"an upper bound of the interval"},
 	    },
-	Outputs => { ZZ => { "the bound for the number of real roots in the interval ", TT "(a,b]", " of a univariate polynomial", TT " f ", "with rational coefficients"}},
+	Outputs => { ZZ => { "the bound for the number of real roots in the interval ", TT "(a,b]", ", counted with multiplicity, of a univariate polynomial ", TT "f", " with rational coefficients"}},
 	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial", TT " f ", " with rational coefficients. It assumes an unspecified interval is
 	      ", TEX///$(-\infty, \infty)$///,". Note that ", TT "ring f", " is allowed to be multivariate."},
 	EXAMPLE lines ///
@@ -902,7 +902,7 @@ document {
 	Inputs => {
 	    RingElement => "f" => {"a polynomial in an Artinian Ring"},
 	    RingElement => "g" => {"a polynomial"},
-	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
+	    Ideal => "I" => {"a zero-dimensional ideal in the polynomial ring containing ", TT "g",},
 	    },
 	Outputs => {Matrix => {"the symmetric matrix representing the trace symmetric form of ",TT "f"," (resp. ",TT "g",") in ",TT "ring f",
 		" (resp. ",TT "(ring g)/I",")"}},
@@ -1077,10 +1077,10 @@ document {
 	Key => {isHurwitzStable,(isHurwitzStable, RingElement)},
 	Headline => "determines if a univariate polynomial with rational coefficients is Hurwitz-stable",
 	Usage => "isHurwitzStable(f)",
-	Inputs => {RingElement => "f" => {"a real univariate polynomial"}},
-	Outputs => { Boolean => { "the Hurwitz stability of a univariate polynomial with rational coefficients ", TT "f"}},
-	PARA {"A real univariate polynomial is Hurwitz stable if all its roots have negative real parts. This method determines the Hurwitz stability of a univariate polynomial with rational coefficients ", TT "f", " with positive leading coefficient and degree at least 1. 
-	    The polynomial, however, is not necessarily from a univariate polynomial ring."},
+	Inputs => {RingElement => "f" => {"a univariate polynomial with rational coefficients"}},
+	Outputs => { Boolean => { "the Hurwitz stability of the polynomial ", TT "f"}},
+	PARA {"A real univariate polynomial is Hurwitz-stable if all its roots have negative real parts. This method determines the Hurwitz stability of a univariate polynomial ", TT "f", " of degree ",TEX///$n>0$///," with rational coefficients whose leading coefficient is positive. 
+	    Note that ", TT "ring f"," is allowed to be multivariate."},
 	EXAMPLE lines ///
 	    	R = QQ[x]
             	f = 3*x^4 - 7*x^3 + 5*x - 7 
