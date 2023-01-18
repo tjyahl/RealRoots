@@ -796,13 +796,13 @@ document {
 	Usage => "SturmCount(f,a,b)
 	          SturmCount(f)",
 	Inputs => {
-	    RingElement => "f" => {"a rational univariate polynomial"},
+	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
 	    QQ => "a" => {"a lower bound of the interval"},
 	    QQ => "b" => {"an upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
 	    },
 	Outputs => { ZZ => {"the number of real roots of ", TT "f"," in the interval ",TEX///$(a,b]$///}},
-	PARA {"This computes the number of real roots of a rational univariate polynomial ",TT "f"," on the interval ", TEX///$(a,b]$///,".
+	PARA {"This computes the number of real roots on the interval ",TEX///$(a,b]$///,"  of a univariate polynomial ",TT "f"," with rational coefficients.
 	     If ", TT "a", " and ", TT "b"," are not specified, this computes the number of real roots of ",TT "f",". This is computed by taking
 	     the difference in variation of the Sturm sequence of ", TT "f","."},
 	EXAMPLE lines ///
@@ -850,7 +850,7 @@ document {
 	Headline => "a list that isolates the real roots of a univariate polynomial with rational coefficients",
 	Usage => "realRootIsolation(f,r)",
 	Inputs => {
-	    RingElement => "f" => {"a rational univariate polynomial"},
+	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
 	    QQ => "r" => {"a positive rational number"},
 	    },
 	Outputs => {List => {"of intervals that contain all the real roots of ", TT "f"}},
@@ -875,8 +875,8 @@ document {
 	    QQ => "b" => {"an upper bound of the interval"},
 	    },
 	Outputs => { ZZ => { "the bound for the number of real roots in the interval ", TT "(a,b]", " of a univariate polynomial", TT " f ", "with rational coefficients"}},
-	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial", TT " f ", " with rational coefficients. If the interval is not specified, it 
-	      computes such bound on ", TEX///$(-\infty, \infty)$///,". Moreover,", TT " ring f ", "is allowed to be multivariate."},
+	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial", TT " f ", " with rational coefficients. It assumes an unspecified interval is
+	      ", TEX///$(-\infty, \infty)$///,". Note that", TT " ring f ", "is allowed to be multivariate."},
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
@@ -1046,12 +1046,12 @@ document {
 	Headline => "the principal submatrix of the Hurwitz matrix of a univariate polynomial",
 	Usage => "HurwitzMatrix(f,k)",
 	Inputs => {
-	    RingElement => "f" => {"a rational univariate polynomial of degree n"},
+	    RingElement => "f" => {"a univariate polynomial of degree n with rational coefficients"},
 	    ZZ => "k" => {"a nonnegative integer at most ",TEX///$n$///},
 	    },
 	Outputs => {Matrix => {"the principal ",TEX///$k\times k$///, " submatrix ",TEX///$H_{k}$///}},
-	PARA{"This computes the principal ",TEX///$k\times k$///, " submatrix ",TEX///$H_{k}$///, " of the Hurwitz matrix ",TEX///$H$///," of a rational univariate polynomial ", TT "f"," of degree n with positive leading coefficient and degree at least 1.
-	    The polynomial, however, is not necessarily from a univariate polynomial ring."},
+	PARA{"This computes the principal ",TEX///$k\times k$///, " submatrix ",TEX///$H_{k}$///, " of the Hurwitz matrix ",TEX///$H$///," of a univariate polynomial ", TT "f"," of degree ",TEX///$n > 0$///," with rational coefficients whose leading coefficient is positive.
+	    Note that ",TT "ring f" ," is allowed to be multivariate."},
 	
 	EXAMPLE lines ///
 	    	R = QQ[x]
