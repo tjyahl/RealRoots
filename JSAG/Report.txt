@@ -1,0 +1,62 @@
+Dear Professor Lopez Garcia,
+
+Acting on expert advice, I am writing to ask you to revise and upload
+a revision of the article
+
+   Real solutions to systems of polynomial equations in Macaulay2
+   by Jordy Lopez Garcia, Kelly Maluccio, Frank Sottile and Thomas Yahl
+
+submitted to the Journal of Software for Algebra and Geometry.
+
+Referee reports may be attached to this letter, indicating the
+necessary changes.
+
+When finished, please upload the revision to
+
+https://ef.msp.org/uploadrev.php?p_id=144987&cr=7E8BEC95EF
+
+You will need to upload at the same time a PDF or text file with a
+summary of changes and an explanation of departures, if any, from the
+reviewer recommendations. 
+
+Please do not reply to this message.  You can track the status of your
+article and contact the journal or editors at 
+
+https://ef.msp.org/status.php?p_id=144987&cr=7E8BEC95EF
+-------------------------------------
+220819-Lopez-v1: technical review of the package "RealRoots" and its article,
+by Lopez-Garcia, Maluccio, Sottile, and Yahl.
+
+The package has 577 lines of code, 511 lines of documentation, and 189 lines
+of tests.  The package can be installed without error, and the tests succeed.
+-----------------------------------------------------------------------------
+comments on code:
+
+-----------------------------------------------------------------------------
+comments on documentation:
+
+The name of the package contains the word "real", but the description of the
+package doesn't contain the word "real" :
+
+      The purpose of this package is to provide general tools for
+      elimination and solving systems of polynomial equations.
+
+In the documentation for "HurwitzMatrix", Insert a space before "of":
+
+      submatrix $H_{k}$of the Hurwitz matrix
+
+In the documentation for "traceForm", it should be mentioned that g
+and I should be in the same ring.
+
+----------------------------------------------------------------------------
+comments on paper:
+
+Instead saying just "c_i \in R is nonzero", say
+"and for each i, c_i\in R is nonzero".
+
+"We have that" is a strange abuse of the English language, adopted by many
+mathematicians to indicate that some is true.  It would sound better to say
+"The inequality ... holds, ...".
+-----------------------------------------------------------------------------
+
+
