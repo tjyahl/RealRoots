@@ -666,7 +666,7 @@ document {
 	Outputs => {
 	    Matrix => {"the standard basis of ",TT "ring f", " (resp. ",TT "(ring g)/I",")"},
 	    Matrix => {"the matrix of the linear map defined by multiplication by ", TT "f"," (resp. ",TT "g",") in ",TT "ring f", " (resp. ",TT "(ring g)/I",")"}},
-	PARA {"This command gives the matrix of the linear map defined by multiplication by ", TT "f", " (resp. ",TT "g",") in terms of the standard basis of the finite-dimensional vector space ", TT "ring f"," (resp. ",TT "(ring g)/I",")."},
+	PARA {"This computes the matrix of the linear map defined by multiplication by ", TT "f", " (resp. ",TT "g",") in terms of the standard basis of the finite-dimensional vector space ", TT "ring f"," (resp. ",TT "(ring g)/I",")."},
 	EXAMPLE lines ///
 		 R = QQ[x,y]
 		 I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
@@ -853,8 +853,7 @@ document {
 	    QQ => "r" => {"a positive rational number"},
 	    },
 	Outputs => {List => {"of intervals that contain all the real roots of ", TT "f"}},
-	PARA {"This method uses a Sturm sequence and a bisection method to isolate real solutions of ", TT "f",
-	       " in intervals of length at most ", TT "r","."},
+	PARA {"This computes disjoint intervals of length at most ",TT "r",", each containing exactly one real root of ",TT "f","."},
 	EXAMPLE lines ///
 	    	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
