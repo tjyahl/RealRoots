@@ -592,7 +592,7 @@ document {
 	Key => RealRoots,
 	Headline => "Package for exploring, counting and locating real solutions to polynomial systems",
 	Acknowledgement => {"This package is an updated version the ",TT "realroots"," package by Grayson and Sottile."},
-	"This package provides general tools for elimination and solving systems of polynomial equations, with the particular emphasis on real solutions."
+	"This package provides general tools for elimination and solving systems of polynomial equations, with a particular emphasis on real solutions."
 	}
 
 document {
@@ -713,14 +713,14 @@ document {
 
  document {
 	Key => {SylvesterSequence,(SylvesterSequence, RingElement, RingElement)},
-	Headline => "the Sylvester sequence of two rational univariate polynomials",
+	Headline => "the Sylvester sequence of two univariate polynomials with rational coefficients",
 	Usage => "SylvesterSequence(f,g)",
 	Inputs => {
-	    RingElement => "f" => {"a rational univariate polynomial"},
-	    RingElement => "g" => {"a rational univariate polynomial in the same variable as ", TT"f"},
+	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
+	    RingElement => "g" => {"a univariate polynomial with rational coefficients in the same variable as ", TT"f"},
 	    },
 	Outputs => { List => { "the reduced Sylvester sequence of ", TT "f", " and ",TT "g"}},
-	PARA {"This computes the reduced Sylvester sequence of two rational univariate polynomials ", TT "f", " and ", TT "g", " in the same ring.
+	PARA {"This computes the reduced Sylvester sequence of two univariate polynomials with rational coefficients ", TT "f", " and ", TT "g", " in the same ring.
 	    This begins with the Sylvester sequence ",TEX///$(f_{0},f_{1},\dots,f_{k})$///,", where ",TEX///$f_{0} = f, f_{1} = f'\cdot g$///," and for ",
 	    TEX///$i\geq 1, f_{i+1} = -1\cdot$///,"remainder ",TEX///$(f_{i-1},f_{i})$///,". The last nonzero remainder is ",TEX///$f_{k}$///," 
 	    is a greatest common divisor of ",TEX///$f$///," and ",TEX///$g$///,". The reduced Sylvester sequence is obtained by dividing each term of 
@@ -740,8 +740,8 @@ document {
 	Usage => "SylvesterCount(f,g,a,b)
 	          SylvesterCount(f,g)",
 	Inputs => {
-	    RingElement => "f" => {"a rational univariate polynomial"},
-	    RingElement => "g" => {"a rational univariate polynomial"},
+	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
+	    RingElement => "g" => {"a univariate polynomial with rational coefficients"},
 	    QQ => "a" => {"(optional) the lower bound of the interval"},
 	    QQ => "b" => {"(optional) the upper bound of the interval"},
 	    Multiplicity => {"option for computing roots with multiplicity"}
@@ -764,13 +764,13 @@ document {
 
 document {
 	Key => {SturmSequence,(SturmSequence, RingElement)},
-	Headline => "the Sturm sequence of a rational univariate polynomial",
+	Headline => "the Sturm sequence of a univariate polynomial with rational coefficients",
 	Usage => "SturmSequence(f)",
 	Inputs => {
-	    RingElement => "f" => {"a rational univariate polynomial"},
+	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
 	    },
 	Outputs => { List => {"the Sturm sequence of ", TT "f"}},
-	PARA {"This computes the Sturm sequence of the square-free part of a rational univariate polynomial ", TT "f","."},
+	PARA {"This computes the Sturm sequence of the square-free part of a univariate polynomial with rational coefficients ", TT "f","."},
 	EXAMPLE lines ///
 	 	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
@@ -792,7 +792,7 @@ document {
 
 document {
 	Key => {SturmCount,(SturmCount,RingElement),(SturmCount,RingElement,QQ,QQ)},
-	Headline => "the number of real roots of a rational univariate polynomial",
+	Headline => "the number of real roots of a univariate polynomial with rational coefficients",
 	Usage => "SturmCount(f,a,b)
 	          SturmCount(f)",
 	Inputs => {
@@ -847,7 +847,7 @@ document {
 
 document {
         Key => {realRootIsolation,(realRootIsolation, RingElement,QQ)},
-	Headline => "a list that isolates the real roots of a rational univariate polynomial",
+	Headline => "a list that isolates the real roots of a univariate polynomial with rational coefficients",
 	Usage => "realRootIsolation(f,r)",
 	Inputs => {
 	    RingElement => "f" => {"a rational univariate polynomial"},
@@ -866,7 +866,7 @@ document {
     
 document {
 	Key => {BudanFourierBound,(BudanFourierBound,RingElement),(BudanFourierBound,RingElement,QQ,QQ)},
-	Headline => "a bound for the number of real roots of a univariate polynomial with rational coefficients",
+	Headline => "a bound for the number of real roots with multiplicity of a univariate polynomial with rational coefficients",
 	Usage => "BudanFourierBound(f, a, b)
 	          BudanFourierBound(f)",
 	Inputs => {
@@ -874,9 +874,9 @@ document {
 	    QQ => "a" => {"a lower bound of the interval"},
 	    QQ => "b" => {"an upper bound of the interval"},
 	    },
-	Outputs => { ZZ => { "the bound for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval ", TT "(a,b]"}},
-	PARA {"This computes the bound from the Budan Fourier Theorem for the number of real roots of a rational univariate polynomial", TT " f ", "in the interval", TT "(a,b]",
-	      ", counted with multiplicity. If the interval is not specified, it 
+	Outputs => { ZZ => { "the bound for the number of real roots in the interval ", TT "(a,b]", " of a univariate polynomial", TT " f ", "with rational coefficients"}},
+	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial", TT " f ", " with rational coefficients."
+	      "If the interval is not specified, it 
 	      computes such bound on ", TEX///$(-\infty, \infty)$///,". Moreover,", TT " ring f ", "is allowed to be multivariate."},
 	EXAMPLE lines ///
 	         R = QQ[t]
@@ -987,7 +987,7 @@ document {
     
 document {
 	Key => {realCount,(realCount, QuotientRing), (realCount, RingElement), (realCount, Ideal),(realCount, List)},
-        Headline => "the number of real points of the spectrum of an Artinian ring (of characteristic 0), not counting multiplicity",
+        Headline => "the number of real points of the spectrum of an Artinian ring (of characteristic 0)",
 	Usage => "realCount(S)",
 	Inputs => {
 	    QuotientRing => "S" => {"an Artinian ring"},
