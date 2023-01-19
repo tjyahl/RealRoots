@@ -617,7 +617,7 @@ document {
 		S = R/I
 		minimalPolynomial(y)
 	 	///,
-	PARA {"We provide two examples to compute minimal polynomials given by ",TT "Strategy => 0"," (computes the kernel of ",TEX///$k[T]\to$///,TT " ring f"," by sending ", TEX///$T$///," to ",TT "f",") and ",TT "Strategy => 1", " (a minimal linear combination of powers of the input)."},
+	PARA {"We provide two examples to compute minimal polynomials given by ",TT "Strategy => 0"," (computes the kernel of ",TEX///$k[T]\to$///,TT "ring f"," by sending ", TEX///$T$///," to ",TT "f",") and ",TT "Strategy => 1", " (a minimal linear combination of powers of the input)."},
 	EXAMPLE lines ///
 		minimalPolynomial(x,Strategy => 0)
 	    	minimalPolynomial(x,Strategy => 1)
@@ -645,7 +645,7 @@ document {
 		I = ideal(y^2 - x^2 - 1,x - y^2 + 4*y - 2)
 		univariateEliminant(y,I)
 	 	///,
-	PARA {"We provide two examples to compute minimal polynomials given by ",TT "Strategy => 0"," (computes the kernel of ",TEX///$k[T]\to$///,TT " ring f"," by sending ", TEX///$T$///," to ",TT "f",") and ",TT "Strategy => 1", " (a minimal linear combination of powers of the input)."},
+	PARA {"We provide two examples to compute minimal polynomials given by ",TT "Strategy => 0"," (computes the kernel of ",TEX///$k[T]\to$///,TT "ring f"," by sending ", TEX///$T$///," to ",TT "f",") and ",TT "Strategy => 1", " (a minimal linear combination of powers of the input)."},
 	EXAMPLE lines ///
 		univariateEliminant(x,I,Strategy => 0)
 	    	univariateEliminant(x,I,Strategy => 1)
@@ -873,7 +873,7 @@ document {
 	    QQ => "b" => {"the right endpoint of the interval"},
 	    },
 	Outputs => { ZZ => { "the bound for the number of real roots in the interval ", TT "(a,b]", ", counted with multiplicity, of a univariate polynomial ", TT "f", " with rational coefficients"}},
-	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial", TT " f ", " with rational coefficients. It assumes an unspecified interval is
+	PARA {"This computes the bound from the Budan-Fourier Theorem for the number of real roots in the interval ", TT "(a,b]",", counted with multiplicity, of a univariate polynomial ", TT "f", " with rational coefficients. It assumes an unspecified interval is
 	      ",TEX///$(-\infty, \infty)$///,". Note that ", TT "ring f", " is allowed to be multivariate."},
 	EXAMPLE lines ///
 	         R = QQ[t]
