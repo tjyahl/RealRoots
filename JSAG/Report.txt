@@ -41,12 +41,58 @@ package doesn't contain the word "real" :
       The purpose of this package is to provide general tools for
       elimination and solving systems of polynomial equations.
 
+Added "with the particular emphasis on real solutions"
+
 In the documentation for "HurwitzMatrix", Insert a space before "of":
 
       submatrix $H_{k}$of the Hurwitz matrix
 
+Added space.
+
 In the documentation for "traceForm", it should be mentioned that g
 and I should be in the same ring.
+
+Added description.
+
+Moreover, throughout the documentation, we edited:
+
+Updated jsag.bib
+
+Throughout the documentation, changed "a lower bound" (resp. "an upper bound") to "the left endpoint" (resp. "the right endpoint")
+
+"rational univariate polynomial" to "polynomial with rational coefficients"
+
+Line 636: Added that the ideal I lies in the polynomial ring containing g
+
+Line 689: Added that the ideal I lies in the polynomial ring containing g
+
+Line 725: Deleted extra "is" before f_k
+
+Lines 749-752, 805: Replaced "on" by "in"
+
+Line 823: Compactified writing to "We give examples with infinite intervals"
+
+Line 837: Removed "ordered"
+
+Line 855: Re-wrote Output description to "of disjoint intervals"
+
+Line 856: Re-wrote description for realRootIsolation
+
+Line 877-878: Added that added that the number of real roots is counted with multiplicity
+
+Line 878-879: Simplified interval description in the second sentence, and added that ring f is allowed to be multivariate
+
+Line 961-962: Removed "not counting multiplicity" and "without multiplicity" and added "after a base change to an algebraically-closed field"
+
+Line 993: Added "(generators of a zero-dimensional ideal)"
+
+Line 996: Removed redundant ", and where ", TT "S", " is an Artinian ring of characteristic 0.},"
+
+Line 1048: Used latex on degree n
+
+Line 1053-1054: Used latex on degree n. Added that ring f is allowed to be multivariate.
+
+Line 1080-1083: Used latex on degree n. Added that ring f is allowed to be multivariate
 
 ----------------------------------------------------------------------------
 comments on paper:
@@ -54,9 +100,25 @@ comments on paper:
 Instead saying just "c_i \in R is nonzero", say
 "and for each i, c_i\in R is nonzero".
 
+Added "each" in front of "$0\leq i \leq k$, $c_{i}\in\RR$ is nonzero."
+
 "We have that" is a strange abuse of the English language, adopted by many
 mathematicians to indicate that some is true.  It would sound better to say
 "The inequality ... holds, ...".
+
+Corrected
+
+Moreover, we made the following changes:
+
+Line 362: Added "real" before "root"
+
+Line 410: Replaced "all the Hurwitz determinants $\Delta_{1},\dots,\Delta_{k}$ are positive." by "each Hurwitz determinant $\Delta_{1},\dots,\Delta_{k}$ is positive."
+
+Line 446: Removed "new"
+
+Line 490: Added "its" before signature
+
+Line 493: Removed "$d\vcentcolon = \dim(R)$"
 -----------------------------------------------------------------------------
 
 
