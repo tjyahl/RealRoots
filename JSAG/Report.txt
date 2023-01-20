@@ -118,7 +118,7 @@ Line 446: Removed "new"
 
 Line 490: Added "its" before signature
 
-Line 493: Removed "$d\vcentcolon = \dim(R)$"
+Line 493: Removed "$d\vcentcolon = \dim(R)$", as this was not used.
 -----------------------------------------------------------------------------
 
 
