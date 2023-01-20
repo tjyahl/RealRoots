@@ -990,7 +990,7 @@ document {
 	    QuotientRing => "S" => {"an Artinian ring"},
 	    RingElement => "f" => {"a univariate polynomial"},
 	    Ideal => "I" => {"a zero-dimensional ideal in a polynomial ring"},
-	    List => "l" => {"a system of rational polynomials with a finite number of solutions (generators of a zero)"},
+	    List => "l" => {"a system of rational polynomials with a finite number of solutions (generators of a zero-dimensional ideal)"},
 	    },
 	Outputs => { ZZ => {"the number of distinct real points of Spec ", TT "S",", not counting multiplicity"}},
 	PARA {"This computes the number of distinct real points of Spec ", TT "S", ", not counting multiplicity.
