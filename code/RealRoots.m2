@@ -1036,6 +1036,7 @@ document {
 	R = QQ[x,y]
 	I = ideal(x*y - 1,2*x - y + 3)
 	rationalUnivariateRepresentation(I)
+	rationalUnivariateRepresentation(R/I)
 	///
     }
 
