@@ -98,7 +98,7 @@ comments on paper:
 Instead saying just "c_i \in R is nonzero", say
 "and for each i, c_i\in R is nonzero".
 
->Added "each" in front of "$0\leq i \leq k$, $c_{i}\in\RR$ is nonzero."
+>Corrected
 
 "We have that" is a strange abuse of the English language, adopted by many
 mathematicians to indicate that some is true.  It would sound better to say
