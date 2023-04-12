@@ -521,7 +521,7 @@ rationalUnivariateRepresentation (Ideal) := Sequence => I->(
     i := 1;
     X := gens R;
     n := #X;
-    while (i < n*(binomial(d,2))) do (
+    while (i < n*(binomial(d,2))+2) do (
     	l := sum(X,apply(n,k->i^k),(a,b)->a*b);
 	(B,m) := regularRepresentation(sub(l,S));
 	ch := characteristicPolynomial(m);
