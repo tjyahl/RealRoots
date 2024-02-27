@@ -118,8 +118,8 @@ signAt (RingElement,InfiniteNumber) := ZZ => (f,r)->(
 
 
 --Computes the sequence of Horner polynomials associated to f
-HornerSequence = method()
-HornerSequence (RingElement) := List => f ->(
+hornerSequence = method()
+hornerSequence (RingElement) := List => f ->(
     d := first degree f;
     x := variable(f);
     a := apply(d+1,i->coefficient(x^(d-i),f));
@@ -540,7 +540,7 @@ rationalUnivariateRepresentation (Ideal) := Sequence => I->(
     
     T := ring ch;
     phi := map(S,T,{l});
-    H := phi matrix{HornerSequence(chbar)};
+    H := phi matrix{hornerSequence(chbar)};
     M := sub(matrix {gens R},S);        
     tr := matrix{apply(first entries B,x-> trace last regularRepresentation x)};
 
