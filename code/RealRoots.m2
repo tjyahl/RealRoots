@@ -12,7 +12,7 @@ newPackage(
 	 HomePage=>"https://www.github.com/kmaluccio"},
     	{Name=>"Frank Sottile",
 	 Email=>"sottile@tamu.edu",
-	 HomePage=>"https://franksottile.github.io"},
+	 HomePage=>"https://franksottile.github.io/"},
 	{Name=>"Thomas Yahl",
 	 Email=>"tyahl@wisc.edu",
 	 HomePage=>"https://tjyahl.github.io/"}
