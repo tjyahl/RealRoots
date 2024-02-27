@@ -404,7 +404,7 @@ realRootIsolation (RingElement,A) := List => (f,r)->(
 	
 	--bound for real roots
 	C := (listForm f)/last;
-    	M := (sum(C,abs))/(leadCoefficient f);
+    	M := (sum(C,abs))/(abs(leadCoefficient f));
 	
 	L := {{-M,M}};
 	midp := 0;
