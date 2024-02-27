@@ -12,9 +12,9 @@ newPackage(
 	 HomePage=>"https://www.github.com/kmaluccio"},
     	{Name=>"Frank Sottile",
 	 Email=>"sottile@tamu.edu",
-	 HomePage=>"https://www.math.tamu.edu/~sottile/"},
+	 HomePage=>"https://franksottile.github.io"},
 	{Name=>"Thomas Yahl",
-	 Email=>"thomasjyahl@tamu.edu",
+	 Email=>"tyahl@wisc.edu",
 	 HomePage=>"https://tjyahl.github.io/"}
 	},
     Headline=>"Package for symbolically exploring, counting, and locating real solutions to general polynomial systems",
@@ -33,17 +33,23 @@ export{
     "regularRepresentation",
     "characteristicPolynomial",
     "variations",
-    "SylvesterSequence",
-    "SylvesterCount",
-    "SturmSequence",
-    "SturmCount",
+    "sylvesterSequence",
+    "SylvesterSequence"=>"sylvesterSequence",
+    "sylvesterCount",
+    "SylvesterCount"=>"sylvesterCount",
+    "sturmSequence",
+    "SturmSequence"=>"sturmSequence",
+    "sturmCount",
+    "SturmCount"=>"sturmCount",
     "realRootIsolation",
-    "BudanFourierBound",
+    "budanFourierBound",
+    "BudanFourierBound"=>"budanFourierBound",
     "traceForm",
     "traceCount",
     "realCount",
     "rationalUnivariateRepresentation",
-    "HurwitzMatrix",
+    "hurwitzMatrix",
+    "HurwitzMatrix"=>"hurwitzMatrix",
     "isHurwitzStable",
     --options
     "Multiplicity"
@@ -292,25 +298,25 @@ variations (List) := ZZ => l->(
 
 
 --Computes the difference in variations of the derivative sequence at specified values
-BudanFourierBound = method()
+budanFourierBound = method()
 for A in {ZZ,QQ,InfiniteNumber} do 
 for B in {ZZ,QQ,InfiniteNumber} do
-BudanFourierBound (RingElement,A,B) := ZZ => (f,a,b)->(
+budanFourierBound (RingElement,A,B) := ZZ => (f,a,b)->(
     if not isUnivariatePolynomial(f) then error "Error: Expected univariate polynomial.";
     if not (a<b) then error "Error: Expected non-empty interval";
     l := derivSequence f;
     variations apply(l,g->signAt(g,a)) - variations apply(l,g->signAt(g,b))
     )
 
-BudanFourierBound (RingElement) := ZZ => f->(
-    BudanFourierBound(f,-infinity,infinity)
+budanFourierBound (RingElement) := ZZ => f->(
+    budanFourierBound(f,-infinity,infinity)
     )
 
 
 --Computes the Sylvester sequence of a pair (f,g)
 ----This isn't actually the Sylvester sequence since we divide by gcd(f,g)
-SylvesterSequence = method()
-SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
+sylvesterSequence = method()
+sylvesterSequence (RingElement, RingElement) := List => (f,g)->(
     if (f==0 or g==0) then error "Error: Expected nonzero polynomials";
     if not (isUnivariatePolynomial(f) and isUnivariatePolynomial(g)) then error "Error: Expected univariate polynomials";
 
@@ -337,48 +343,48 @@ SylvesterSequence (RingElement, RingElement) := List => (f,g)->(
 
 --Computes the difference in the number of roots of f where g is positive and where g is negative
 ----letting g = 1 gives the number of real roots from the Sturm sequence
-SylvesterCount = method(Options=>{Multiplicity=>false})
+sylvesterCount = method(Options=>{Multiplicity=>false})
 for A in {ZZ,QQ,InfiniteNumber} do 
 for B in {ZZ,QQ,InfiniteNumber} do
-SylvesterCount (RingElement,RingElement,A,B) := ZZ => opts->(f, g, a, b)->(
+sylvesterCount (RingElement,RingElement,A,B) := ZZ => opts->(f, g, a, b)->(
     if not (a<b) then error "Error: Expected non-empty interval";
-    l := SylvesterSequence(f,g);
+    l := sylvesterSequence(f,g);
     n := variations apply(l,h->signAt(h,a)) - variations apply(l,h->signAt(h,b));
     if opts.Multiplicity then (
 	h := gcd(f,diff(variable f,f));
 	while (first degree h > 0) do (
-	    n = n + SylvesterCount(h,g,a,b);
+	    n = n + sylvesterCount(h,g,a,b);
 	    h = gcd(h,diff(variable h,h))
 	    )
 	);
     n
     )
 
-SylvesterCount (RingElement,RingElement) := ZZ => opts->(f,g)->(
-    SylvesterCount(f,g,-infinity,infinity)
+sylvesterCount (RingElement,RingElement) := ZZ => opts->(f,g)->(
+    sylvesterCount(f,g,-infinity,infinity)
     )
 
 
 --Computes the Sturm sequence of f via a Sylvester sequence
-SturmSequence = method()
-SturmSequence (RingElement) := List => f->(
+sturmSequence = method()
+sturmSequence (RingElement) := List => f->(
     if (f == 0) then error "Error: Expected nonzero polynomial";
     R := ring f;
-    SylvesterSequence(f,1_R)
+    sylvesterSequence(f,1_R)
     )
 
 
 --Computes the difference in variations of the Sturm sequence at specified values
-SturmCount = method(Options=>{Multiplicity=>false})
+sturmCount = method(Options=>{Multiplicity=>false})
 for A in {ZZ,QQ,InfiniteNumber} do
 for B in {ZZ,QQ,InfiniteNumber} do
-SturmCount (RingElement,A,B) := ZZ => opts->(f,a,b)->(
+sturmCount (RingElement,A,B) := ZZ => opts->(f,a,b)->(
     R := ring f;
-    SylvesterCount(f,1_R,a,b,opts)
+    sylvesterCount(f,1_R,a,b,opts)
     )
 
-SturmCount (RingElement) := ZZ => opts->f->( 
-    SturmCount(f,-infinity,infinity,opts)
+sturmCount (RingElement) := ZZ => opts->f->( 
+    sturmCount(f,-infinity,infinity,opts)
     )
 
 
@@ -393,8 +399,8 @@ realRootIsolation (RingElement,A) := List => (f,r)->(
     
     f = sub(f/gcd(f,diff(variable f,f)),R);
     
-    if (SturmCount(f)>0) then (
-	l := SturmSequence(f);
+    if (sturmCount(f)>0) then (
+	l := sturmSequence(f);
 	
 	--bound for real roots
 	C := (listForm f)/last;
@@ -424,7 +430,7 @@ realRootIsolation (RingElement,A) := List => (f,r)->(
     )
 
 --computes the signature of a matrix
-----can also use SylvesterCount(ch,variable ch,Multiplicity=>true)
+----can also use sylvesterCount(ch,variable ch,Multiplicity=>true)
 signature = method()
 signature (Matrix) := ZZ => M->(
     if not (ring M === ZZ or ring M === QQ) then error "Error: Expected rational matrix";
@@ -548,8 +554,8 @@ rationalUnivariateRepresentation (Ideal) := Sequence => I->(
 
 
 --Computes the Hurwitz matrix of f (of order k)
-HurwitzMatrix = method()
-HurwitzMatrix (RingElement) := Matrix => f->(
+hurwitzMatrix = method()
+hurwitzMatrix (RingElement) := Matrix => f->(
     d := first degree f;
     if not (d>0) then error "Error: Expected polynomial of positive degree";
     
@@ -560,8 +566,8 @@ HurwitzMatrix (RingElement) := Matrix => f->(
     M
     )
 
-HurwitzMatrix (RingElement,ZZ) := Matrix => (f,k)->(
-    M := HurwitzMatrix f;
+hurwitzMatrix (RingElement,ZZ) := Matrix => (f,k)->(
+    M := hurwitzMatrix f;
     if (k==0) then matrix{{1}} else submatrix(M,toList(0..k-1),toList(0..k-1))
     )
 
@@ -572,7 +578,7 @@ isHurwitzStable = method()
 isHurwitzStable (RingElement) := Boolean => f->(
     if (leadCoefficient f < 0) then f = -f;
     d := first degree f;
-    all(d+1,k->det HurwitzMatrix(f,k) > 0)
+    all(d+1,k->det hurwitzMatrix(f,k) > 0)
     )
 
 --------------------
@@ -582,9 +588,9 @@ isHurwitzStable (RingElement) := Boolean => f->(
 beginDocumentation()
 
 undocumented {
-    delete((SylvesterCount,RingElement,RingElement,QQ,QQ),flatten table({ZZ,QQ,InfiniteNumber},{ZZ,QQ,InfiniteNumber},(a,b)->(SylvesterCount,RingElement,RingElement,a,b))),
-    delete((SturmCount,RingElement,QQ,QQ),flatten table({ZZ,QQ,InfiniteNumber},{ZZ,QQ,InfiniteNumber},(a,b)->(SturmCount,RingElement,a,b))),
-    delete((BudanFourierBound,RingElement,QQ,QQ),flatten table({ZZ,QQ,InfiniteNumber},{ZZ,QQ,InfiniteNumber},(a,b)->(BudanFourierBound,RingElement,a,b))),
+    delete((sylvesterCount,RingElement,RingElement,QQ,QQ),flatten table({ZZ,QQ,InfiniteNumber},{ZZ,QQ,InfiniteNumber},(a,b)->(sylvesterCount,RingElement,RingElement,a,b))),
+    delete((sturmCount,RingElement,QQ,QQ),flatten table({ZZ,QQ,InfiniteNumber},{ZZ,QQ,InfiniteNumber},(a,b)->(sturmCount,RingElement,a,b))),
+    delete((budanFourierBound,RingElement,QQ,QQ),flatten table({ZZ,QQ,InfiniteNumber},{ZZ,QQ,InfiniteNumber},(a,b)->(budanFourierBound,RingElement,a,b))),
     (realRootIsolation, RingElement,ZZ)
     }
 
@@ -712,9 +718,9 @@ document {
 
 
  document {
-	Key => {SylvesterSequence,(SylvesterSequence, RingElement, RingElement)},
+	Key => {sylvesterSequence,(sylvesterSequence, RingElement, RingElement)},
 	Headline => "the Sylvester sequence of two univariate polynomials with rational coefficients",
-	Usage => "SylvesterSequence(f,g)",
+	Usage => "sylvesterSequence(f,g)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
 	    RingElement => "g" => {"a univariate polynomial with rational coefficients in the same variable as ", TT"f"},
@@ -729,16 +735,16 @@ document {
 	         R = QQ[t]
 		 f = (t + 1)*(t + 2)
 		 g = t + 2
-		 SylvesterSequence(f,g)
+		 sylvesterSequence(f,g)
 	 	 ///,
-	SeeAlso => {"SylvesterCount","SturmSequence"}
+	SeeAlso => {"sylvesterCount","sturmSequence"}
      	}
 
 document {
-	Key => {SylvesterCount,(SylvesterCount,RingElement,RingElement),(SylvesterCount,RingElement,RingElement,QQ,QQ)},
+	Key => {sylvesterCount,(sylvesterCount,RingElement,RingElement),(sylvesterCount,RingElement,RingElement,QQ,QQ)},
 	Headline => "a signed count of the real roots of a univariate polynomial with rational coefficients",
-	Usage => "SylvesterCount(f,g,a,b)
-	          SylvesterCount(f,g)",
+	Usage => "sylvesterCount(f,g,a,b)
+	          sylvesterCount(f,g)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
 	    RingElement => "g" => {"a univariate polynomial with rational coefficients in the same variable as ", TT"f"},
@@ -757,15 +763,15 @@ document {
 		 g = t + 1
 		 a = -5
 		 b = 4
-		 SylvesterCount(f,g,a,b)
+		 sylvesterCount(f,g,a,b)
 	 	 ///,
-	SeeAlso => {"SylvesterSequence","SturmCount"}
+	SeeAlso => {"sylvesterSequence","sturmCount"}
      	}
 
 document {
-	Key => {SturmSequence,(SturmSequence, RingElement)},
+	Key => {sturmSequence,(sturmSequence, RingElement)},
 	Headline => "the Sturm sequence of a univariate polynomial with rational coefficients",
-	Usage => "SturmSequence(f)",
+	Usage => "sturmSequence(f)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
 	    },
@@ -775,13 +781,13 @@ document {
 	 	 R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
 		 roots f
-		 SturmSequence(f)
+		 sturmSequence(f)
 	 	 ///,
-	SeeAlso => {"SturmCount","SylvesterSequence"}
+	SeeAlso => {"sturmCount","sylvesterSequence"}
      	}
 
 document {
-    	Key => {"Multiplicity(RealRoots)", [SylvesterCount, Multiplicity], [SturmCount, Multiplicity]},
+    	Key => {"Multiplicity(RealRoots)", [sylvesterCount, Multiplicity], [sturmCount, Multiplicity]},
 	PARA {"This is an optional input for counting roots with multiplicity."}
     }
 
@@ -791,10 +797,10 @@ document {
     }
 
 document {
-	Key => {SturmCount,(SturmCount,RingElement),(SturmCount,RingElement,QQ,QQ)},
+	Key => {sturmCount,(sturmCount,RingElement),(sturmCount,RingElement,QQ,QQ)},
 	Headline => "the number of real roots of a univariate polynomial with rational coefficients",
-	Usage => "SturmCount(f,a,b)
-	          SturmCount(f)",
+	Usage => "sturmCount(f,a,b)
+	          sturmCount(f)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial with rational coefficients"},
 	    QQ => "a" => {"the left endpoint of the interval"},
@@ -809,24 +815,24 @@ document {
 	    	 R = QQ[t]
 		 f = (t - 5)*(t - 3)^2*(t - 1)*(t + 1)
 		 roots f
-		 SturmCount(f)
-		 SturmCount(f,0,5)
-		 SturmCount(f,-2,2)
-		 SturmCount(f,-1,5)	       
+		 sturmCount(f)
+		 sturmCount(f,0,5)
+		 sturmCount(f,-2,2)
+		 sturmCount(f,-1,5)	       
 	 	 ///,
 	PARA {"In the above example, multiplicity is not counted. To include it, make the multiplicity option ",TT "true","."},
 	EXAMPLE lines ///
-		SturmCount(f,Multiplicity => true)
-		SturmCount(f,0,5,Multiplicity => true)
-		SturmCount(f,0,3,Multiplicity => true)
+		sturmCount(f,Multiplicity => true)
+		sturmCount(f,0,5,Multiplicity => true)
+		sturmCount(f,0,3,Multiplicity => true)
 		///,
 	PARA {"We give examples with infinite intervals."},
 	EXAMPLE lines ///
-	    	SturmCount(f,-infinity, 0)
-		SturmCount(f,0,infinity)
-		SturmCount(f,-infinity,infinity)
+	    	sturmCount(f,-infinity, 0)
+		sturmCount(f,0,infinity)
+		sturmCount(f,-infinity,infinity)
 		///,
-	SeeAlso => {"SturmSequence","SylvesterCount"}
+	SeeAlso => {"sturmSequence","sylvesterCount"}
      	}
     
 document {
@@ -859,14 +865,14 @@ document {
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
 		 realRootIsolation(f,1/2)
 	 	 ///,
-	SeeAlso => {"SturmSequence"}
+	SeeAlso => {"sturmSequence"}
      	}
     
 document {
-	Key => {BudanFourierBound,(BudanFourierBound,RingElement),(BudanFourierBound,RingElement,QQ,QQ)},
+	Key => {budanFourierBound,(budanFourierBound,RingElement),(budanFourierBound,RingElement,QQ,QQ)},
 	Headline => "a bound for the number of real roots with multiplicity of a univariate polynomial with rational coefficients",
-	Usage => "BudanFourierBound(f, a, b)
-	          BudanFourierBound(f)",
+	Usage => "budanFourierBound(f, a, b)
+	          budanFourierBound(f)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial with rational coefficients, where", TT " ring f ", "is not necessarily univariate"},
 	    QQ => "a" => {"the left endpoint of the interval"},
@@ -878,16 +884,16 @@ document {
 	EXAMPLE lines ///
 	         R = QQ[t]
 		 f = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5
-		 BudanFourierBound(f)
+		 budanFourierBound(f)
 		 g = (t + 5)*(t + 3)*(t + 1)*(t - 1)^2*(t - 4)*(t - 6)
-		 BudanFourierBound(g,-6,infinity)
-		 BudanFourierBound(g,-1,5)
+		 budanFourierBound(g,-6,infinity)
+		 budanFourierBound(g,-1,5)
 	 	 ///,
 	PARA {"We also provide examples when the interval includes ", TEX///$-\infty$///," or ", TEX///$\infty$///, "."},
 	EXAMPLE lines ///
-	         BudanFourierBound(g,-infinity,0)
-	         BudanFourierBound(g,3,infinity)
-		 BudanFourierBound(g,-infinity,infinity)
+	         budanFourierBound(g,-infinity,0)
+	         budanFourierBound(g,3,infinity)
+		 budanFourierBound(g,-infinity,infinity)
 		 ///
      	}
     
@@ -1041,9 +1047,9 @@ document {
     }
 
 document {
-	Key => {HurwitzMatrix,(HurwitzMatrix,RingElement),(HurwitzMatrix, RingElement, ZZ)},
+	Key => {hurwitzMatrix,(hurwitzMatrix,RingElement),(hurwitzMatrix, RingElement, ZZ)},
 	Headline => "the principal submatrix of the Hurwitz matrix of a univariate polynomial",
-	Usage => "HurwitzMatrix(f,k)",
+	Usage => "hurwitzMatrix(f,k)",
 	Inputs => {
 	    RingElement => "f" => {"a univariate polynomial of degree ",TEX///$n$///," with rational coefficients"},
 	    ZZ => "k" => {"a nonnegative integer at most ",TEX///$n$///},
@@ -1055,9 +1061,9 @@ document {
 	EXAMPLE lines ///
 	    	R = QQ[x]
 	        f = 3*x^4 - 7*x^3 + 5*x - 7
-		HurwitzMatrix(f) 
-		HurwitzMatrix(f,4)
-	        HurwitzMatrix(f,3)	      
+		hurwitzMatrix(f) 
+		hurwitzMatrix(f,4)
+	        hurwitzMatrix(f,3)	      
 	 	 ///,
 	PARA{"We can also use mutliple variables to represent unknown coefficients. Note that we create another ring ",TT "S"," so 
 	    that ", TT "x", " and ", TT "y"," are not considered variables in the same ring and so confuse the monomials ", TEX///$x$///, " or ",TEX///$y$///,
@@ -1065,9 +1071,9 @@ document {
 	EXAMPLE lines ///
 	        S = R[y]
 		g = y^3 + 2*y^2 + y - x + 1
-		HurwitzMatrix(g,3)
-		HurwitzMatrix(g,2)
-		HurwitzMatrix(g,1)
+		hurwitzMatrix(g,3)
+		hurwitzMatrix(g,2)
+		hurwitzMatrix(g,1)
 		 ///,
 	SeeAlso => {"isHurwitzStable"} 
 	}   
@@ -1087,7 +1093,7 @@ document {
 		isHurwitzStable(f)
 		isHurwitzStable(g)	      
 	 	 ///,
-	SeeAlso => {"HurwitzMatrix"}	 
+	SeeAlso => {"hurwitzMatrix"}	 
      	}
 
 TEST ///
@@ -1140,10 +1146,10 @@ TEST ///
     R = QQ[t];
     f = (t + 1)*(t + 2);
     g = (t + 2);
-    assert(SylvesterSequence(f,g) == {t + 1, 2*t+3,1/2,0});
+    assert(sylvesterSequence(f,g) == {t + 1, 2*t+3,1/2,0});
     
     f =  45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5;
-    assert(SturmSequence(f) == {t^4 - 8*t^3 + 14*t^2 + 8*t - 15, 5*t^3 - 29*t^2 + 27*t + 13, 104/25*t^2 - 432/25*t + 232/25, 3100/169*t - 5300/169, 194688/24025, 0});
+    assert(sturmSequence(f) == {t^4 - 8*t^3 + 14*t^2 + 8*t - 15, 5*t^3 - 29*t^2 + 27*t + 13, 104/25*t^2 - 432/25*t + 232/25, 3100/169*t - 5300/169, 194688/24025, 0});
     ///
 
 TEST ///
@@ -1151,58 +1157,58 @@ TEST ///
     f = (t - 4)*(t - 1)^2*(t + 1)*(t + 3)*(t + 5)*(t - 6);--roots at 6, 4, 1 (mult 2), -1, -3, -5
     g = (2*t - 1)*(3*t + 8)*(t - 9)*(6*t + 1);--rational roots at -8/3, -1/6, 1/2, 9
     p = (t - 5)*(t - 2)*(t + 3)*(t + 4)*(t - 8)*(t + 13);--roots at -13, -4, -3, 2, 5, 8
-    assert(BudanFourierBound(f) == 7);
-    assert(BudanFourierBound(g) == 4);
-    assert(BudanFourierBound(p) == 6);
-    assert(BudanFourierBound(g,-infinity,0) == 2);
-    assert(BudanFourierBound(g,-1,infinity) == 3);
+    assert(budanFourierBound(f) == 7);
+    assert(budanFourierBound(g) == 4);
+    assert(budanFourierBound(p) == 6);
+    assert(budanFourierBound(g,-infinity,0) == 2);
+    assert(budanFourierBound(g,-1,infinity) == 3);
    
     f' = 45 - 39*t - 34*t^2 + 38*t^3 - 11*t^4 + t^5;
-    assert(BudanFourierBound(f') == 5);
+    assert(budanFourierBound(f') == 5);
     g' = (t + 5)*(t + 3)*(t + 1)*(t - 1)^2*(t - 4)*(t - 6);
-    assert(BudanFourierBound(g',-6,infinity) == 7);
-    assert(BudanFourierBound(g',-1,5) == 3);
-    assert(BudanFourierBound(g',-infinity,0) == 3);
-    assert(BudanFourierBound(g',3,infinity) == 2);
-    assert(BudanFourierBound(g',-infinity,infinity) == 7);
+    assert(budanFourierBound(g',-6,infinity) == 7);
+    assert(budanFourierBound(g',-1,5) == 3);
+    assert(budanFourierBound(g',-infinity,0) == 3);
+    assert(budanFourierBound(g',3,infinity) == 2);
+    assert(budanFourierBound(g',-infinity,infinity) == 7);
     
-    assert(SturmCount(f) == 6);
-    assert(SturmCount(f,-6,0) == 3);
-    assert(SturmCount(f,-1,10) == 3);
-    assert(SturmCount(f,Multiplicity => true) == 7);
-    assert(SturmCount(f,-10,5,Multiplicity => true) == 6);
-    assert(SturmCount(f,0,6,Multiplicity => true) == 4);
+    assert(sturmCount(f) == 6);
+    assert(sturmCount(f,-6,0) == 3);
+    assert(sturmCount(f,-1,10) == 3);
+    assert(sturmCount(f,Multiplicity => true) == 7);
+    assert(sturmCount(f,-10,5,Multiplicity => true) == 6);
+    assert(sturmCount(f,0,6,Multiplicity => true) == 4);
     
-    assert(SturmCount(g) == 4);
-    assert(SturmCount(g,-3,1) == 3);
-    assert(SturmCount(g,0,10) == 2);
+    assert(sturmCount(g) == 4);
+    assert(sturmCount(g,-3,1) == 3);
+    assert(sturmCount(g,0,10) == 2);
     
-    assert(SturmCount(p) == 6);
-    assert(SturmCount(p,-15,0) == 3);
-    assert(SturmCount(p,2,10) == 2);
+    assert(sturmCount(p) == 6);
+    assert(sturmCount(p,-15,0) == 3);
+    assert(sturmCount(p,2,10) == 2);
     
     h = (t - 5)*(t - 3)^2*(t - 1)*(t + 1);
-    assert(SturmCount(h) == 4);
-    assert(SturmCount(h,0,5) == 3);
-    assert(SturmCount(h,-2,2) == 2);
-    assert(SturmCount(h,-1,5) == 3);
-    assert(SturmCount(h,Multiplicity => true) == 5);
-    assert(SturmCount(h,0,5,Multiplicity => true) == 4);
-    assert(SturmCount(h,0,3,Multiplicity => true) == 3);
-    assert(SturmCount(h,-infinity, 0) == 1);
-    assert(SturmCount(h,0,infinity) == 3);
-    assert(SturmCount(h,-infinity,infinity) == 4);
+    assert(sturmCount(h) == 4);
+    assert(sturmCount(h,0,5) == 3);
+    assert(sturmCount(h,-2,2) == 2);
+    assert(sturmCount(h,-1,5) == 3);
+    assert(sturmCount(h,Multiplicity => true) == 5);
+    assert(sturmCount(h,0,5,Multiplicity => true) == 4);
+    assert(sturmCount(h,0,3,Multiplicity => true) == 3);
+    assert(sturmCount(h,-infinity, 0) == 1);
+    assert(sturmCount(h,0,infinity) == 3);
+    assert(sturmCount(h,-infinity,infinity) == 4);
     ///
     
 TEST ///
     R = QQ[t];
     f = (t - 2)*(t - 1)*(t + 3);
     g = t + 1;
-    assert(SylvesterCount(f,g,-5,4) == 1);
+    assert(sylvesterCount(f,g,-5,4) == 1);
     h = (t - 4)*(t - 1)^2*(t + 1)*(t + 3)*(t + 5)*(t - 6);
     p = t + 5;
-    assert(SylvesterCount(h,p,-10,10,Multiplicity=>true) == 6);
-    assert(SylvesterCount(h,p,0,10) == 3);
+    assert(sylvesterCount(h,p,-10,10,Multiplicity=>true) == 6);
+    assert(sylvesterCount(h,p,0,10) == 3);
     ///
     
 TEST ///
@@ -1255,17 +1261,17 @@ TEST ///
 TEST ///
      R = QQ[x];
      f = 3*x^4 - 7*x^3 + 5*x - 7;
-     assert(HurwitzMatrix(f,4) == sub(matrix{{-7,5,0,0},{3,0,-7,0},{0,-7,5,0},{0,3,0,-7}},QQ));
-     assert(HurwitzMatrix(f,3) == sub( matrix{{-7,5,0},{3,0,-7},{0,-7,5}},QQ));
+     assert(hurwitzMatrix(f,4) == sub(matrix{{-7,5,0,0},{3,0,-7,0},{0,-7,5,0},{0,3,0,-7}},QQ));
+     assert(hurwitzMatrix(f,3) == sub( matrix{{-7,5,0},{3,0,-7},{0,-7,5}},QQ));
      assert(isHurwitzStable(f) == false);
      g = x^2 + 10*x + 21;
      assert(isHurwitzStable(g) == true);
      
      S = R[y];
      h = y^3 + 2*y^2 + y - x + 1;
-     assert(HurwitzMatrix(h,3) == matrix{{2, -x + 1, 0},{1, 1, 0},{0, 2, -x + 1}});
-     assert(HurwitzMatrix(h,2) == matrix{{2, -x + 1}, {1, 1}});
-     assert(HurwitzMatrix(h,1) == matrix{{2_R}});
+     assert(hurwitzMatrix(h,3) == matrix{{2, -x + 1, 0},{1, 1, 0},{0, 2, -x + 1}});
+     assert(hurwitzMatrix(h,2) == matrix{{2, -x + 1}, {1, 1}});
+     assert(hurwitzMatrix(h,1) == matrix{{2_R}});
      ///
 
 TEST ///
