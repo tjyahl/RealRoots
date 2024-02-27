@@ -1,4 +1,4 @@
-i11 : HurwitzMatrix(x^4 + 5*x^3 + 7*x^2 + 11*x + 13) 
+i11 : hurwitzMatrix(x^4 + 5*x^3 + 7*x^2 + 11*x + 13) 
 
 o11 = | 5 11 0  0  |
       | 1 7  13 0  |

@@ -5,10 +5,10 @@ i4 : f = x*(2*x - 3)*(x^4 - 2)^2
        10     9     6      5     2
 o4 = 2x   - 3x  - 8x  + 12x  + 8x  - 12x
 
-i5 : BudanFourierBound(f, 0, infinity)
+i5 : budanFourierBound(f, 0, infinity)
 
 o5 = 3
 
-i6 : BudanFourierBound(f, -2, 1)
+i6 : budanFourierBound(f, -2, 1)
 
 o6 = 7

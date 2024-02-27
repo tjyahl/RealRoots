@@ -4,6 +4,6 @@ i20 : gens gb ideal(g, diff(Z,g))
 
 o20 = | 1 |
 
-i21 : SturmCount(g)
+i21 : sturmCount(g)
 
 o21 = 4
